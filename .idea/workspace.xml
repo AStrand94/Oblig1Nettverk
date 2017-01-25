@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="5a9f3f6b-e03a-4f60-9881-bc3e2bb23957" name="Default" comment="Lagt inn en test klasse som fungerer. Lagd en simpel Client-klasse">
+    <list default="true" id="5a9f3f6b-e03a-4f60-9881-bc3e2bb23957" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
@@ -457,7 +457,14 @@
       <option name="project" value="LOCAL" />
       <updated>1485337528359</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Lagt inn en test klasse som fungerer. Lagd en simpel Client-klasse">
+      <created>1485337558021</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1485337558021</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
