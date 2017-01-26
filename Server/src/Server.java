@@ -6,6 +6,9 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.NoSuchElementException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by strand117 on 25.01.2017.
@@ -35,53 +38,70 @@ public class Server {
                 ){
 
 
-            String text;
-            while (true){
+            String isUser;
+            User user;
+            while (true) {
+
+                //Waits for a client to connect
+                Socket connect = serverSocket.accept();
 
 
-                Socket connect = serverSocket.accept(); //Waits for a client to connect
-                PrintWriter out = new PrintWriter(connect.getOutputStream()); //out to client
+                System.out.println("client connected");
+                PrintWriter out = new PrintWriter(connect.getOutputStream(),true); //out to client
                 BufferedReader in = new BufferedReader(new InputStreamReader(connect.getInputStream())); //input from client
+                boolean connected = false;
+                try {
+                    while (!connected) {
 
-                out.println();
+                        //Wants 'y' or 'n' from user. 'y' if user is registered, 'n' if needs to register
+                        out.println("Are you a registered user? y/n");
+                        isUser = in.readLine();
+                        System.out.println(isUser);
 
-                //Wants 'y' or 'n' from user. 'y' if user is registered, 'n' if needs to register
+                        out.println("requser");
 
-                text = in.readLine();
+                        Pattern p = Pattern.compile("(.+) (.+)"); //username and password with a single space between them
+                        String up = in.readLine();
+                        System.out.println(up);
+                        Matcher m = p.matcher(up);
+                        System.out.println(m.find());
+                        System.out.println(m.group(1) + "     " + m.group(2));
 
-                while (!text.equals("y") || !text.equals("n")) { //
-                    out.println("Are you a registered user? y/n");
-                    text = in.readLine();
-                }
 
 
+                        //if client is a user
+                        if (isUser.equals("y")) {
 
-                //if client is a user
-                if (text.equals("y")){
+                            if (!checkUser(m.group(1), m.group(2))) {
+                                System.out.println("Oh, this user is not registered");
+                                continue;   //continue makes you go on from start in loop again.
+                            }
 
-                    out.println("Req user");
+                            System.out.println("User is checked");
+                            user = getUser(m.group(1));
+                            logIn(user);
 
-                    while (!checkUser(in.readLine(),in.readLine())){
-                        out.println("Req user");
+                        } else { //if user is not a registered user
+
+                            if (!registerUser(m.group(1),m.group(2))) {
+                                continue;
+                            }
+                            user = getUser(m.group(1));
+                            logIn(user);
+                        }
+
+                        System.out.println("Done checking user");
+
+                        ChatServer chat = new ChatServer(connect);
+                        chat.start();
+                        connected = true;
+                        System.out.println("Done connecting");
                     }
-                }else { //if user is not a registered user
 
-                    out.println("req userinfo");
+                } catch (IOException e) {
+                    System.out.println("Connection timed out with client, waiting for new client");
 
                 }
-
-
-
-
-
-
-
-
-
-
-
-                ChatServer chat = new ChatServer(connect);
-                chat.start();
             }
 
         }catch (IOException ioe){
@@ -91,16 +111,59 @@ public class Server {
 
     }
 
+    private boolean logInUser(String uname){
+        for (User u : allUsers)
+            if (uname.equals(u.getUserName())){
+                u.setStatus("online");
+                return true;
+            }
+
+        return false;
+
+    }
+
     public static boolean checkUser(String uname, String passw){
-        String uname, passw;
-        boolean exists;
+
+        System.out.println("test");
+        boolean exists = false;
 
         int i = 0;
         for (User u : allUsers){
+            System.out.println(i++);
             if (u.getUserName().equals(uname) &&
                     u.getPassword().equals(passw))
                 exists = true;
         }
+
         return exists;
+    }
+
+    public static boolean registerUser(String uname, String passw){
+
+        for (User u : allUsers){
+            if (uname.equals(u.getUserName())) return false;
+        }
+        User u = new User(uname,passw);
+        allUsers.add(u);
+
+        return true;
+
+    }
+
+    public static void logIn(User u){
+        u.setStatus("online");
+    }
+
+    public static void logOff(User u){
+        u.setStatus("offline");
+    }
+
+    //Needs to check if user exists before calling method
+    public static User getUser(String uname){
+        for (User u : allUsers){
+            if (u.getUserName().equals(uname)) return u;
+        }
+
+        throw new NoSuchElementException("No user with username" + uname);
     }
 }

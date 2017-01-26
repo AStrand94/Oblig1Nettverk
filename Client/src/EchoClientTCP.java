@@ -10,7 +10,7 @@ import java.net.*;
 public class EchoClientTCP {
     public static void main(String[] args) throws IOException {
 
-        String hostName = "10.253.30.217"; // Default host, localhost
+        String hostName = "127.0.0.1"; // Default host, localhost
         int portNumber = 5555; // Default port to use
         if (args.length > 0) {
             hostName = args[0];
