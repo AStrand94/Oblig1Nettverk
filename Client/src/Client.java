@@ -11,33 +11,20 @@ import java.net.Socket;
  */
 public class Client {
 
-    String hostName;
-    int portNumber;
+    private static Client instance = null;
+
+    String hostName = "127.0.0.1";
+    int portNumber = 5555;
 
 
-    Socket socket;
+    Socket socket = null;
 
-    PrintWriter out;
-    BufferedReader in;
-    BufferedReader stdIn;
+    PrintWriter out = null;
+    BufferedReader in = null;
+    BufferedReader stdIn = null;
 
 
-    public Client() throws IOException {
-
-        System.out.println("Lager nytt Client-objekt");
-
-        socket = new Socket("127.0.0.1", 5555);
-
-        out = new PrintWriter(socket.getOutputStream(), true);
-        in = new BufferedReader(
-                new InputStreamReader(socket.getInputStream()));
-        stdIn = new BufferedReader(
-                new InputStreamReader(System.in));
-    }
-
-    public Client(String hostName, int portNumber) throws IOException {
-        this.hostName = hostName;
-        this.portNumber = portNumber;
+    protected Client() throws IOException {
 
         socket = new Socket(hostName, portNumber);
 
@@ -48,14 +35,35 @@ public class Client {
                 new InputStreamReader(System.in));
     }
 
-
-    public boolean registrerUser(String username, String password) {
-        //Check if username exists before
-
-        return false;
+    public static Client getInstance() {
+        if (instance == null) {
+            try {
+                instance = new Client();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return instance;
     }
 
-    public void sendMessage(String message) throws IOException {
+    public void setHostName(String hostName) {
+        this.hostName = hostName;
+    }
+
+    public void setPortNumber(int portNumber) {
+        this.portNumber = portNumber;
+    }
+
+    public boolean updateSocket() {
+        try {
+            socket = new Socket(hostName, portNumber);
+        } catch (IOException e) {
+            return false;
+        }
+        return true;
+    }
+
+    public String sendMessage(String message) throws IOException {
         String userInput = message;
 
         System.out.println("Client: " + userInput);
@@ -64,6 +72,8 @@ public class Client {
         String recievedText = in.readLine();
 
         System.out.println("Server: " + recievedText);
+
+        return recievedText;
     }
 
 }

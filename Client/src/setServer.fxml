@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="connectController">
+   <children>
+      <TextField fx:id="ipAddress" layoutX="200.0" layoutY="21.0" promptText="IP-adress" text="127.0.0.1" />
+      <TextField fx:id="portNumber" layoutX="200.0" layoutY="65.0" promptText="Port number" text="5555" />
+      <Text layoutX="87.0" layoutY="39.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Enter IP-adress:" />
+      <Text layoutX="70.0" layoutY="83.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Enter port number:" />
+      <Button fx:id="connectButton" layoutX="200.0" layoutY="144.0" mnemonicParsing="false" onAction="#setServer" prefHeight="27.0" prefWidth="84.0" text="Connect" />
+      <Text fx:id="serverErrorMessage" fill="RED" layoutX="200.0" layoutY="113.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="167.0" />
+   </children>
+</AnchorPane>

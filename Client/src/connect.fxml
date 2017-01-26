@@ -18,5 +18,16 @@
             <Font size="15.0" />
          </font>
       </Text>
+      <MenuBar prefHeight="29.0" prefWidth="600.0">
+        <menus>
+          <Menu mnemonicParsing="false" text="File">
+               <items>
+                  <MenuItem fx:id="setServer" mnemonicParsing="false" onAction="#setServerButtonPressed" text="Set server" />
+               </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Edit" />
+          <Menu mnemonicParsing="false" text="Help" />
+        </menus>
+      </MenuBar>
    </children>
 </AnchorPane>
