@@ -1,3 +1,5 @@
+import javafx.fxml.FXML;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -12,13 +14,40 @@ public class Client {
     String hostName;
     int portNumber;
 
-    String username;
-    String password;
 
-    public Client() {
-        this.hostName = "127.0.0.1";
-        this.portNumber = 5555;
+    Socket socket;
+
+    PrintWriter out;
+    BufferedReader in;
+    BufferedReader stdIn;
+
+
+    public Client() throws IOException {
+
+        System.out.println("Lager nytt Client-objekt");
+
+        socket = new Socket("127.0.0.1", 5555);
+
+        out = new PrintWriter(socket.getOutputStream(), true);
+        in = new BufferedReader(
+                new InputStreamReader(socket.getInputStream()));
+        stdIn = new BufferedReader(
+                new InputStreamReader(System.in));
     }
+
+    public Client(String hostName, int portNumber) throws IOException {
+        this.hostName = hostName;
+        this.portNumber = portNumber;
+
+        socket = new Socket(hostName, portNumber);
+
+        out = new PrintWriter(socket.getOutputStream(), true);
+        in = new BufferedReader(
+                new InputStreamReader(socket.getInputStream()));
+        stdIn = new BufferedReader(
+                new InputStreamReader(System.in));
+    }
+
 
     public boolean registrerUser(String username, String password) {
         //Check if username exists before
@@ -26,29 +55,15 @@ public class Client {
         return false;
     }
 
-    public void connect(String hostName, int portNumber) throws IOException{
-        this.hostName = hostName;
-        this.portNumber = portNumber;
+    public void sendMessage(String message) throws IOException {
+        String userInput = message;
 
-        Socket socket = new Socket(hostName, portNumber);
+        System.out.println("Client: " + userInput);
+        out.println(userInput);
 
-        PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-        BufferedReader in = new BufferedReader(
-                new InputStreamReader(socket.getInputStream()));
-        BufferedReader stdIn = new BufferedReader(
-                new InputStreamReader(System.in));
+        String recievedText = in.readLine();
 
-
-        String userInput;
-
-        //Evt. while (bruker ikke har logget ut)
-        while ((userInput = stdIn.readLine()) != null) {
-            out.println(userInput);
-
-            String recievedText = in.readLine();
-
-            System.out.println(recievedText);
-        }
+        System.out.println("Server: " + recievedText);
     }
 
 }

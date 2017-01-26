@@ -1,14 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="connectController">
    <children>
-      <TextField id="userName" layoutX="182.0" layoutY="139.0" prefHeight="27.0" prefWidth="237.0" promptText="Brukernavn" />
-      <TextField id="password" layoutX="182.0" layoutY="189.0" prefHeight="27.0" prefWidth="237.0" promptText="Passord" />
-      <Button id="connect" layoutX="264.0" layoutY="234.0" mnemonicParsing="false" text="Koble til" />
+      <TextField id="userName" fx:id="userName" layoutX="182.0" layoutY="139.0" onAction="#handleConnectAction" prefHeight="27.0" prefWidth="237.0" promptText="Brukernavn" />
+      <TextField id="password" fx:id="password" layoutX="182.0" layoutY="189.0" onAction="#handleConnectAction" prefHeight="27.0" prefWidth="237.0" promptText="Passord" />
+      <Button id="connect" fx:id="connect" layoutX="264.0" layoutY="234.0" mnemonicParsing="false" onAction="#handleConnectAction" text="Koble til" />
+      <Text fx:id="errorMessage" fill="RED" layoutX="182.0" layoutY="79.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="237.0">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Text>
    </children>
 </AnchorPane>
