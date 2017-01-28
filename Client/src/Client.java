@@ -46,15 +46,7 @@ public class Client {
         return instance;
     }
 
-    public void setHostName(String hostName) {
-        this.hostName = hostName;
-    }
-
-    public void setPortNumber(int portNumber) {
-        this.portNumber = portNumber;
-    }
-
-    public boolean updateSocket() {
+    public boolean createNewSocket(String hostName, int portNumber) {
         try {
             socket = new Socket(hostName, portNumber);
         } catch (IOException e) {

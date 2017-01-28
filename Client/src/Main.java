@@ -12,12 +12,15 @@ import java.io.IOException;
 public class Main extends Application{
 
     static Scene loginScene;
+    static Stage stage;
 
     public static void main(String[] args) throws IOException {
         launch(args);
     }
 
     public void start(Stage stage) throws Exception {
+
+        this.stage = stage;
         Parent root = FXMLLoader.load(getClass().getResource("connect.fxml"));
 
         loginScene = new Scene(root, 600, 400);

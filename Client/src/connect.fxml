@@ -8,26 +8,50 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="connectController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #59656F;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="connectController">
    <children>
-      <TextField id="userName" fx:id="userName" layoutX="182.0" layoutY="139.0" onAction="#handleConnectAction" prefHeight="27.0" prefWidth="237.0" promptText="Brukernavn" />
-      <TextField id="password" fx:id="password" layoutX="182.0" layoutY="189.0" onAction="#handleConnectAction" prefHeight="27.0" prefWidth="237.0" promptText="Passord" />
-      <Button id="connect" fx:id="connect" layoutX="264.0" layoutY="234.0" mnemonicParsing="false" onAction="#handleConnectAction" text="Koble til" />
-      <Text fx:id="errorMessage" fill="RED" layoutX="182.0" layoutY="79.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="237.0">
+      <TextField id="userName" fx:id="userName" layoutX="185.0" layoutY="125.0" onAction="#logIn" prefHeight="27.0" prefWidth="237.0" promptText="Username">
+         <font>
+            <Font size="12.0" />
+         </font></TextField>
+      <PasswordField fx:id="password" layoutX="185.0" layoutY="166.0" onAction="#logIn" prefHeight="27.0" prefWidth="237.0" promptText="Password">
+         <font>
+            <Font size="11.0" />
+         </font></PasswordField>
+      <Button id="connect" fx:id="logInButton" layoutX="185.0" layoutY="226.0" mnemonicParsing="false" onAction="#logIn" prefHeight="37.0" prefWidth="104.0" style="-fx-background-color: darkgray; -fx-border-color: lightgray;" text="Log in" textFill="WHITE">
+         <font>
+            <Font size="18.0" />
+         </font></Button>
+      <Text fx:id="errorMessage" fill="WHITE" layoutX="182.0" layoutY="79.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" underline="true" wrappingWidth="237.0">
          <font>
             <Font size="15.0" />
          </font>
       </Text>
-      <MenuBar prefHeight="29.0" prefWidth="600.0">
+      <MenuBar layoutX="-1.0" prefHeight="29.0" prefWidth="600.0">
         <menus>
           <Menu mnemonicParsing="false" text="File">
                <items>
-                  <MenuItem fx:id="setServer" mnemonicParsing="false" onAction="#setServerButtonPressed" text="Set server" />
+                  <MenuItem fx:id="setServer" mnemonicParsing="false" onAction="#openSetServerWindow" text="Set server" />
                </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Edit" />
           <Menu mnemonicParsing="false" text="Help" />
         </menus>
       </MenuBar>
+      <Text fill="WHITE" layoutX="107.0" layoutY="144.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Username:">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Text>
+      <Text fill="WHITE" layoutX="109.0" layoutY="185.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Password:">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Text>
+      <Button id="connect" layoutX="317.0" layoutY="226.0" mnemonicParsing="false" onAction="#registrerUser" prefHeight="37.0" prefWidth="105.0" style="-fx-background-color: darkgray; -fx-border-color: lightgray;" text="Registrer" textFill="WHITE">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Button>
    </children>
 </AnchorPane>
