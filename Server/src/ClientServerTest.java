@@ -8,6 +8,9 @@ import java.net.UnknownHostException;
 
 public class ClientServerTest {
 
+    static PrintWriter out;
+    static BufferedReader stdIn, in;
+
     public static void main(String[] args) {
 
         String hostName = "127.0.0.1";
@@ -27,31 +30,26 @@ public class ClientServerTest {
 
         System.out.println("Hi, I am EchoUCase TCP client!");
 
-        try(
+        try {
 
-                Socket clientSocket = new Socket(hostName,portNumber);
+            Socket clientSocket = new Socket(hostName,portNumber);
 
-                //Writer til socket
-                PrintWriter out = new PrintWriter(clientSocket.getOutputStream(),true);
+            //Writer til socket
+            out = new PrintWriter(clientSocket.getOutputStream(),true);
 
                 //Reader fra socket
-                BufferedReader in = new BufferedReader(
-                        new InputStreamReader(clientSocket.getInputStream()));
+            in = new BufferedReader(
+                    new InputStreamReader(clientSocket.getInputStream()));
 
-                //Leser fra keyboard
-                BufferedReader stdIn =
-                        new BufferedReader(
-                                new InputStreamReader(System.in)
-                        );
-                ){
-
+            //Leser fra keyboard
+            stdIn = new BufferedReader(new InputStreamReader(System.in));
             System.out.println(1);
             String userInput, receivedText = in.readLine();
             System.out.println(2);
             System.out.println(receivedText);
             System.out.println(3);
 
-            while ((userInput = stdIn.readLine()) != null && !receivedText.equals("loginAccept")){  //while loop to initialize login/registration for the user
+            while (!receivedText.equals("loginAccept") && (userInput = stdIn.readLine()) != null){  //while loop to initialize login/registration for the user
                 System.out.println(4);
                 out.println(userInput);
                 receivedText = in.readLine();
@@ -63,32 +61,11 @@ public class ClientServerTest {
                 System.exit(1);
             }
 
-            System.out.println("I, client [" + InetAddress.getLocalHost() + ":" + clientSocket.getLocalPort() + "] >");
+            System.out.println(in.readLine());
+            System.out.println("READLINE:");
 
-            Thread send = new Thread(() -> {
-                try {
-                    String input;
-                    while ((input = stdIn.readLine()) != null && !input.isEmpty()) {
-                        out.println(input);
-                    }
-                }catch (IOException e){
-                    System.out.println("Error while sending message");
-                }
-            });
-
-            Thread receive = new Thread(() -> {
-
-            });
-
-            while ((userInput = stdIn.readLine()) != null && !userInput.isEmpty()){
-                System.out.println(userInput);
-                out.println(userInput);
-
-                receivedText = in.readLine();
-
-                System.out.println("Server [" + hostName +  ":" + portNumber + "] > " + receivedText);
-                System.out.print("I (Client) [" + clientSocket.getLocalAddress().getHostAddress() + ":" + clientSocket.getLocalPort() + "] > ");
-            }
+            sender().start();
+            receiver().start();
 
         }catch (UnknownHostException uhe){
             System.err.println("Couldn't get I/O for the connection to " + hostName);
@@ -98,5 +75,31 @@ public class ClientServerTest {
             System.exit(1);
         }
 
+    }
+
+    public static Thread sender(){
+        return new Thread(() -> {
+            try {
+                String input;
+                while ((input = stdIn.readLine()) != null) {
+                    out.println(input);
+                }
+            }catch(IOException e){
+                e.printStackTrace();
+            }
+        });
+    }
+
+    public static Thread receiver(){
+        return new Thread(() -> {
+            try {
+                String received;
+                while ((received = in.readLine()) != null) {
+                    System.out.println(received);
+                }
+            }catch(IOException e){
+                e.printStackTrace();
+            }
+        });
     }
 }

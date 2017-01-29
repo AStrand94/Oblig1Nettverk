@@ -18,6 +18,7 @@ public class Server {
     static int portNumber;
     static ArrayList<User> allUsers = new ArrayList<>();
     static ArrayList<User> onlineUsers = new ArrayList<>();
+    static ArrayList<ChatServer> chatServers = new ArrayList<>();
 
 
     public static void main(String[] args) {
@@ -25,7 +26,7 @@ public class Server {
         portNumber = 5555; //default
 
         if (args.length > 1) {
-            System.err.println("Wrong input"); //fiks tekst senere
+            System.err.println("Wrong input");
             System.exit(1);
         }
         if(args.length == 1) portNumber = Integer.parseInt(args[0]);
@@ -41,6 +42,8 @@ public class Server {
             String isUser;
             User user;
             while (true) {
+
+                System.out.println("Listening for user");
 
                 //Waits for a client to connect
                 Socket connect = serverSocket.accept();
@@ -64,7 +67,7 @@ public class Server {
                         String up = in.readLine();
                         System.out.println(up);
                         Matcher m = p.matcher(up);
-                        System.out.println(m.find());
+                        if (!m.find()) continue;
                         System.out.println(m.group(1) + "     " + m.group(2));
 
 
@@ -90,10 +93,32 @@ public class Server {
                             logIn(user);
                         }
 
-                        System.out.println("Done checking user");
 
-                        ChatServer chat = new ChatServer(connect);
-                        chat.start();
+                        System.out.println("Done checking user");
+                        out.println("loginAccept");
+                        ServerClient client = new ServerClient(connect,user);
+                        //looking for available chats
+                        if (!chatServers.isEmpty()){
+                            StringBuilder sb = new StringBuilder("Available users: ");
+                            for (ChatServer cs : chatServers){
+                                if (cs.isAvailable())
+                                    sb.append(cs.getUsername() + " ");
+                            }
+                            sb.append(';');
+                            out.println(sb.toString());
+
+                            String chat = in.readLine();
+                            for (ChatServer cs : chatServers) {
+                                if (cs.getUsername().equals(chat)) cs.addClient(client);
+                                cs.start();
+                            }
+                        }else{
+                            out.println("No chats available, client put in empty chat");
+                            chatServers.add(new ChatServer(client));
+                        }
+
+                        //ChatServer chat = new ChatServer(client);
+                        //chat.start();
                         connected = true;
                         System.out.println("Done connecting");
                     }
