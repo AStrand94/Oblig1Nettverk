@@ -64,7 +64,7 @@ public class ChatServer extends Thread{
             try {
                 System.out.println("client1()");
                 String text;
-                while ((text = client1.getMessage().readLine()).equals("*QUIT*") && t2.isAlive()){
+                while (!(text = client1.getMessage().readLine()).equals("*QUIT*") && t2.isAlive()){
                     System.out.println("WRITING MESSAGE");
                     client2.writeMessage(text);
                 }
@@ -79,7 +79,7 @@ public class ChatServer extends Thread{
             try {
                 String text;
                 System.out.println("client2()");
-                while ((text = client2.getMessage().readLine()).equals("*QUIT*") && t1.isAlive()){
+                while (!(text = client2.getMessage().readLine()).equals("*QUIT*") && t1.isAlive()){
                     System.out.println("WRITING MESSAGE");
                     client1.writeMessage(text);
                 }
