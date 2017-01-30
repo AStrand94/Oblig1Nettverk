@@ -13,7 +13,7 @@ public class User {
         this.userId = id++;
         this.userName = userName;
         this.password = password;
-        this.status = "online";
+        this.status = "offline";
     }
 
     public int getId() {
