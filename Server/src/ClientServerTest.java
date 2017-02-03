@@ -62,7 +62,6 @@ public class ClientServerTest {
             }
 
             System.out.println(in.readLine());
-            System.out.println("READLINE:");
 
             sender().start();
             receiver().start();
