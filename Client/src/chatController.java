@@ -46,9 +46,12 @@ public class chatController {
 
     @FXML
     protected void selectUser() {
-        client.print().println(onlineUsers.getSelectionModel().getSelectedItem());
-
         onlineUsers.getScene().getStylesheets().add(getClass().getResource("listStyles.css").toExternalForm());
+
+        //Kan kun koble til en annen klient, hvis man ikke er connected fra før
+        if(!client.getConnected()) {
+            client.print().println(onlineUsers.getSelectionModel().getSelectedItem());
+        }
     }
 
     @FXML

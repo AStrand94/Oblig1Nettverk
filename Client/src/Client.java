@@ -56,6 +56,10 @@ public class Client {
         this.connected = connected;
     }
 
+    public boolean getConnected() {
+        return connected;
+    }
+
     public void setUsername(String username) {
         this.username = username;
     }
@@ -100,11 +104,6 @@ public class Client {
                 }
                 sb.setLength(0);
             }
-
-            System.out.println(sb.toString());
-
-
-
         }
     }
 
