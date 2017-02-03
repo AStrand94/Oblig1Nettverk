@@ -24,9 +24,7 @@ public class chatController {
     }
     @FXML
     protected void sendMessage() throws IOException {
-        chatArea.appendText(client.sendMessage(messageField.getText()));
-        chatArea.appendText("\n");
-        //client.sendMessage(messageField.getText());
+        client.sendMessageToServer(messageField.getText());
         messageField.clear();
     }
 

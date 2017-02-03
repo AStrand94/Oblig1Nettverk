@@ -19,7 +19,6 @@ public class Main extends Application{
     }
 
     public void start(Stage stage) throws Exception {
-
         this.stage = stage;
         Parent root = FXMLLoader.load(getClass().getResource("connect.fxml"));
 
@@ -28,9 +27,6 @@ public class Main extends Application{
         stage.setTitle("Connect");
         stage.setScene(loginScene);
         stage.show();
-
-
-
     }
 
 }

@@ -84,11 +84,9 @@ public class Client {
         return true;
     }
 
-    public String sendMessage(String message) throws IOException {
+    public void sendMessageToServer(String message) throws IOException {
         System.out.println(message);
         out.println(message);
-
-        return message;
     }
 
 }
