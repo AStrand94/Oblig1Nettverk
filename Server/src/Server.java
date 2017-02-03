@@ -252,7 +252,7 @@ public class Server {
     }
 
     protected static void sendUpdatedUsers(){
-        String userInfo = onlineUsers();
+        String userInfo = "*ui*" + onlineUsers();
         for (ChatServer cs : chatServers){
             cs.client1.writeMessage(userInfo);
             cs.client2.writeMessage(userInfo);
