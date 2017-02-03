@@ -12,6 +12,10 @@ import java.io.IOException;
 
 public class connectController {
 
+    Client client = Client.getInstance();
+
+    String receivedText = "";
+
     @FXML
     private TextField userName;
     @FXML
@@ -27,21 +31,35 @@ public class connectController {
 
 
     public connectController() throws IOException {
-
+        System.out.println(client.read().readLine());
     }
 
     @FXML
-    protected void logIn(ActionEvent event) {
+    protected void logIn() throws IOException {
 
-        if (userName.getText().equals("admin") && password.getText().equals("admin")) {
-            try {
-                errorMessage.setText("");
-                goToChatWindow();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        //Confirms to server that a login is about to happen
+        client.print().println("y");
+
+        System.out.println(client.read().readLine());
+
+        //Sends username and password to server
+        client.print().println(userName.getText() + " " + password.getText());
+
+        //Stores server's response to the login in a String
+        receivedText = client.read().readLine();
+
+
+        //Username and password correct
+        if (receivedText.equals("loginAccept")) {
+            errorMessage.setText("");
+            goToChatWindow();
+            receivedText = client.read().readLine();
+            System.out.println(receivedText);
+
+
+            client.receiver().start();
+        //Username or password incorrect
         } else {
-
             if (userName.getText().equals("") && password.getText().equals(""))
                 errorMessage.setText("You must enter a username and password..");
             else if (userName.getText().equals(""))
@@ -53,13 +71,33 @@ public class connectController {
         }
     }
 
+    //Registers a user in the system
     @FXML
-    protected void registrerUser() {
-        System.out.println("registrerUser() clicked");
+    protected void registerUser() throws IOException {
+        client.print().println("n");
+        System.out.println(client.read().readLine());
+
+        //Username contains space
+        if (userName.getText().contains(" ")) {
+            errorMessage.setText("Username cannot contains any spaces");
+        }
+        //Password contains space
+        else if (password.getText().contains(" ")) {
+            errorMessage.setText("Password cannot contain any spaces");
+        } else {
+            client.print().println(userName.getText() + " " + password.getText());
+
+            if (client.read().readLine().equals("loginAccept")) {
+                errorMessage.setText("");
+                goToChatWindow();
+                System.out.println(client.read().readLine());
+                client.receiver().start();
+            }
+        }
     }
 
     @FXML
-    protected void openSetServerWindow(ActionEvent event) throws IOException {
+    protected void openSetServerWindow() throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("setServer.fxml"));
 
         Scene setServerScene = new Scene(root, 400, 200);

@@ -1,4 +1,5 @@
 import javafx.fxml.FXML;
+import javafx.scene.control.*;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -13,16 +14,25 @@ public class Client {
 
     private static Client instance = null;
 
-    String hostName = "127.0.0.1";
-    int portNumber = 5555;
+    private String hostName = "127.0.0.1";
+    private int portNumber = 5555;
 
 
-    Socket socket = null;
+    private Socket socket = null;
 
-    PrintWriter out = null;
-    BufferedReader in = null;
-    BufferedReader stdIn = null;
+    private PrintWriter out = null;
+    private BufferedReader in = null;
+    private BufferedReader stdIn = null;
 
+    private TextArea chatArea;
+
+    public BufferedReader read() {
+        return in;
+    }
+
+    public PrintWriter print() {
+        return out;
+    }
 
     protected Client() throws IOException {
 
@@ -33,6 +43,10 @@ public class Client {
                 new InputStreamReader(socket.getInputStream()));
         stdIn = new BufferedReader(
                 new InputStreamReader(System.in));
+    }
+
+    public void setChatArea(TextArea chatArea){
+        this.chatArea = chatArea;
     }
 
     public static Client getInstance() {
@@ -46,6 +60,21 @@ public class Client {
         return instance;
     }
 
+    public Thread receiver() {
+        return new Thread(() -> {
+            try {
+                String received;
+                while ((received = in.readLine()) != null) {
+                    System.out.println(received);
+                    chatArea.appendText(received + '\n');
+
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
     public boolean createNewSocket(String hostName, int portNumber) {
         try {
             socket = new Socket(hostName, portNumber);
@@ -56,16 +85,10 @@ public class Client {
     }
 
     public String sendMessage(String message) throws IOException {
-        String userInput = message;
+        System.out.println(message);
+        out.println(message);
 
-        System.out.println("Client: " + userInput);
-        out.println(userInput);
-
-        String recievedText = in.readLine();
-
-        System.out.println("Server: " + recievedText);
-
-        return recievedText;
+        return message;
     }
 
 }

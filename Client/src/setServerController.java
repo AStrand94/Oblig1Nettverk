@@ -27,7 +27,7 @@ public class setServerController {
     private Button connectButton;
 
     @FXML
-    protected void setServer(ActionEvent event) throws IOException {
+    protected void setServer() throws IOException {
 
         int port;
 

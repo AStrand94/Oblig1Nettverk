@@ -48,7 +48,7 @@
             <Font size="14.0" />
          </font>
       </Text>
-      <Button id="connect" layoutX="317.0" layoutY="226.0" mnemonicParsing="false" onAction="#registrerUser" prefHeight="37.0" prefWidth="105.0" style="-fx-background-color: darkgray; -fx-border-color: lightgray;" text="Registrer" textFill="WHITE">
+      <Button id="connect" layoutX="317.0" layoutY="226.0" mnemonicParsing="false" onAction="#registerUser" prefHeight="37.0" prefWidth="105.0" style="-fx-background-color: darkgray; -fx-border-color: lightgray;" text="Registrer" textFill="WHITE">
          <font>
             <Font size="18.0" />
          </font>

@@ -1,9 +1,4 @@
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
@@ -20,16 +15,26 @@ public class chatController {
     @FXML
     private TextArea chatArea;
     @FXML
+    private TextArea onlineUsers;
+    @FXML
     private TextField messageField;
 
+    public void initialize(){
+        client.setChatArea(chatArea);
+    }
     @FXML
-    protected void sendMessage(ActionEvent event) throws IOException {
-        chatArea.appendText(client.sendMessage(messageField.getText()) + "\n");
+    protected void sendMessage() throws IOException {
+        chatArea.appendText(client.sendMessage(messageField.getText()));
+        chatArea.appendText("\n");
+        //client.sendMessage(messageField.getText());
         messageField.clear();
     }
 
     @FXML
-    protected void openConnectWindow(ActionEvent event) throws IOException {
+    protected void logOut() throws IOException {
+
+        client.print().println("*QUIT*");
+
         Stage stage = Main.stage;
 
         stage.setScene(Main.loginScene);
