@@ -100,10 +100,8 @@ public class Server {
                         out.println("loginAccept");
                         ServerClient client = new ServerClient(connect,user);
                         //looking for available chats
+                        out.println("*ui*" + onlineUsers());
                         if (availableChats()){
-                            String users = "*ui*" + onlineUsers();
-                            if (users.length() == 4)
-                            out.println("*ui*" + onlineUsers());
 
                             String chat = in.readLine();
                             if (chat.equals("new")) putInNewChat(client);
@@ -113,17 +111,19 @@ public class Server {
                                 cs.start();
                             }
                         }else{
-                            out.println("*ui*");
                             putInNewChat(client);
                         }
 
                         connected = true;
                         System.out.println("Done connecting");
+                        sendUpdatedUsers();
                     }
 
                 } catch (IOException e) {
                     System.out.println("Connection timed out with client, waiting for new client");
 
+                }catch(NullPointerException npe){
+                    System.out.println("User disconnected");
                 }
             }
 
@@ -199,6 +199,7 @@ public class Server {
         while (!inChat) {
             try {
                 String chat = client.in.readLine();
+                System.out.println("User trying to reconnect, chat: " + chat);
                 if (chat.equals("new")){
                     putInNewChat(client);
                     inChat = true;
@@ -248,5 +249,13 @@ public class Server {
 
     private static String onlineUsers(){
         return isAvailable() + busyUsers();
+    }
+
+    protected static void sendUpdatedUsers(){
+        String userInfo = onlineUsers();
+        for (ChatServer cs : chatServers){
+            cs.client1.writeMessage(userInfo);
+            cs.client2.writeMessage(userInfo);
+        }
     }
 }

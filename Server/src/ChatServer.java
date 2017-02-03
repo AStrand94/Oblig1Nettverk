@@ -14,6 +14,8 @@ public class ChatServer extends Thread{
     ServerClient client1, client2;
     InetAddress address1, address2;
 
+    ChatServer thisChat = this;
+
     Thread t1,t2;
     String s1,s2;
 
@@ -37,6 +39,13 @@ public class ChatServer extends Thread{
         client1.setStatus("busy");
 
         s2 = '[' + client2.getUsername() + ']' + ':' + ' ';
+        confirmConnection();
+    }
+
+    private void confirmConnection(){
+        String connected = "*c*";
+        client1.writeMessage(connected);
+        client2.writeMessage(connected);
     }
 
     public boolean isAvailable(){
@@ -63,7 +72,7 @@ public class ChatServer extends Thread{
 
     @Override
     public void run(){
-
+/*
         Thread.UncaughtExceptionHandler t = new Thread.UncaughtExceptionHandler(){
             public void uncaughtException(Thread th, Throwable ex){
                 System.out.println("Uncaught Exception : " + ex);
@@ -82,12 +91,12 @@ public class ChatServer extends Thread{
 
                 chatAlive = false;
             }
-        };
+        };*/
 
         chatAlive = true;
         t1 = client1(); t2 = client2();
-        t1.setUncaughtExceptionHandler(t);
-        t2.setUncaughtExceptionHandler(t);
+        //t1.setUncaughtExceptionHandler(t);
+        //t2.setUncaughtExceptionHandler(t);
 
         t1.start(); t2.start();
 
@@ -110,6 +119,14 @@ public class ChatServer extends Thread{
                 System.out.println("done client1()");
             }catch (IOException e){
                 e.printStackTrace();
+
+            }catch(NullPointerException npe){
+                System.out.println("client " + client1.getUsername() + " disconnected");
+                chatAlive = false;
+                t2.stop();
+                endChatSeeUsers(client2);
+                client1.setStatus("offline");
+
             }
         });
     }
@@ -129,6 +146,12 @@ public class ChatServer extends Thread{
                 System.out.println("done client2()");
             }catch (IOException e){
                 e.printStackTrace();
+            }catch(NullPointerException npe){
+                System.out.println("client " + client2.getUsername() + " disconnected");
+                chatAlive = false;
+                t1.stop();
+                client2.setStatus("offline");
+                endChatSeeUsers(client1);
             }
         });
     }
@@ -137,10 +160,7 @@ public class ChatServer extends Thread{
         client.setStatus("available");
         Server.endChat(this);
         Server.putInChat(client);
-    }
-
-    public boolean usersAreOnline(){
-        return (!client1.socket.isClosed() && !client2.socket.isClosed());
+        Server.sendUpdatedUsers();
     }
 
 }
