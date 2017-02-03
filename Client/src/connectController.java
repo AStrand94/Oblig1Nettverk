@@ -57,11 +57,11 @@ public class connectController {
             receivedText = client.read().readLine();
             System.out.println(receivedText);
 
-            if(receivedText.equals("*ui*")) {
+            if (receivedText.substring(0, 4).equals("*ui*")) {
                 client.updateOnlineUsers(receivedText);
             }
             client.receiver().start();
-        //Username or password incorrect
+            //Username or password incorrect
         } else {
             if (userName.getText().equals("") && password.getText().equals(""))
                 errorMessage.setText("You must enter a username and password..");
@@ -99,7 +99,7 @@ public class connectController {
                 receivedText = client.read().readLine();
                 System.out.println(receivedText);
 
-                if(receivedText.length() != 4) {
+                if (receivedText.length() != 4) {
                     client.updateOnlineUsers(receivedText);
                 }
                 client.receiver().start();

@@ -70,6 +70,8 @@ public class Client {
 
     //TODO fikse farge etter status på brukerne
     public void updateOnlineUsers(String users) {
+        //Deletes all items in ListView
+        onlineUsers.getItems().clear();
 
         char[] charArray = users.toCharArray();
 
@@ -84,23 +86,24 @@ public class Client {
             } else if(charArray[i-1] == 'b' && charArray[i] == ':') {
                 //Do something
                 continue;
-                //User is offline
-            } else if(charArray[i-1] == 'o' && charArray[i] == ':') {
-                //Do something
+            } else if(charArray[i-1] == ' ') {
                 continue;
             }
-
-
 
             if(charArray[i] != ' ')  {
                 sb.append(charArray[i]);
             }
             else {
                 if(!sb.toString().equals(username)) {
+                    //Adds all items to ListView, except the user himself
                     onlineUsers.getItems().add(sb.toString());
                 }
                 sb.setLength(0);
             }
+
+            System.out.println(sb.toString());
+
+
 
         }
     }
@@ -132,9 +135,9 @@ public class Client {
                         } else if (received.substring(0, 4).equals("*ui*")) {
                             updateOnlineUsers(received);
                         }
+                    } else {
+                        chatArea.appendText(received + '\n');
                     }
-
-                    chatArea.appendText(received + '\n');
 
                 }
             } catch (IOException e) {
