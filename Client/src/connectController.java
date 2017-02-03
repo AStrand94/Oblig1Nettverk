@@ -56,7 +56,9 @@ public class connectController {
             receivedText = client.read().readLine();
             System.out.println(receivedText);
 
-
+            if(receivedText.length() != 4) {
+                client.updateOnlineUsers(receivedText);
+            }
             client.receiver().start();
         //Username or password incorrect
         } else {
@@ -75,7 +77,8 @@ public class connectController {
     @FXML
     protected void registerUser() throws IOException {
         client.print().println("n");
-        System.out.println(client.read().readLine());
+        String receivedText = client.read().readLine();
+        System.out.println(receivedText);
 
         //Username contains space
         if (userName.getText().contains(" ")) {
@@ -87,10 +90,16 @@ public class connectController {
         } else {
             client.print().println(userName.getText() + " " + password.getText());
 
-            if (client.read().readLine().equals("loginAccept")) {
+            receivedText = client.read().readLine();
+            if (receivedText.equals("loginAccept")) {
                 errorMessage.setText("");
                 goToChatWindow();
-                System.out.println(client.read().readLine());
+                receivedText = client.read().readLine();
+                System.out.println(receivedText);
+
+                if(receivedText.length() != 4) {
+                    client.updateOnlineUsers(receivedText);
+                }
                 client.receiver().start();
             }
         }

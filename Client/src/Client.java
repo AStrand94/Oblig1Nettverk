@@ -1,11 +1,15 @@
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
+import javax.xml.soap.Text;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by stiangrim on 25.01.2017.
@@ -17,6 +21,7 @@ public class Client {
     private String hostName = "127.0.0.1";
     private int portNumber = 5555;
 
+    private boolean connected;
 
     private Socket socket = null;
 
@@ -25,6 +30,7 @@ public class Client {
     private BufferedReader stdIn = null;
 
     private TextArea chatArea;
+    private ListView<String> onlineUsers;
 
     public BufferedReader read() {
         return in;
@@ -45,8 +51,51 @@ public class Client {
                 new InputStreamReader(System.in));
     }
 
+    public void setConnected(boolean connected) {
+        this.connected = connected;
+    }
+
     public void setChatArea(TextArea chatArea){
         this.chatArea = chatArea;
+    }
+
+    public void setOnlineUsers(ListView<String> onlineUsers) {
+        this.onlineUsers = onlineUsers;
+    }
+
+    //TODO fikse farge etter status på brukerne
+    public void updateOnlineUsers(String users) {
+
+        char[] charArray = users.toCharArray();
+
+        StringBuilder sb = new StringBuilder();
+        for (int i = 5; i < charArray.length; i++) {
+
+            //User is available
+            if(charArray[i-1] == 'a' && charArray[i] == ':') {
+                //Do something
+                continue;
+                //User is busy
+            } else if(charArray[i-1] == 'b' && charArray[i] == ':') {
+                //Do something
+                continue;
+                //User is offline
+            } else if(charArray[i-1] == 'o' && charArray[i] == ':') {
+                //Do something
+                continue;
+            }
+
+
+
+            if(charArray[i] != ' ')  {
+                sb.append(charArray[i]);
+            }
+            else {
+                onlineUsers.getItems().add(sb.toString());
+                sb.setLength(0);
+            }
+
+        }
     }
 
     public static Client getInstance() {
@@ -66,6 +115,19 @@ public class Client {
                 String received;
                 while ((received = in.readLine()) != null) {
                     System.out.println(received);
+
+                    //Message from server
+                    if(received.charAt(0) == '*') {
+                        //Update usersOnline
+                        if(received.substring(0, 3).equals("*ui*")) {
+                            updateOnlineUsers(received);
+                        } else if (received.substring(0, 2).equals("*d*")) {
+                            connected = false;
+                        } else if (received.substring(0, 2).equals("*c*")) {
+                            connected = true;
+                        }
+                    }
+
                     chatArea.appendText(received + '\n');
 
                 }
@@ -86,7 +148,9 @@ public class Client {
 
     public void sendMessageToServer(String message) throws IOException {
         System.out.println(message);
-        out.println(message);
+        if(connected) {
+            out.println(message);
+        }
     }
 
 }
