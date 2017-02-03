@@ -1,4 +1,3 @@
-import javax.jws.soap.SOAPBinding;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -102,8 +101,8 @@ public class Server {
                         ServerClient client = new ServerClient(connect,user);
                         //looking for available chats
                         if (availableChats()){
-                            //TODO: endre kode for !empty
-                            out.println(availableUsers());
+
+                            out.println("*ui*" + onlineUsers());
 
                             String chat = in.readLine();
                             if (chat.equals("new")) putInNewChat(client);
@@ -142,7 +141,6 @@ public class Server {
             }
 
         return false;
-
     }
 
     public static boolean checkUser(String uname, String passw){
@@ -195,20 +193,26 @@ public class Server {
     }
 
     public static void putInChat(ServerClient client){
-        client.out.println(availableUsers() + " new");
-        try {
-            String chat = client.in.readLine();
-            if (chat.equals("new")) putInNewChat(client);
-            else{
-                for (ChatServer cs : chatServers) {
-                if (cs.getUsername().equals(chat))
-                    cs.addClient(client);
-                else continue;
-                cs.start();
+        client.out.println("*ui*" + onlineUsers() + " new");
+        boolean inChat = false;
+        while (!inChat) {
+            try {
+                String chat = client.in.readLine();
+                if (chat.equals("new")){
+                    putInNewChat(client);
+                    inChat = true;
+                } else {
+                    for (ChatServer cs : chatServers) {
+                        if (cs.getUsername().equals(chat)) {
+                            cs.addClient(client);
+                            cs.start();
+                            inChat = true;
+                        }
+                    }
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-            }
-        }catch(IOException e){
-            e.printStackTrace();
         }
     }
 
@@ -223,13 +227,25 @@ public class Server {
         chatServers.add(new ChatServer(client));
     }
 
-    private static String availableUsers(){
-        StringBuilder sb = new StringBuilder("Available users: ");
+    private static String isAvailable(){
+        StringBuilder sb = new StringBuilder();
         for (ChatServer cs : chatServers){
             if (cs.isAvailable())
-                sb.append(cs.getUsername()).append(' ');
+                sb.append("a:").append(cs.getUsername()).append(' ');
         }
-        sb.append(';');
         return sb.toString();
+    }
+
+    private static String busyUsers(){
+        StringBuilder sb = new StringBuilder();
+        for (User u : allUsers){
+            if (u.getStatus().equals("busy"))
+                sb.append("b:").append(u.getUserName()).append(' ');
+        }
+        return sb.toString();
+    }
+
+    private static String onlineUsers(){
+        return isAvailable() + busyUsers();
     }
 }

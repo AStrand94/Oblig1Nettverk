@@ -40,6 +40,9 @@ public class ChatServer extends Thread{
     }
 
     public boolean isAvailable(){
+        if (client1 == null && client2 == null)
+            throw new IllegalStateException("Empty ChatServer still alive");
+
         return (client1 == null || client2 == null);
     }
 
@@ -51,7 +54,7 @@ public class ChatServer extends Thread{
 
         if (client2 == null) return client1.getUsername();
         else if (client1 == null) return client2.getUsername();
-        else return client1.getUsername() + " " + client2.getUsername();
+        else return client1.getUsername() + ' ' + client2.getUsername();
 
 
     }
@@ -67,12 +70,15 @@ public class ChatServer extends Thread{
 
         t1.start(); t2.start();
 
+
+
     }
 
     private Thread client1(){
         return new Thread(() -> {
             try {
                 System.out.println("client1()");
+                client1.writeMessage("connected to " + client2.getUsername());
                 String text;
                 while (!(text = client1.getMessage().readLine()).equals("*QUIT*") && chatAlive){
                     client1.writeMessage(s1 + text);
@@ -92,6 +98,7 @@ public class ChatServer extends Thread{
             try {
                 String text;
                 System.out.println("client2()");
+                client2.writeMessage("connected to " + client1.getUsername());
                 while (!(text = client2.getMessage().readLine()).equals("*QUIT*") && chatAlive){
                     client2.writeMessage(s2 + text);
                     client1.writeMessage(s2 + text);
