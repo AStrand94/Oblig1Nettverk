@@ -21,7 +21,10 @@ public class Server {
     static ArrayList<ChatServer> chatServers = new ArrayList<>();
 
 
+
     public static void main(String[] args) {
+        allUsers.add(new User("admin","admin"));
+        allUsers.add(new User("stian","stian"));
 
         portNumber = 5555; //default
 
