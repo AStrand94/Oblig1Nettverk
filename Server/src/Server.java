@@ -101,7 +101,8 @@ public class Server {
                         ServerClient client = new ServerClient(connect,user);
                         //looking for available chats
                         if (availableChats()){
-
+                            String users = "*ui*" + onlineUsers();
+                            if (users.length() == 4)
                             out.println("*ui*" + onlineUsers());
 
                             String chat = in.readLine();
@@ -112,7 +113,7 @@ public class Server {
                                 cs.start();
                             }
                         }else{
-                            out.println("No chats available, client put in empty chat");
+                            out.println("*ui*");
                             putInNewChat(client);
                         }
 

@@ -61,12 +61,33 @@ public class ChatServer extends Thread{
 
 
 
-
     @Override
     public void run(){
 
+        Thread.UncaughtExceptionHandler t = new Thread.UncaughtExceptionHandler(){
+            public void uncaughtException(Thread th, Throwable ex){
+                System.out.println("Uncaught Exception : " + ex);
+
+                System.out.println(client1.socket.isConnected() + " " + client2.socket.isConnected());
+                if (client1.socket.isClosed()){
+                    t1.stop();
+                    System.out.println("client1 is closed");
+                    Server.putInChat(client2);
+                }
+                if (client2.socket.isClosed()){
+                    t2.stop();
+                    System.out.println("client2 is closed");
+                    Server.putInChat(client1);
+                }
+
+                chatAlive = false;
+            }
+        };
+
         chatAlive = true;
         t1 = client1(); t2 = client2();
+        t1.setUncaughtExceptionHandler(t);
+        t2.setUncaughtExceptionHandler(t);
 
         t1.start(); t2.start();
 
