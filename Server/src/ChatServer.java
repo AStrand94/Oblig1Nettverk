@@ -15,6 +15,9 @@ public class ChatServer extends Thread{
     InetAddress address1, address2;
 
     Thread t1,t2;
+    String s1,s2;
+
+    boolean chatAlive;
 
 
 
@@ -22,12 +25,18 @@ public class ChatServer extends Thread{
         System.out.println("NEW CHATSERVER");
         this.client1 = client1;
         address1 = client1.getClientAddr();
+        s1 = '[' + client1.getUsername() + ']' + ':' + ' ';
 
     }
 
     public void addClient(ServerClient client2){
         this.client2 = client2;
         address2 = client2.getClientAddr();
+
+        client2.setStatus("busy");
+        client1.setStatus("busy");
+
+        s2 = '[' + client2.getUsername() + ']' + ':' + ' ';
     }
 
     public boolean isAvailable(){
@@ -53,41 +62,53 @@ public class ChatServer extends Thread{
     @Override
     public void run(){
 
+        chatAlive = true;
         t1 = client1(); t2 = client2();
 
         t1.start(); t2.start();
 
     }
 
-    public Thread client1(){
+    private Thread client1(){
         return new Thread(() -> {
             try {
                 System.out.println("client1()");
                 String text;
-                while (!(text = client1.getMessage().readLine()).equals("*QUIT*") && t2.isAlive()){
+                while (!(text = client1.getMessage().readLine()).equals("*QUIT*") && chatAlive){
                     System.out.println("WRITING MESSAGE");
-                    client2.writeMessage(text);
+                    client2.writeMessage(s1 + text);
                 }
+                chatAlive = false;
+                endChatSeeUsers(client1);
+                System.out.println("done client1()");
             }catch (IOException e){
                 e.printStackTrace();
             }
         });
     }
 
-    public Thread client2(){
+    private Thread client2(){
         return new Thread(() -> {
             try {
                 String text;
                 System.out.println("client2()");
-                while (!(text = client2.getMessage().readLine()).equals("*QUIT*") && t1.isAlive()){
+                while (!(text = client2.getMessage().readLine()).equals("*QUIT*") && chatAlive){
                     System.out.println("WRITING MESSAGE");
-                    client1.writeMessage(text);
+                    client1.writeMessage(s2 + text);
                 }
+                chatAlive = false;
+                endChatSeeUsers(client2);
                 System.out.println("done client2()");
             }catch (IOException e){
                 e.printStackTrace();
             }
         });
+    }
+
+    public void endChatSeeUsers(ServerClient client){
+        client.setStatus("available");
+        Server.endChat(this);
+        Server.putInChat(client);
     }
 
     public boolean usersAreOnline(){

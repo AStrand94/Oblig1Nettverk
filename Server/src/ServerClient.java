@@ -47,4 +47,12 @@ public class ServerClient {
     public BufferedReader getMessage(){
         return in;
     }
+
+    public void setStatus(String status){
+        user.setStatus(status);
+    }
+
+    public String getStatus(){
+        return user.getStatus();
+    }
 }

@@ -34,7 +34,7 @@ public class Server {
         System.out.println("Hi, this is ChatServer");
 
         try(
-                ServerSocket serverSocket = new ServerSocket(portNumber);
+                ServerSocket serverSocket = new ServerSocket(portNumber)
 
                 ){
 
@@ -50,8 +50,10 @@ public class Server {
 
 
                 System.out.println("client connected");
-                PrintWriter out = new PrintWriter(connect.getOutputStream(),true); //out to client
-                BufferedReader in = new BufferedReader(new InputStreamReader(connect.getInputStream())); //input from client
+                PrintWriter out = new PrintWriter(
+                        connect.getOutputStream(),true); //out to client
+                BufferedReader in = new BufferedReader(
+                        new InputStreamReader(connect.getInputStream())); //input from client
                 boolean connected = false;
                 try {
                     while (!connected) {
@@ -63,24 +65,22 @@ public class Server {
 
                         out.println("requser");
 
-                        Pattern p = Pattern.compile("(.+) (.+)"); //username and password with a single space between them
+                        // req username and password with a single space between them
+                        Pattern p = Pattern.compile("(.+) (.+)");
                         String up = in.readLine();
-                        System.out.println(up);
                         Matcher m = p.matcher(up);
                         if (!m.find()) continue;
-                        System.out.println(m.group(1) + "     " + m.group(2));
-
 
 
                         //if client is a user
                         if (isUser.equals("y")) {
 
+                            //if user is not registered
                             if (!checkUser(m.group(1), m.group(2))) {
-                                System.out.println("Oh, this user is not registered");
+
                                 continue;   //continue makes you go on from start in loop again.
                             }
 
-                            System.out.println("User is checked");
                             user = getUser(m.group(1));
                             logIn(user);
 
@@ -94,31 +94,26 @@ public class Server {
                         }
 
 
-                        System.out.println("Done checking user");
+                        //Done checking user
                         out.println("loginAccept");
                         ServerClient client = new ServerClient(connect,user);
                         //looking for available chats
-                        if (!chatServers.isEmpty()){
-                            StringBuilder sb = new StringBuilder("Available users: ");
-                            for (ChatServer cs : chatServers){
-                                if (cs.isAvailable())
-                                    sb.append(cs.getUsername() + " ");
-                            }
-                            sb.append(';');
-                            out.println(sb.toString());
+                        if (availableChats()){
+                            //TODO: endre kode for !empty
+                            out.println(availableUsers());
 
                             String chat = in.readLine();
+                            if (chat.equals("new")) putInNewChat(client);
                             for (ChatServer cs : chatServers) {
                                 if (cs.getUsername().equals(chat)) cs.addClient(client);
+                                else continue;
                                 cs.start();
                             }
                         }else{
                             out.println("No chats available, client put in empty chat");
-                            chatServers.add(new ChatServer(client));
+                            putInNewChat(client);
                         }
 
-                        //ChatServer chat = new ChatServer(client);
-                        //chat.start();
                         connected = true;
                         System.out.println("Done connecting");
                     }
@@ -190,5 +185,48 @@ public class Server {
         }
 
         throw new NoSuchElementException("No user with username" + uname);
+    }
+
+    public static void endChat(ChatServer cs){
+        chatServers.remove(cs);
+    }
+
+    public static void putInChat(ServerClient client){
+        client.out.println(availableUsers() + " new");
+        try {
+            String chat = client.in.readLine();
+            if (chat.equals("new")) putInNewChat(client);
+            else{
+                for (ChatServer cs : chatServers) {
+                if (cs.getUsername().equals(chat))
+                    cs.addClient(client);
+                else continue;
+                cs.start();
+            }
+            }
+        }catch(IOException e){
+            e.printStackTrace();
+        }
+    }
+
+    private static boolean availableChats(){
+        for (ChatServer cs : chatServers){
+            if (cs.isAvailable()) return true;
+        }
+        return false;
+    }
+
+    private static void putInNewChat(ServerClient client){
+        chatServers.add(new ChatServer(client));
+    }
+
+    private static String availableUsers(){
+        StringBuilder sb = new StringBuilder("Available users: ");
+        for (ChatServer cs : chatServers){
+            if (cs.isAvailable())
+                sb.append(cs.getUsername()).append(' ');
+        }
+        sb.append(';');
+        return sb.toString();
     }
 }
