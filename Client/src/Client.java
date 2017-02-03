@@ -22,6 +22,7 @@ public class Client {
     private int portNumber = 5555;
 
     private boolean connected;
+    private String username = "";
 
     private Socket socket = null;
 
@@ -53,6 +54,10 @@ public class Client {
 
     public void setConnected(boolean connected) {
         this.connected = connected;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public void setChatArea(TextArea chatArea){
@@ -91,7 +96,9 @@ public class Client {
                 sb.append(charArray[i]);
             }
             else {
-                onlineUsers.getItems().add(sb.toString());
+                if(!sb.toString().equals(username)) {
+                    onlineUsers.getItems().add(sb.toString());
+                }
                 sb.setLength(0);
             }
 
@@ -118,13 +125,12 @@ public class Client {
 
                     //Message from server
                     if(received.charAt(0) == '*') {
-                        //Update usersOnline
-                        if(received.substring(0, 3).equals("*ui*")) {
-                            updateOnlineUsers(received);
-                        } else if (received.substring(0, 2).equals("*d*")) {
-                            connected = false;
-                        } else if (received.substring(0, 2).equals("*c*")) {
+                        if(received.substring(0, 3).equals("*c*")) {
                             connected = true;
+                        } else if (received.substring(0, 3).equals("*d*")) {
+                            connected = false;
+                        } else if (received.substring(0, 4).equals("*ui*")) {
+                            updateOnlineUsers(received);
                         }
                     }
 

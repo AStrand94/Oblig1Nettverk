@@ -51,12 +51,13 @@ public class connectController {
 
         //Username and password correct
         if (receivedText.equals("loginAccept")) {
+            client.setUsername(userName.getText());
             errorMessage.setText("");
             goToChatWindow();
             receivedText = client.read().readLine();
             System.out.println(receivedText);
 
-            if(receivedText.length() != 4) {
+            if(receivedText.equals("*ui*")) {
                 client.updateOnlineUsers(receivedText);
             }
             client.receiver().start();
@@ -92,6 +93,7 @@ public class connectController {
 
             receivedText = client.read().readLine();
             if (receivedText.equals("loginAccept")) {
+                client.setUsername(userName.getText());
                 errorMessage.setText("");
                 goToChatWindow();
                 receivedText = client.read().readLine();
