@@ -1,15 +1,11 @@
-import javafx.collections.ObservableList;
-import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.ListView;
+import javafx.scene.control.TextArea;
 
-import javax.xml.soap.Text;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by stiangrim on 25.01.2017.
@@ -17,21 +13,27 @@ import java.util.List;
 public class Client {
 
     private static Client instance = null;
-
     private String hostName = "127.0.0.1";
-    private int portNumber = 5555;
-
-    private boolean connected;
     private String username = "";
-
+    private int portNumber = 5555;
+    private boolean connected;
     private Socket socket = null;
-
     private PrintWriter out = null;
     private BufferedReader in = null;
     private BufferedReader stdIn = null;
-
     private TextArea chatArea;
     private ListView<String> onlineUsers;
+
+    public static Client getInstance() {
+        if (instance == null) {
+            try {
+                instance = new Client();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return instance;
+    }
 
     public BufferedReader read() {
         return in;
@@ -42,7 +44,6 @@ public class Client {
     }
 
     protected Client() throws IOException {
-
         socket = new Socket(hostName, portNumber);
 
         out = new PrintWriter(socket.getOutputStream(), true);
@@ -76,6 +77,7 @@ public class Client {
     public void updateOnlineUsers(String users) {
         //Deletes all items in ListView
         onlineUsers.getItems().clear();
+        onlineUsers.getItems().addAll("Test1", "Test2");
 
         char[] charArray = users.toCharArray();
 
@@ -101,21 +103,11 @@ public class Client {
                 if(!sb.toString().equals(username)) {
                     //Adds all items to ListView, except the user himself
                     onlineUsers.getItems().add(sb.toString());
+                    onlineUsers.getItems().get(0).toUpperCase();
                 }
                 sb.setLength(0);
             }
         }
-    }
-
-    public static Client getInstance() {
-        if (instance == null) {
-            try {
-                instance = new Client();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        return instance;
     }
 
     public Thread receiver() {

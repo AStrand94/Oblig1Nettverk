@@ -1,4 +1,4 @@
-import javafx.event.ActionEvent;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -57,9 +57,12 @@ public class connectController {
             receivedText = client.read().readLine();
             System.out.println(receivedText);
 
+            //Server sends message to update users
             if (receivedText.substring(0, 4).equals("*ui*")) {
                 client.updateOnlineUsers(receivedText);
             }
+
+            //Starts thread
             client.receiver().start();
             //Username or password incorrect
         } else {
@@ -99,9 +102,12 @@ public class connectController {
                 receivedText = client.read().readLine();
                 System.out.println(receivedText);
 
-                if (receivedText.length() != 4) {
+                //Server sends message to update users
+                if (receivedText.substring(0, 4).equals("*ui*")) {
                     client.updateOnlineUsers(receivedText);
                 }
+
+                //Starts thread
                 client.receiver().start();
             }
         }
@@ -127,6 +133,13 @@ public class connectController {
         Stage stage = (Stage) logInButton.getScene().getWindow();
         stage.setTitle("Chat");
         stage.setScene(chatScene);
+
+        stage.setOnCloseRequest(event -> {
+            client.receiver().interrupt();
+            Platform.exit();
+            System.exit(0);
+        });
+
         stage.show();
     }
 

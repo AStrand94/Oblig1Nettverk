@@ -11,8 +11,8 @@ import java.io.IOException;
  */
 public class Main extends Application{
 
-    static Scene loginScene;
-    static Stage stage;
+     Scene loginScene;
+     Stage stage;
 
     public static void main(String[] args) throws IOException {
         launch(args);

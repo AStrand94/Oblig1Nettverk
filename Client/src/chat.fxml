@@ -11,7 +11,7 @@
       <Button layoutX="395.0" layoutY="359.0" mnemonicParsing="false" onAction="#sendMessage" prefHeight="27.0" prefWidth="73.0" text="Send" />
       <TextArea fx:id="chatArea" editable="false" layoutX="14.0" layoutY="43.0" prefHeight="310.0" prefWidth="454.0" wrapText="true" />
       <Text fill="WHITE" layoutX="497.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Online users" />
-      <Button layoutX="13.0" layoutY="8.0" mnemonicParsing="false" onAction="#logOut" style="-fx-background-color: darkgray; -fx-border-color: lightgray;" text="Log out" textFill="WHITE" />
+      <Button layoutX="13.0" layoutY="8.0" mnemonicParsing="false" onAction="#endChat" style="-fx-background-color: darkgray; -fx-border-color: lightgray;" text="End chat" textFill="WHITE" />
       <ListView fx:id="onlineUsers" layoutX="476.0" layoutY="43.0" prefHeight="310.0" prefWidth="116.0" />
    </children>
 </AnchorPane>

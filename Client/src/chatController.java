@@ -4,7 +4,6 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseButton;
-import javafx.stage.Stage;
 
 import java.io.IOException;
 
@@ -26,13 +25,10 @@ public class chatController {
         client.setChatArea(chatArea);
         client.setOnlineUsers(onlineUsers);
 
-        onlineUsers.setOnMouseClicked(new EventHandler<javafx.scene.input.MouseEvent>() {
-            @Override
-            public void handle(javafx.scene.input.MouseEvent event) {
-                if(event.getButton().equals(MouseButton.PRIMARY)) {
-                    if(event.getClickCount() == 2) {
-                        selectUser();
-                    }
+        onlineUsers.setOnMouseClicked(event -> {
+            if(event.getButton().equals(MouseButton.PRIMARY)) {
+                if(event.getClickCount() == 2) {
+                    selectUser();
                 }
             }
         });
@@ -55,14 +51,9 @@ public class chatController {
     }
 
     @FXML
-    protected void logOut() throws IOException {
-
+    protected void endChat() throws IOException {
         client.print().println("*QUIT*");
-
-        Stage stage = Main.stage;
-
-        stage.setScene(Main.loginScene);
-        stage.show();
+        client.setConnected(false);
     }
 
 }
