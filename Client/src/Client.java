@@ -1,11 +1,15 @@
+import javafx.fxml.FXML;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
+import javafx.scene.paint.Color;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.ArrayList;
 
 /**
  * Created by stiangrim on 25.01.2017.
@@ -77,7 +81,6 @@ public class Client {
     public void updateOnlineUsers(String users) {
         //Deletes all items in ListView
         onlineUsers.getItems().clear();
-        onlineUsers.getItems().addAll("Test1", "Test2");
 
         char[] charArray = users.toCharArray();
 
@@ -92,6 +95,10 @@ public class Client {
             } else if(charArray[i-1] == 'b' && charArray[i] == ':') {
                 //Do something
                 continue;
+                //User is offline
+            } else if(charArray[i-1] == 'o' && charArray[i] == ':') {
+                //Do something
+                continue;
             } else if(charArray[i-1] == ' ') {
                 continue;
             }
@@ -103,7 +110,6 @@ public class Client {
                 if(!sb.toString().equals(username)) {
                     //Adds all items to ListView, except the user himself
                     onlineUsers.getItems().add(sb.toString());
-                    onlineUsers.getItems().get(0).toUpperCase();
                 }
                 sb.setLength(0);
             }
@@ -122,6 +128,7 @@ public class Client {
                         if(received.substring(0, 3).equals("*c*")) {
                             connected = true;
                         } else if (received.substring(0, 3).equals("*d*")) {
+                            out.write("disconnected");
                             connected = false;
                         } else if (received.substring(0, 4).equals("*ui*")) {
                             updateOnlineUsers(received);

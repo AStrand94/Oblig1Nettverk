@@ -1,8 +1,6 @@
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
 
 import java.io.IOException;
@@ -32,6 +30,8 @@ public class chatController {
                 }
             }
         });
+
+        onlineUsers.getStylesheets().add(getClass().getResource("listStyles.css").toExternalForm());
     }
 
     @FXML
@@ -42,8 +42,6 @@ public class chatController {
 
     @FXML
     protected void selectUser() {
-        onlineUsers.getScene().getStylesheets().add(getClass().getResource("listStyles.css").toExternalForm());
-
         //Kan kun koble til en annen klient, hvis man ikke er connected fra før
         if(!client.getConnected()) {
             client.print().println(onlineUsers.getSelectionModel().getSelectedItem());
