@@ -18,18 +18,12 @@ public class chatController {
     private ListView<String> onlineUsers;
     @FXML
     private TextField messageField;
+    @FXML
+    private Button connect;
 
     public void initialize(){
         client.setChatArea(chatArea);
         client.setOnlineUsers(onlineUsers);
-
-        onlineUsers.setOnMouseClicked(event -> {
-            if(event.getButton().equals(MouseButton.PRIMARY)) {
-                if(event.getClickCount() == 2) {
-                    selectUser();
-                }
-            }
-        });
 
         onlineUsers.getStylesheets().add(getClass().getResource("listStyles.css").toExternalForm());
     }
@@ -42,16 +36,18 @@ public class chatController {
 
     @FXML
     protected void selectUser() {
-        //Kan kun koble til en annen klient, hvis man ikke er connected fra før
+        //Hvis man ikke er i en chat
         if(!client.getConnected()) {
             client.print().println(onlineUsers.getSelectionModel().getSelectedItem());
+            client.setConnected(true);
+            connect.setText("Disconnect");
         }
-    }
-
-    @FXML
-    protected void endChat() throws IOException {
-        client.print().println("*QUIT*");
-        client.setConnected(false);
+        //Hvis man allerede er i en chat
+        else {
+            client.print().write("*QUIT*");
+            client.setConnected(false);
+            connect.setText("Connect");
+        }
     }
 
 }

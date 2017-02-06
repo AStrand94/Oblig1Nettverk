@@ -1,8 +1,10 @@
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextArea;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
+import javafx.stage.Stage;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -10,6 +12,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Optional;
 
 /**
  * Created by stiangrim on 25.01.2017.
@@ -79,7 +82,7 @@ public class Client {
 
     //TODO fikse farge etter status på brukerne
     public void updateOnlineUsers(String users) {
-        //Deletes all items in ListView
+        // Deletes all items in ListView
         onlineUsers.getItems().clear();
 
         char[] charArray = users.toCharArray();
@@ -128,10 +131,11 @@ public class Client {
                         if(received.substring(0, 3).equals("*c*")) {
                             connected = true;
                         } else if (received.substring(0, 3).equals("*d*")) {
-                            out.write("disconnected");
                             connected = false;
                         } else if (received.substring(0, 4).equals("*ui*")) {
                             updateOnlineUsers(received);
+                        } else if (received.substring(0, 4).equals("*c?*")) {
+                            connectRequest(received);
                         }
                     } else {
                         chatArea.appendText(received + '\n');
@@ -142,6 +146,29 @@ public class Client {
                 e.printStackTrace();
             }
         });
+    }
+
+    // Opens up a pop-up box. Asks if you want to connect
+    // to an incoming user or not
+    public void connectRequest(String receivedText) {
+        String user = receivedText.substring(4, receivedText.length());
+
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Connect?");
+        alert.setHeaderText(user + " wants to chat with you!");
+        alert.setContentText("Do you accept?");
+
+        ButtonType yes = new ButtonType("Yes");
+        ButtonType no = new ButtonType("No");
+
+        alert.getButtonTypes().setAll(yes, no);
+
+        Optional<ButtonType> result = alert.showAndWait();
+
+        if (result.get() == ButtonType.OK) {
+            out.write("*QUIT*");
+            out.write(user);
+        }
     }
 
     public boolean createNewSocket(String hostName, int portNumber) {
