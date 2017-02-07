@@ -1,3 +1,4 @@
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
@@ -82,41 +83,48 @@ public class Client {
 
     //TODO fikse farge etter status på brukerne
     public void updateOnlineUsers(String users) {
-        // Deletes all items in ListView
-        onlineUsers.getItems().clear();
 
-        char[] charArray = users.toCharArray();
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
 
-        StringBuilder sb = new StringBuilder();
-        for (int i = 5; i < charArray.length; i++) {
+                // Deletes all items in ListView
+                onlineUsers.getItems().clear();
 
-            //User is available
-            if(charArray[i-1] == 'a' && charArray[i] == ':') {
-                //Do something
-                continue;
-                //User is busy
-            } else if(charArray[i-1] == 'b' && charArray[i] == ':') {
-                //Do something
-                continue;
-                //User is offline
-            } else if(charArray[i-1] == 'o' && charArray[i] == ':') {
-                //Do something
-                continue;
-            } else if(charArray[i-1] == ' ') {
-                continue;
-            }
+                char[] charArray = users.toCharArray();
 
-            if(charArray[i] != ' ')  {
-                sb.append(charArray[i]);
-            }
-            else {
-                if(!sb.toString().equals(username)) {
-                    //Adds all items to ListView, except the user himself
-                    onlineUsers.getItems().add(sb.toString());
+                StringBuilder sb = new StringBuilder();
+                for (int i = 5; i < charArray.length; i++) {
+
+                    //User is available
+                    if(charArray[i-1] == 'a' && charArray[i] == ':') {
+                        //Do something
+                        continue;
+                        //User is busy
+                    } else if(charArray[i-1] == 'b' && charArray[i] == ':') {
+                        //Do something
+                        continue;
+                        //User is offline
+                    } else if(charArray[i-1] == 'o' && charArray[i] == ':') {
+                        //Do something
+                        continue;
+                    } else if(charArray[i-1] == ' ') {
+                        continue;
+                    }
+
+                    if(charArray[i] != ' ')  {
+                        sb.append(charArray[i]);
+                    }
+                    else {
+                        if(!sb.toString().equals(username)) {
+                            //Adds all items to ListView, except the user himself
+                            onlineUsers.getItems().add(sb.toString());
+                        }
+                        sb.setLength(0);
+                    }
                 }
-                sb.setLength(0);
             }
-        }
+        });
     }
 
     public Thread receiver() {
@@ -131,6 +139,7 @@ public class Client {
                         if(received.substring(0, 3).equals("*c*")) {
                             connected = true;
                         } else if (received.substring(0, 3).equals("*d*")) {
+                            out.println("ok");
                             connected = false;
                         } else if (received.substring(0, 4).equals("*ui*")) {
                             updateOnlineUsers(received);
@@ -151,24 +160,29 @@ public class Client {
     // Opens up a pop-up box. Asks if you want to connect
     // to an incoming user or not
     public void connectRequest(String receivedText) {
-        String user = receivedText.substring(4, receivedText.length());
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
 
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Connect?");
-        alert.setHeaderText(user + " wants to chat with you!");
-        alert.setContentText("Do you accept?");
+                String user = receivedText.substring(4, receivedText.length());
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setTitle("Connect?");
+                alert.setHeaderText(user + " wants to chat with you!");
+                alert.setContentText("Do you accept?");
 
-        ButtonType yes = new ButtonType("Yes");
-        ButtonType no = new ButtonType("No");
+                ButtonType yes = new ButtonType("Yes");
+                ButtonType no = new ButtonType("No");
 
-        alert.getButtonTypes().setAll(yes, no);
+                alert.getButtonTypes().setAll(yes, no);
 
-        Optional<ButtonType> result = alert.showAndWait();
+                Optional<ButtonType> result = alert.showAndWait();
 
-        if (result.get() == ButtonType.OK) {
-            out.write("*QUIT*");
-            out.write(user);
-        }
+                if (result.isPresent() && result.get() == ButtonType.OK) {
+                    out.write("*QUIT*");
+                    out.write(user);
+                }
+            }
+        });
     }
 
     public boolean createNewSocket(String hostName, int portNumber) {

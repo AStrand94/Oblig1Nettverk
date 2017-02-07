@@ -1,3 +1,5 @@
+import sun.misc.ClassFileTransformer;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -16,7 +18,7 @@ public class Server {
 
     static int portNumber;
     static ArrayList<User> allUsers = new ArrayList<>();
-    static ArrayList<User> onlineUsers = new ArrayList<>();
+    //static ArrayList<User> onlineUsers = new ArrayList<>();
     static ArrayList<ChatServer> chatServers = new ArrayList<>();
 
 
@@ -101,19 +103,18 @@ public class Server {
                         ServerClient client = new ServerClient(connect,user);
                         //looking for available chats
                         out.println("*ui*" + onlineUsers());
+                        /*
                         if (availableChats()){
 
                             String chat = in.readLine();
-                            if (chat.equals("new")) putInNewChat(client);
-                            for (ChatServer cs : chatServers) {
-                                if (cs.getUsername().equals(chat)) cs.addClient(client);
-                                else continue;
-                                cs.start();
-                            }
+                            reqChat(client,findServerClient(chat));
+                            putInNewChat(client);
                         }else{
                             putInNewChat(client);
                         }
+                        */
 
+                        putInNewChat(client);
                         connected = true;
                         System.out.println("Done connecting");
                         sendUpdatedUsers();
@@ -207,7 +208,7 @@ public class Server {
                     for (ChatServer cs : chatServers) {
                         if (cs.getUsername().equals(chat)) {
                             cs.addClient(client);
-                            cs.start();
+                            cs.start(); //Denne skal vel fjernes senere?
                             inChat = true;
                         }
                     }
@@ -257,5 +258,30 @@ public class Server {
             cs.client1.writeMessage(userInfo);
             cs.client2.writeMessage(userInfo);
         }
+    }
+
+    /**
+     * Searches the active chats for a user by the username.
+     * The function takes as granted that the input parameter is
+     * the username of an online user.
+     * @param s
+     * @return
+     */
+    private static ServerClient findServerClient(String s){
+
+
+        for (ChatServer cs : chatServers){
+
+            if (cs.client1.getUsername().equals(s)) return cs.client1;
+            else if(cs.client2.getUsername() != null)
+                if (cs.client2.getUsername().equals(s))
+                    return cs.client2;
+
+        }
+        return null;
+    }
+
+    public static void reqChat(ServerClient requester, ServerClient client){
+        client.writeMessage("*c?*" + requester.getUsername());
     }
 }

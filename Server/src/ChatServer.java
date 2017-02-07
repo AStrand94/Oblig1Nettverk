@@ -29,6 +29,7 @@ public class ChatServer extends Thread{
         address1 = client1.getClientAddr();
         s1 = '[' + client1.getUsername() + ']' + ':' + ' ';
 
+        t1 = client1(); t2 = client2(); t1.start();
     }
 
     public void addClient(ServerClient client2){
@@ -40,6 +41,7 @@ public class ChatServer extends Thread{
 
         s2 = '[' + client2.getUsername() + ']' + ':' + ' ';
         confirmConnection();
+        t2.start();
     }
 
     private void confirmConnection(){
@@ -69,51 +71,34 @@ public class ChatServer extends Thread{
     }
 
 
-
+/*
     @Override
     public void run(){
-/*
-        Thread.UncaughtExceptionHandler t = new Thread.UncaughtExceptionHandler(){
-            public void uncaughtException(Thread th, Throwable ex){
-                System.out.println("Uncaught Exception : " + ex);
-
-                System.out.println(client1.socket.isConnected() + " " + client2.socket.isConnected());
-                if (client1.socket.isClosed()){
-                    t1.stop();
-                    System.out.println("client1 is closed");
-                    Server.putInChat(client2);
-                }
-                if (client2.socket.isClosed()){
-                    t2.stop();
-                    System.out.println("client2 is closed");
-                    Server.putInChat(client1);
-                }
-
-                chatAlive = false;
-            }
-        };*/
 
         chatAlive = true;
-        t1 = client1(); t2 = client2();
-        //t1.setUncaughtExceptionHandler(t);
-        //t2.setUncaughtExceptionHandler(t);
+        t2 = client2();
 
-        t1.start(); t2.start();
-
-
+        t2.start();
 
     }
+    */
 
     private Thread client1(){
         return new Thread(() -> {
             try {
+
+                String text;
+                while (!chatAlive && !(text = client1.getMessage().readLine()).equals("*QUIT*")){
+                    client1.writeMessage('<' + text + "> could not be delivered" +
+                            " because the chat is empty");
+                }
                 System.out.println("client1()");
                 client1.writeMessage("connected to " + client2.getUsername());
-                String text;
                 while (!(text = client1.getMessage().readLine()).equals("*QUIT*") && chatAlive){
                     client1.writeMessage(s1 + text);
                     client2.writeMessage(s1 + text);
                 }
+                if (text.equals("*QUIT*")) client2.writeMessage("*d*");
                 chatAlive = false;
                 endChatSeeUsers(client1);
                 System.out.println("done client1()");
@@ -123,7 +108,8 @@ public class ChatServer extends Thread{
             }catch(NullPointerException npe){
                 System.out.println("client " + client1.getUsername() + " disconnected");
                 chatAlive = false;
-                t2.stop();
+                //t2.stop();
+                client2.writeMessage("*d*");
                 endChatSeeUsers(client2);
                 client1.setStatus("offline");
 
@@ -141,6 +127,7 @@ public class ChatServer extends Thread{
                     client2.writeMessage(s2 + text);
                     client1.writeMessage(s2 + text);
                 }
+                if (text.equals("*QUIT*")) client1.writeMessage("*d*");
                 chatAlive = false;
                 endChatSeeUsers(client2);
                 System.out.println("done client2()");
@@ -149,7 +136,8 @@ public class ChatServer extends Thread{
             }catch(NullPointerException npe){
                 System.out.println("client " + client2.getUsername() + " disconnected");
                 chatAlive = false;
-                t1.stop();
+                //t1.stop();
+                client1.writeMessage("*d*");
                 client2.setStatus("offline");
                 endChatSeeUsers(client1);
             }
