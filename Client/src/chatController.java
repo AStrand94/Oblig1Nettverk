@@ -44,7 +44,7 @@ public class chatController {
         }
         //Hvis man allerede er i en chat
         else {
-            client.print().write("*QUIT*");
+            client.print().println("*QUIT*");
             client.setConnected(false);
             connect.setText("Connect");
         }

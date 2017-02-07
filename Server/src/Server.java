@@ -124,6 +124,7 @@ public class Server {
                     System.out.println("Connection timed out with client, waiting for new client");
 
                 }catch(NullPointerException npe){
+                    npe.printStackTrace();
                     System.out.println("User disconnected");
                 }
             }
@@ -197,25 +198,50 @@ public class Server {
     public static void putInChat(ServerClient client){
         client.out.println("*ui*" + onlineUsers() + " new");
         boolean inChat = false;
-        while (!inChat) {
-            try {
-                String chat = client.in.readLine();
-                System.out.println("User trying to reconnect, chat: " + chat);
-                if (chat.equals("new")){
-                    putInNewChat(client);
-                    inChat = true;
-                } else {
-                    for (ChatServer cs : chatServers) {
-                        if (cs.getUsername().equals(chat)) {
+        while (!inChat) try {
+            String chat = client.in.readLine();
+            System.out.println("User trying to reconnect, chat: " + chat);
+
+
+            if (chat.substring(0, 4).equals("*OK*")) {
+                System.out.println("STRING IS *OK*");
+                chat = chat.substring(4, chat.length());
+                for (ChatServer cs : chatServers) {
+                    if (cs.getUsername().equals(chat)) {
+                        System.out.println("CHATSERVER IS :" + cs.isAvailable());
+                        if (cs.isAvailable()) {
                             cs.addClient(client);
                             cs.start(); //Denne skal vel fjernes senere?
-                            inChat = true;
+                        } else {
+                            client.writeMessage("Could not connect to " + chat);
+                            chatServers.add(new ChatServer(client));
                         }
+                        inChat = true;
+                        break;
                     }
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
+            } else {
+                chatServers.add(new ChatServer(client));
+                ServerClient serverClient;
+                boolean req;
+                for (ChatServer cs : chatServers) {
+                    if (cs.client1.getUsername().equals(chat)) {
+                        serverClient = cs.client1;
+                        reqChat(client, serverClient);
+                        req = true;
+                        break;
+                    } else if (cs.client2 != null && cs.client2.getUsername().equals(chat)) {
+                        serverClient = cs.client2;
+                        reqChat(client, serverClient);
+                        break;
+                    }
+
+                }
             }
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -256,7 +282,7 @@ public class Server {
         String userInfo = "*ui*" + onlineUsers();
         for (ChatServer cs : chatServers){
             cs.client1.writeMessage(userInfo);
-            cs.client2.writeMessage(userInfo);
+            if (cs.client2 != null) cs.client2.writeMessage(userInfo);
         }
     }
 
