@@ -179,7 +179,7 @@ public class Client {
 
                 if (result.isPresent() && result.get() == ButtonType.OK) {
                     out.write("*QUIT*");
-                    out.write(user);
+                    out.write("*OK*" + user);
                 }
             }
         });
