@@ -77,8 +77,8 @@ public class ChatServer extends Thread{
 
     private void confirmConnection(){
         String connected = "*c*";
-        client1.writeMessage(connected);
-        client2.writeMessage(connected);
+        client1.writeMessage(connected + client2.getUsername());
+        client2.writeMessage(connected + client1.getUsername());
     }
 
     public boolean isAvailable(){
@@ -140,7 +140,7 @@ public class ChatServer extends Thread{
                 }
                 System.out.println("(after while)"+client1.getUsername() + ": <" + text + '>');
                 System.out.println("while loop done, nr: " + Thread.currentThread().getId());
-                if (text.equals("*QUIT*") && client2 != null) client2.writeMessage("*d*");
+                if (text.equals("*QUIT*") && client2 != null) client2.writeMessage("*d*" + client1.getUsername());
                 chatAlive = false;
                 endChatSeeUsers(client1);
                 System.out.println("done client1()" + Thread.currentThread().getId());
@@ -170,7 +170,7 @@ public class ChatServer extends Thread{
                     client2.writeMessage(s2 + text);
                     client1.writeMessage(s2 + text);
                 }
-                if (text.equals("*QUIT*")) client1.writeMessage("*d*");
+                if (text.equals("*QUIT*")) client1.writeMessage("*d*" + client2.getUsername());
                 chatAlive = false;
                 endChatSeeUsers(client2);
                 System.out.println("done client2()");

@@ -2,6 +2,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
+import javafx.scene.text.Text;
 
 import java.io.IOException;
 
@@ -20,11 +21,14 @@ public class chatController {
     private TextField messageField;
     @FXML
     private Button connectButton;
+    @FXML
+    private Text userName;
 
     public void initialize() {
         client.setChatArea(chatArea);
         client.setOnlineUsers(onlineUsers);
         client.setConnectButton(connectButton);
+        userName.setText(client.getUsername());
 
         onlineUsers.getStylesheets().add(getClass().getResource("listStyles.css").toExternalForm());
     }

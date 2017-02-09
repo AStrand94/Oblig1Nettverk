@@ -5,6 +5,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.io.BufferedReader;
@@ -63,16 +64,16 @@ public class Client {
                 new InputStreamReader(System.in));
     }
 
-    public void setConnected(boolean connected) {
-        this.connected = connected;
-    }
-
     public boolean getConnected() {
         return connected;
     }
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getUsername() {
+        return username;
     }
 
     public void setChatArea(TextArea chatArea){
@@ -90,44 +91,41 @@ public class Client {
     //TODO fikse farge etter status på brukerne
     public void updateOnlineUsers(String users) {
 
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
+        Platform.runLater(() -> {
 
-                // Deletes all items in ListView
-                onlineUsers.getItems().clear();
+            // Deletes all items in ListView
+            onlineUsers.getItems().clear();
 
-                char[] charArray = users.toCharArray();
+            char[] charArray = users.toCharArray();
 
-                StringBuilder sb = new StringBuilder();
-                for (int i = 5; i < charArray.length; i++) {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 5; i < charArray.length; i++) {
 
-                    //User is available
-                    if(charArray[i-1] == 'a' && charArray[i] == ':') {
-                        //Do something
-                        continue;
-                        //User is busy
-                    } else if(charArray[i-1] == 'b' && charArray[i] == ':') {
-                        //Do something
-                        continue;
-                        //User is offline
-                    } else if(charArray[i-1] == 'o' && charArray[i] == ':') {
-                        //Do something
-                        continue;
-                    } else if(charArray[i-1] == ' ') {
-                        continue;
+                //User is available
+                if(charArray[i-1] == 'a' && charArray[i] == ':') {
+                    //Do something
+                    continue;
+                    //User is busy
+                } else if(charArray[i-1] == 'b' && charArray[i] == ':') {
+                    //Do something
+                    continue;
+                    //User is offline
+                } else if(charArray[i-1] == 'o' && charArray[i] == ':') {
+                    //Do something
+                    continue;
+                } else if(charArray[i-1] == ' ') {
+                    continue;
+                }
+
+                if(charArray[i] != ' ')  {
+                    sb.append(charArray[i]);
+                }
+                else {
+                    if(!sb.toString().equals(username)) {
+                        //Adds all items to ListView, except the user himself
+                        onlineUsers.getItems().add(sb.toString());
                     }
-
-                    if(charArray[i] != ' ')  {
-                        sb.append(charArray[i]);
-                    }
-                    else {
-                        if(!sb.toString().equals(username)) {
-                            //Adds all items to ListView, except the user himself
-                            onlineUsers.getItems().add(sb.toString());
-                        }
-                        sb.setLength(0);
-                    }
+                    sb.setLength(0);
                 }
             }
         });
@@ -143,9 +141,11 @@ public class Client {
                     if(received.charAt(0) == '*') {
                         if(received.substring(0, 3).equals("*c*")) {
                             connected = true;
+                            chatArea.setText("<Connected to " + received.substring(3, received.length()) + ">\n");
                         } else if (received.substring(0, 3).equals("*d*")) {
                             out.println("ok");
                             connected = false;
+                            chatArea.setText("<Disconnected from " + received.substring(3, received.length()) + ">\n");
                         } else if (received.substring(0, 4).equals("*ui*")) {
                             updateOnlineUsers(received);
                         } else if (received.substring(0, 4).equals("*c?*")) {
@@ -172,6 +172,7 @@ public class Client {
             alert.setTitle("Connect?");
             alert.setHeaderText(user + " wants to chat with you!");
             alert.setContentText("Do you accept?");
+            alert.initOwner(chatArea.getScene().getWindow());
 
             ButtonType yes = new ButtonType("Yes");
             ButtonType no = new ButtonType("No");
