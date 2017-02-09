@@ -23,6 +23,7 @@ public class Client {
     private static Client instance = null;
     private String hostName = "127.0.0.1";
     private String username = "";
+    String received;
     private int portNumber = 5555;
     private boolean connected;
     private Socket socket = null;
@@ -31,6 +32,7 @@ public class Client {
     private BufferedReader stdIn = null;
     private TextArea chatArea;
     private ListView<String> onlineUsers;
+    private Button connectButton;
 
     public static Client getInstance() {
         if (instance == null) {
@@ -79,6 +81,10 @@ public class Client {
 
     public void setOnlineUsers(ListView<String> onlineUsers) {
         this.onlineUsers = onlineUsers;
+    }
+
+    public void setConnectButton(Button connectButton) {
+        this.connectButton = connectButton;
     }
 
     //TODO fikse farge etter status på brukerne
@@ -130,7 +136,6 @@ public class Client {
     public Thread receiver() {
         return new Thread(() -> {
             try {
-                String received;
                 while ((received = in.readLine()) != null) {
                     System.out.println(received);
 
@@ -138,9 +143,14 @@ public class Client {
                     if(received.charAt(0) == '*') {
                         if(received.substring(0, 3).equals("*c*")) {
                             connected = true;
+                            connectButton.setText("Disconnect");
+                            //connectButton.setStyle("-fx-background-color: red;");
                         } else if (received.substring(0, 3).equals("*d*")) {
                             out.println("ok");
                             connected = false;
+                            connectButton.setText("Connect");
+                            //connectButton.setStyle("");
+                            //chatArea.setStyle("-fx-background-color: transparent;");
                         } else if (received.substring(0, 4).equals("*ui*")) {
                             updateOnlineUsers(received);
                         } else if (received.substring(0, 4).equals("*c?*")) {
@@ -160,27 +170,24 @@ public class Client {
     // Opens up a pop-up box. Asks if you want to connect
     // to an incoming user or not
     public void connectRequest(String receivedText) {
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
+        Platform.runLater(() -> {
 
-                String user = receivedText.substring(4, receivedText.length());
-                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                alert.setTitle("Connect?");
-                alert.setHeaderText(user + " wants to chat with you!");
-                alert.setContentText("Do you accept?");
+            String user = receivedText.substring(4, receivedText.length());
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Connect?");
+            alert.setHeaderText(user + " wants to chat with you!");
+            alert.setContentText("Do you accept?");
 
-                ButtonType yes = new ButtonType("Yes");
-                ButtonType no = new ButtonType("No");
+            ButtonType yes = new ButtonType("Yes");
+            ButtonType no = new ButtonType("No");
 
-                alert.getButtonTypes().setAll(yes, no);
+            alert.getButtonTypes().setAll(yes, no);
 
-                Optional<ButtonType> result = alert.showAndWait();
+            Optional<ButtonType> result = alert.showAndWait();
 
-                if (result.isPresent() && result.get() == ButtonType.OK) {
-                    out.write("*QUIT*");
-                    out.write("*OK*" + user);
-                }
+            if (result.isPresent() && result.get() == ButtonType.OK) {
+                out.write("*QUIT*");
+                out.write("*OK*" + user);
             }
         });
     }

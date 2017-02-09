@@ -12,6 +12,6 @@
       <TextArea fx:id="chatArea" editable="false" layoutX="14.0" layoutY="43.0" prefHeight="310.0" prefWidth="454.0" wrapText="true" />
       <Text fill="WHITE" layoutX="497.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Online users" />
       <ListView fx:id="onlineUsers" layoutX="476.0" layoutY="43.0" prefHeight="310.0" prefWidth="116.0" />
-      <Button fx:id="connect" layoutX="476.0" layoutY="359.0" mnemonicParsing="false" onAction="#selectUser" prefHeight="27.0" prefWidth="116.0" text="Connect" />
+      <Button fx:id="connectButton" layoutX="476.0" layoutY="359.0" mnemonicParsing="false" onAction="#selectUser" prefHeight="27.0" prefWidth="116.0" text="Connect" />
    </children>
 </AnchorPane>

@@ -19,11 +19,12 @@ public class chatController {
     @FXML
     private TextField messageField;
     @FXML
-    private Button connect;
+    private Button connectButton;
 
-    public void initialize(){
+    public void initialize() {
         client.setChatArea(chatArea);
         client.setOnlineUsers(onlineUsers);
+        client.setConnectButton(connectButton);
 
         onlineUsers.getStylesheets().add(getClass().getResource("listStyles.css").toExternalForm());
     }
@@ -37,16 +38,12 @@ public class chatController {
     @FXML
     protected void selectUser() {
         //Hvis man ikke er i en chat
-        if(!client.getConnected()) {
+        if (!client.getConnected()) {
             client.print().println(onlineUsers.getSelectionModel().getSelectedItem());
-            client.setConnected(true);
-            connect.setText("Disconnect");
         }
         //Hvis man allerede er i en chat
         else {
-            client.print().println("*QUIT*");
-            client.setConnected(false);
-            connect.setText("Connect");
+            client.print().write("*QUIT*");
         }
     }
 
