@@ -133,7 +133,7 @@ public class ChatServer extends Thread{
                 System.out.println("client1()" + Thread.currentThread().getId() + client1.getUsername());
                 //client1.writeMessage("connected to " + client2.getUsername());
                 while (!(text = client1.getMessage().readLine()).equals("*QUIT*") && chatAlive){
-                    System.out.print("text from client1, " + client1.getUsername() + " " + text);
+                    //System.out.print("text from client1, " + client1.getUsername() + " " + text);
                     client1.writeMessage(s1 + text);
                     if(client2 != null) client2.writeMessage(s1 + text);
                 }
@@ -187,7 +187,7 @@ public class ChatServer extends Thread{
 
     public void endChatSeeUsers(ServerClient client){
         System.out.print("ending chat for " + client.getUsername());
-        if (client == client1) System.out.println(t1.getId());
+        if (client == client1) System.out.println("tid: "+t1.getId());
         else System.out.println(t2.getId());
         client.setStatus("available");
         Server.endChat(this);

@@ -237,6 +237,7 @@ public class Server {
                     }
 
                 }
+                inChat = true;
             }
 
 
