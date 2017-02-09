@@ -143,14 +143,9 @@ public class Client {
                     if(received.charAt(0) == '*') {
                         if(received.substring(0, 3).equals("*c*")) {
                             connected = true;
-                            //connectButton.setText("Disconnect");
-                            //connectButton.setStyle("-fx-background-color: red;");
                         } else if (received.substring(0, 3).equals("*d*")) {
                             out.println("ok");
                             connected = false;
-                            //connectButton.setText("Connect");
-                            //connectButton.setStyle("");
-                            //chatArea.setStyle("-fx-background-color: transparent;");
                         } else if (received.substring(0, 4).equals("*ui*")) {
                             updateOnlineUsers(received);
                         } else if (received.substring(0, 4).equals("*c?*")) {

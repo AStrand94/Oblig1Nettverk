@@ -37,15 +37,8 @@ public class chatController {
 
     @FXML
     protected void selectUser() {
-        //Hvis man ikke er i en chat
-        //if (!client.getConnected()) {
-            client.print().println("*QUIT*");
-            client.print().println(onlineUsers.getSelectionModel().getSelectedItem());
-        //}
-        //Hvis man allerede er i en chat
-        //else {
-        //    client.print().write("*QUIT*");
-        //}
+        client.print().println("*QUIT*");
+        client.print().println(onlineUsers.getSelectionModel().getSelectedItem());
     }
 
 }
