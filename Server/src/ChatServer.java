@@ -133,10 +133,12 @@ public class ChatServer extends Thread{
                 System.out.println("client1()" + Thread.currentThread().getId() + client1.getUsername());
                 //client1.writeMessage("connected to " + client2.getUsername());
                 while (!(text = client1.getMessage().readLine()).equals("*QUIT*") && chatAlive){
+                    System.out.println(client1.getUsername() + ": <" + text + '>');
                     //System.out.print("text from client1, " + client1.getUsername() + " " + text);
                     client1.writeMessage(s1 + text);
                     if(client2 != null) client2.writeMessage(s1 + text);
                 }
+                System.out.println("(after while)"+client1.getUsername() + ": <" + text + '>');
                 System.out.println("while loop done, nr: " + Thread.currentThread().getId());
                 if (text.equals("*QUIT*") && client2 != null) client2.writeMessage("*d*");
                 chatAlive = false;

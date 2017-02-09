@@ -185,7 +185,10 @@ public class Client {
 
             Optional<ButtonType> result = alert.showAndWait();
 
-            if (result.isPresent() && result.get() == ButtonType.OK) {
+
+            System.out.println("result.isPresent() = " + result.isPresent());
+            if (result.isPresent() && result.get().equals(yes)) {
+                System.out.println("RESULT IS PRESENT");
                 out.write("*QUIT*");
                 out.write("*OK*" + user);
             }
@@ -202,7 +205,7 @@ public class Client {
     }
 
     public void sendMessageToServer(String message) throws IOException {
-        System.out.println(message);
+        System.out.println("Sender melding: <" + message + ">");
         if(connected) {
             out.println(message);
         }
