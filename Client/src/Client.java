@@ -26,6 +26,7 @@ public class Client {
     private TextArea chatArea;
     private ListView<String> onlineUsers;
     private Button connectButton;
+    public boolean firstConnectionDone;
 
     public static Client getInstance() {
         if (instance == null) {
@@ -64,7 +65,7 @@ public class Client {
         return username;
     }
 
-    public void setChatArea(TextArea chatArea){
+    public void setChatArea(TextArea chatArea) {
         this.chatArea = chatArea;
     }
 
@@ -90,26 +91,25 @@ public class Client {
             for (int i = 5; i < charArray.length; i++) {
 
                 //User is available
-                if(charArray[i-1] == 'a' && charArray[i] == ':') {
+                if (charArray[i - 1] == 'a' && charArray[i] == ':') {
                     //Do something
                     continue;
                     //User is busy
-                } else if(charArray[i-1] == 'b' && charArray[i] == ':') {
+                } else if (charArray[i - 1] == 'b' && charArray[i] == ':') {
                     //Do something
                     continue;
                     //User is offline
-                } else if(charArray[i-1] == 'o' && charArray[i] == ':') {
+                } else if (charArray[i - 1] == 'o' && charArray[i] == ':') {
                     //Do something
                     continue;
-                } else if(charArray[i-1] == ' ') {
+                } else if (charArray[i - 1] == ' ') {
                     continue;
                 }
 
-                if(charArray[i] != ' ')  {
+                if (charArray[i] != ' ') {
                     sb.append(charArray[i]);
-                }
-                else {
-                    if(!sb.toString().equals(username)) {
+                } else {
+                    if (!sb.toString().equals(username)) {
                         //Adds all items to ListView, except the user himself
                         onlineUsers.getItems().add(sb.toString());
                     }
@@ -126,8 +126,17 @@ public class Client {
                     System.out.println(received);
 
                     //Message from server
-                    if(received.charAt(0) == '*') {
-                        if(received.substring(0, 3).equals("*c*")) {
+                    if (received.charAt(0) == '*') {
+                        if (received.substring(0, 3).equals("*c*")) {
+                            //Changes button appearance
+                            if (!firstConnectionDone) {
+                                Platform.runLater(() -> {
+                                    connectButton.setText("Reconnect");
+                                    connectButton.setStyle("-fx-effect: innershadow(gaussian,rgba(0,0,0,0.5),1,0,1,1);");
+                                    connectButton.setStyle("-fx-background-color: lightgray");
+                                });
+                                firstConnectionDone = true;
+                            }
                             connected = true;
                             chatArea.setText("<Connected to " + received.substring(3, received.length()) + ">\n");
                         } else if (received.substring(0, 3).equals("*d*")) {
@@ -171,7 +180,7 @@ public class Client {
 
             System.out.println("result.isPresent() = " + result.isPresent());
             if (result.isPresent() && result.get().equals(yes)) {
-                System.out.println("RESULT IS PRESENT, user: <" + user+'>');
+                System.out.println("RESULT IS PRESENT, user: <" + user + '>');
                 out.println("*QUIT*");
                 out.println("*OK*" + user);
             }
@@ -188,15 +197,15 @@ public class Client {
     }
 
     public void sendMessageToServer(String message) throws IOException {
-        if(connected) {
+        if (connected) {
             out.println(message);
         }
     }
 
-    protected void finalize(){
+    protected void finalize() {
         try {
             socket.close();
-        }catch(IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }

@@ -41,8 +41,10 @@ public class chatController {
 
     @FXML
     protected void selectUser() {
-        client.print().println("*QUIT*");
-        client.print().println(onlineUsers.getSelectionModel().getSelectedItem());
+        if(onlineUsers.getSelectionModel().getSelectedItem() != null) {
+            client.print().println("*QUIT*");
+            client.print().println(onlineUsers.getSelectionModel().getSelectedItem());
+        }
     }
 
 }
