@@ -66,12 +66,12 @@ public class Server {
             String isUser;
             User user;
             try{
+                PrintWriter out =
+                        new PrintWriter(connect.getOutputStream(), true); //out to client
+                BufferedReader in = new BufferedReader(
+                    new InputStreamReader(connect.getInputStream())); //input from client
                 boolean connected = false;
                 while (!connected) {
-                    PrintWriter out = new PrintWriter(
-                    connect.getOutputStream(), true); //out to client
-                    BufferedReader in = new BufferedReader(
-                    new InputStreamReader(connect.getInputStream())); //input from client
 
                     //Wants 'y' or 'n' from user. 'y' if user is registered, 'n' if needs to register
                     out.println("Are you a registered user? y/n");
@@ -83,6 +83,7 @@ public class Server {
                     // req username and password with a single space between them
                     Pattern p = Pattern.compile("(.+) (.+)");
                     String up = in.readLine();
+                    if (up == null) throw new NullPointerException();
                     Matcher m = p.matcher(up);
                     if (!m.find()) continue;
 
@@ -122,12 +123,9 @@ public class Server {
                     sendUpdatedUsers();
                 }
 
-            } catch (IOException e) {
-                System.out.println("Connection timed out with client, waiting for new client");
-
-            } catch (NullPointerException npe) {
-                npe.printStackTrace();
+            } catch (IOException|NullPointerException e) {
                 System.out.println("User disconnected");
+
             }
 
         });

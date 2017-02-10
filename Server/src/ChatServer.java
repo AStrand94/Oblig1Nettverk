@@ -110,6 +110,7 @@ public class ChatServer {
                 client1.closeSocket();
                 Server.logOff(client1);
                 client1 = null;
+                Server.endChat(this);
                 if(client2 != null) client2.writeMessage("*d*");
             }catch (IOException e) {
                 e.printStackTrace();
