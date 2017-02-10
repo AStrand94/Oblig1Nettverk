@@ -8,8 +8,6 @@ import javafx.scene.control.Hyperlink;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
@@ -19,8 +17,8 @@ import java.io.IOException;
 public class connectController {
 
     Client client = Client.getInstance();
-    static Scene chatScene;
-    String receivedText = "";
+    Scene chatScene;
+    String receivedText;
 
     @FXML
     private Hyperlink backToLoginLink;
@@ -46,12 +44,34 @@ public class connectController {
         System.out.println(client.read().readLine());
     }
 
-    //TODO Gjøre at Register-button blir kjørt når man trykker enter, IKKE login-button
+    public void initialize() {
+        userName.setOnKeyPressed(event -> {
+            if(event.getCode().equals(KeyCode.ENTER))
+                try {
+                    logIn();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+        });
+
+        password.setOnKeyPressed(event -> {
+            if(event.getCode().equals(KeyCode.ENTER))
+                try {
+                    logIn();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+        });
+    }
+
+    //Enables registration nodes, and goes to registration scheme
     @FXML
     protected void registerNewUser() {
         userName.clear();
         password.clear();
         retypePasswordField.clear();
+        userName.requestFocus();
+        errorMessage.setText("");
 
         textFlow.setDisable(true);
         textFlow.setOpacity(0);
@@ -70,13 +90,42 @@ public class connectController {
 
         backToLoginLink.setDisable(false);
         backToLoginLink.setOpacity(1);
+
+        userName.setOnKeyPressed(event -> {
+            if(event.getCode().equals(KeyCode.ENTER))
+                try {
+                    registerUser();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+        });
+
+        password.setOnKeyPressed(event -> {
+            if(event.getCode().equals(KeyCode.ENTER))
+                try {
+                    registerUser();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+        });
+
+        retypePasswordField.setOnKeyPressed(event -> {
+            if(event.getCode().equals(KeyCode.ENTER))
+                try {
+                    registerUser();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+        });
     }
 
+    //Disables registration nodes, and goes back to logIn-mode
     @FXML
     protected void backToLogin() {
         userName.clear();
         password.clear();
         retypePasswordField.clear();
+        errorMessage.setText("");
 
         textFlow.setDisable(false);
         textFlow.setOpacity(1);
@@ -95,9 +144,27 @@ public class connectController {
 
         backToLoginLink.setDisable(true);
         backToLoginLink.setOpacity(0);
+
+        userName.setOnKeyPressed(event -> {
+            if(event.getCode().equals(KeyCode.ENTER))
+                try {
+                    logIn();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+        });
+
+        password.setOnKeyPressed(event -> {
+            if(event.getCode().equals(KeyCode.ENTER))
+                try {
+                    logIn();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+        });
     }
 
-    //Registers a user in the system
+    //Tries to register a new user, with the given username and password
     @FXML
     protected void registerUser() throws IOException {
         client.print().println("n");
@@ -105,16 +172,21 @@ public class connectController {
         System.out.println(receivedText);
 
         //Username contains space
-        if (userName.getText().contains(" ")) {
+        if (userName.getText().contains(" "))
             errorMessage.setText("Username cannot contains any spaces");
-        }
         //Password contains space
-        else if (password.getText().contains(" ")) {
+        else if (password.getText().contains(" "))
             errorMessage.setText("Password cannot contain any spaces");
-        }
-        else if (!(password.getText().equals(retypePasswordField.getText()))) {
+        else if (retypePasswordField.getText().equals(""))
+            errorMessage.setText("Please retype your password");
+        else if (!(password.getText().equals(retypePasswordField.getText())))
             errorMessage.setText("Both password fields must match");
-        }
+        else if (userName.getText().equals("") && password.getText().equals(""))
+            errorMessage.setText("You must enter a username and password..");
+        else if (userName.getText().equals(""))
+            errorMessage.setText("Please enter a username");
+        else if (password.getText().equals(""))
+            errorMessage.setText("Please enter a password");
         else {
             client.print().println(userName.getText() + " " + password.getText());
 
@@ -133,10 +205,13 @@ public class connectController {
 
                 //Starts thread
                 client.receiver().start();
+            } else {
+                errorMessage.setText("Username is already taken");
             }
         }
     }
 
+    //Tries to log the user in, with the given username and password
     @FXML
     protected void logIn() throws IOException {
 
@@ -180,6 +255,7 @@ public class connectController {
         }
     }
 
+    //Opens a popup-box with hostname and port input
     @FXML
     protected void openSetServerWindow() throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("setServer.fxml"));
@@ -192,6 +268,7 @@ public class connectController {
         stage.show();
     }
 
+    //Opens the chat scene
     protected void goToChatWindow() throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("chat.fxml"));
 
