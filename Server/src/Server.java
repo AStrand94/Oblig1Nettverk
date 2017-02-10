@@ -18,14 +18,14 @@ public class Server {
 
     static int portNumber;
     static ArrayList<User> allUsers = new ArrayList<>();
-    //static ArrayList<User> onlineUsers = new ArrayList<>();
+    static ArrayList<User> onlineUsers = new ArrayList<>();
     static ArrayList<ChatServer> chatServers = new ArrayList<>();
 
 
 
     public static void main(String[] args) {
-        allUsers.add(new User("admin","admin"));
-        allUsers.add(new User("stian","stian"));
+        allUsers.add(new User("admin", "admin"));
+        allUsers.add(new User("stian", "stian"));
 
         portNumber = 5555; //default
 
@@ -33,18 +33,11 @@ public class Server {
             System.err.println("Wrong input");
             System.exit(1);
         }
-        if(args.length == 1) portNumber = Integer.parseInt(args[0]);
+        if (args.length == 1) portNumber = Integer.parseInt(args[0]);
 
         System.out.println("Hi, this is ChatServer");
 
-        try(
-                ServerSocket serverSocket = new ServerSocket(portNumber)
-
-                ){
-
-
-            String isUser;
-            User user;
+        try (ServerSocket serverSocket = new ServerSocket(portNumber)) {
             while (true) {
 
                 System.out.println("Listening for user");
@@ -52,88 +45,97 @@ public class Server {
                 //Waits for a client to connect
                 Socket connect = serverSocket.accept();
 
+                Thread t = logInProcedure(connect);
+                t.start();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
-                System.out.println("client connected");
-                PrintWriter out = new PrintWriter(
-                        connect.getOutputStream(),true); //out to client
-                BufferedReader in = new BufferedReader(
-                        new InputStreamReader(connect.getInputStream())); //input from client
+
+
+
+
+
+
+    private static Thread logInProcedure(Socket connect){
+
+        return new Thread(() -> {
+
+            String isUser;
+            User user;
+            try{
                 boolean connected = false;
-                try {
-                    while (!connected) {
+                while (!connected) {
+                    PrintWriter out = new PrintWriter(
+                    connect.getOutputStream(), true); //out to client
+                    BufferedReader in = new BufferedReader(
+                    new InputStreamReader(connect.getInputStream())); //input from client
 
-                        //Wants 'y' or 'n' from user. 'y' if user is registered, 'n' if needs to register
-                        out.println("Are you a registered user? y/n");
-                        isUser = in.readLine();
-                        System.out.println(isUser);
+                    //Wants 'y' or 'n' from user. 'y' if user is registered, 'n' if needs to register
+                    out.println("Are you a registered user? y/n");
+                    isUser = in.readLine();
+                    System.out.println(isUser);
 
-                        out.println("requser");
+                    out.println("requser");
 
-                        // req username and password with a single space between them
-                        Pattern p = Pattern.compile("(.+) (.+)");
-                        String up = in.readLine();
-                        Matcher m = p.matcher(up);
-                        if (!m.find()) continue;
+                    // req username and password with a single space between them
+                    Pattern p = Pattern.compile("(.+) (.+)");
+                    String up = in.readLine();
+                    Matcher m = p.matcher(up);
+                    if (!m.find()) continue;
 
 
-                        //if client is a user
-                        if (isUser.equals("y")) {
+                    //if client is a user
+                    if (isUser.equals("y")) {
 
-                            //if user is not registered
-                            if (!checkUser(m.group(1), m.group(2))) {
+                        //if user is not registered
+                        if (!checkUser(m.group(1), m.group(2))) {
 
-                                continue;   //continue makes you go on from start in loop again.
-                            }
-
-                            user = getUser(m.group(1));
-                            logIn(user);
-
-                        } else { //if user is not a registered user
-
-                            if (!registerUser(m.group(1),m.group(2))) {
-                                continue;
-                            }
-                            user = getUser(m.group(1));
-                            logIn(user);
+                            continue;   //continue makes you go on from start in loop again.
                         }
+                        if (isOnline(m.group(1))) continue;;
+                        user = getUser(m.group(1));
+                        logIn(user);
 
+                    } else { //if user is not a registered user
 
-                        //Done checking user
-                        out.println("loginAccept");
-                        ServerClient client = new ServerClient(connect,user);
-                        //looking for available chats
-                        out.println("*ui*" + onlineUsers());
-                        /*
-                        if (availableChats()){
-
-                            String chat = in.readLine();
-                            reqChat(client,findServerClient(chat));
-                            putInNewChat(client);
-                        }else{
-                            putInNewChat(client);
+                        if (!registerUser(m.group(1), m.group(2))) {
+                            continue;
                         }
-                        */
-
-                        putInNewChat(client);
-                        connected = true;
-                        System.out.println("Done connecting");
-                        sendUpdatedUsers();
+                        user = getUser(m.group(1));
+                        logIn(user);
                     }
 
-                } catch (IOException e) {
-                    System.out.println("Connection timed out with client, waiting for new client");
 
-                }catch(NullPointerException npe){
-                    npe.printStackTrace();
-                    System.out.println("User disconnected");
+                    //Done checking user
+                    out.println("loginAccept");
+                    ServerClient client = new ServerClient(connect, user);
+                    //looking for available chats
+                    out.println("*ui*" + onlineUsers());
+
+                    putInNewChat(client);
+                    connected = true;
+                    System.out.println("Done connecting");
+                    onlineUsers.add(user);
+                    sendUpdatedUsers();
                 }
+
+            } catch (IOException e) {
+                System.out.println("Connection timed out with client, waiting for new client");
+
+            } catch (NullPointerException npe) {
+                npe.printStackTrace();
+                System.out.println("User disconnected");
             }
 
-        }catch (IOException ioe){
-            System.out.println("Exception ocurred when listening to port"
-                    + portNumber + "or listening to connection");
-        }
+        });
 
+    }
+
+    public static void logIn(User u){
+        u.setStatus("online");
     }
 
     private boolean logInUser(String uname){
@@ -174,12 +176,11 @@ public class Server {
 
     }
 
-    public static void logIn(User u){
-        u.setStatus("online");
-    }
 
-    public static void logOff(User u){
-        u.setStatus("offline");
+    public static void logOff(ServerClient sc){
+        sc.getUser().setStatus("offline");
+
+
     }
 
     //Needs to check if user exists before calling method
@@ -211,7 +212,6 @@ public class Server {
                         System.out.println("CHATSERVER IS :" + cs.isAvailable());
                         if (cs.isAvailable()) {
                             cs.addClient(client);
-                            cs.start(); //Denne skal vel fjernes senere?
                         } else {
                             client.writeMessage("Could not connect to " + chat);
                             chatServers.add(new ChatServer(client));
@@ -253,7 +253,7 @@ public class Server {
         return false;
     }
 
-    private static void putInNewChat(ServerClient client){
+    private static synchronized void putInNewChat(ServerClient client){
         chatServers.add(new ChatServer(client));
     }
 
@@ -279,7 +279,7 @@ public class Server {
         return isAvailable() + busyUsers();
     }
 
-    protected static void sendUpdatedUsers(){
+    synchronized static void sendUpdatedUsers(){
         String userInfo = "*ui*" + onlineUsers();
         for (ChatServer cs : chatServers){
             cs.client1.writeMessage(userInfo);
@@ -306,6 +306,19 @@ public class Server {
 
         }
         return null;
+    }
+
+    private static boolean isOnline(String s){
+        for (User u : allUsers) {
+            if (u.getUserName().equals(s)) {
+                if (u.getStatus().equals("online") || u.getStatus().equals("busy")) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        }
+        return false;
     }
 
     public static void reqChat(ServerClient requester, ServerClient client){

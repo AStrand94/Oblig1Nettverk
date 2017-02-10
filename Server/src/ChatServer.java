@@ -4,12 +4,13 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.NoSuchElementException;
 
 /**
  * Created by strand117 on 25.01.2017.
  */
-public class ChatServer extends Thread{
+public class ChatServer {
 
     ServerClient client1, client2;
     InetAddress address1, address2;
@@ -31,29 +32,10 @@ public class ChatServer extends Thread{
         address1 = client1.getClientAddr();
         s1 = '[' + client1.getUsername() + ']' + ':' + ' ';
 
-       //st = startThread();
-       //st.start();
+
         t1 = client1();
         t1.start();
         j = i++;
-    }
-
-    private Thread startThread(){
-        return new Thread(() -> {
-            try {
-                String text;
-                while (!(text = client1.getMessage().readLine()).equals("*QUIT*") && !chatAlive){
-                    System.out.println("fra startthread: " + text);
-                }
-                System.out.println("fra startthread: " + text);
-
-
-
-
-            }catch(IOException e){
-                e.printStackTrace();
-            }
-        });
     }
 
     public void addClient(ServerClient client2){
@@ -101,35 +83,11 @@ public class ChatServer extends Thread{
 
     }
 
-
-/*
-    @Override
-    public void run(){
-
-        chatAlive = true;
-        t2 = client2();
-
-        t2.start();
-
-    }
-    */
-
     private Thread client1(){
         return new Thread(() -> {
             try {
 
-                String text;/*
-                while ((text = client1.getMessage().readLine()) != null){
-                    System.out.println("QUITTER FRA FØRSTE FOR LOOP" + client1.getUsername());
-                    if (text.equals("*QUIT*")) break;
-                    if (!chatAlive) break;
-                }
-                if (text.equals("*QUIT*")){
-                    System.out.println("TEXT ER FAEN MEG *QUIT*, SE: " + text);
-                    endChatSeeUsers(client1);
-                }
-                else client2.writeMessage(text);
-*/
+                String text;
                 System.out.println("client1()" + Thread.currentThread().getId() + client1.getUsername());
                 //client1.writeMessage("connected to " + client2.getUsername());
                 while (!(text = client1.getMessage().readLine()).equals("*QUIT*") && chatAlive){
@@ -147,19 +105,15 @@ public class ChatServer extends Thread{
                 chatAlive = false;
                 endChatSeeUsers(client1);
                 System.out.println("done client1()" + Thread.currentThread().getId());
-            }catch (IOException e){
-                e.printStackTrace();
-            }/*catch(NullPointerException npe){
-                System.out.println("client " + client1.getUsername() + " disconnected");
+            }catch(SocketException|NullPointerException se){
                 chatAlive = false;
-                //t2.stop();
-                if (client2 != null) {
-                    client2.writeMessage("*d*");
-                    endChatSeeUsers(client2);
-                }
-                client1.setStatus("offline");
-
-            }*/
+                client1.closeSocket();
+                Server.logOff(client1);
+                client1 = null;
+                if(client2 != null) client2.writeMessage("*d*");
+            }catch (IOException e) {
+                e.printStackTrace();
+            }
         });
     }
 
@@ -180,16 +134,15 @@ public class ChatServer extends Thread{
                 chatAlive = false;
                 endChatSeeUsers(client2);
                 System.out.println("done client2()");
+            }catch(SocketException|NullPointerException se){
+                chatAlive = false;
+                client2.closeSocket();
+                Server.logOff(client2);
+                client2 = null;
+                client1.writeMessage("*d*");
             }catch (IOException e){
                 e.printStackTrace();
-            }/*catch(NullPointerException npe){
-                System.out.println("client " + client2.getUsername() + " disconnected");
-                chatAlive = false;
-                //t1.stop();
-                client1.writeMessage("*d*");
-                client2.setStatus("offline");
-                endChatSeeUsers(client1);
-            }*/
+            }
         });
     }
 

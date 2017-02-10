@@ -169,7 +169,6 @@ public class Client {
 
             Optional<ButtonType> result = alert.showAndWait();
 
-
             System.out.println("result.isPresent() = " + result.isPresent());
             if (result.isPresent() && result.get().equals(yes)) {
                 System.out.println("RESULT IS PRESENT, user: <" + user+'>');
@@ -191,6 +190,14 @@ public class Client {
     public void sendMessageToServer(String message) throws IOException {
         if(connected) {
             out.println(message);
+        }
+    }
+
+    protected void finalize(){
+        try {
+            socket.close();
+        }catch(IOException e){
+            e.printStackTrace();
         }
     }
 

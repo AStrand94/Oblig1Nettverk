@@ -10,8 +10,8 @@ import java.net.Socket;
  */
 public class ServerClient {
 
-        Socket socket;
-        User user;
+        private Socket socket;
+        private User user;
         InetAddress clientAddr;
         int serverport, clientPort;
         BufferedReader in;
@@ -54,5 +54,17 @@ public class ServerClient {
 
     public String getStatus(){
         return user.getStatus();
+    }
+
+    public User getUser(){
+        return user;
+    }
+
+    public void closeSocket(){
+        try {
+            socket.close();
+        }catch(IOException e){
+            e.printStackTrace();
+        }
     }
 }
