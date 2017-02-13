@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.shape.*?>
 <?import javafx.scene.text.*?>
 <?import javafx.scene.control.*?>
 <?import java.lang.*?>
@@ -10,8 +11,6 @@
       <TextField fx:id="messageField" layoutX="14.0" layoutY="359.0" onAction="#sendMessage" prefHeight="27.0" prefWidth="375.0" promptText="Enter you message.." />
       <Button layoutX="395.0" layoutY="359.0" mnemonicParsing="false" onAction="#sendMessage" prefHeight="27.0" prefWidth="73.0" text="Send" />
       <TextArea fx:id="chatArea" editable="false" layoutX="14.0" layoutY="43.0" prefHeight="310.0" prefWidth="454.0" wrapText="true" />
-      <Text fill="WHITE" layoutX="497.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Online users" />
-      <ListView fx:id="onlineUsers" layoutX="476.0" layoutY="43.0" prefHeight="310.0" prefWidth="116.0" />
       <Button fx:id="connectButton" layoutX="476.0" layoutY="359.0" mnemonicParsing="false" onAction="#selectUser" prefHeight="27.0" prefWidth="116.0" text="Connect" />
       <Text fill="WHITE" layoutX="14.0" layoutY="27.0" opacity="0.3" strokeType="OUTSIDE" strokeWidth="0.0" text="Logged in as: " wrappingWidth="88.21875">
          <font>
@@ -21,6 +20,30 @@
       <Text fx:id="userName" fill="WHITE" layoutX="96.0" layoutY="28.0" stroke="#656565" strokeType="OUTSIDE" strokeWidth="0.1" wrappingWidth="150.21875">
          <font>
             <Font size="14.0" />
+         </font>
+      </Text>
+      <TableView fx:id="tableView" layoutX="476.0" layoutY="43.0" prefHeight="310.0" prefWidth="116.0">
+        <columns>
+          <TableColumn fx:id="statusColumn" editable="false" minWidth="0.0" prefWidth="24.982269287109375" resizable="false" text="#" />
+            <TableColumn fx:id="nameColumn" editable="false" prefWidth="88.66644287109375" text="Name" />
+        </columns>
+      </TableView>
+      <Circle fill="#27a83e" layoutX="482.0" layoutY="7.0" radius="5.0" stroke="WHITE" strokeType="INSIDE" />
+      <Circle fill="#ee8300" layoutX="482.0" layoutY="19.0" radius="5.0" stroke="WHITE" strokeType="INSIDE" />
+      <Circle fill="#6f6f6f" layoutX="482.0" layoutY="31.0" radius="5.0" stroke="WHITE" strokeType="INSIDE" />
+      <Text fill="WHITE" layoutX="489.0" layoutY="10.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Available">
+         <font>
+            <Font size="9.0" />
+         </font>
+      </Text>
+      <Text fill="WHITE" layoutX="489.0" layoutY="22.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Busy">
+         <font>
+            <Font size="9.0" />
+         </font>
+      </Text>
+      <Text fill="WHITE" layoutX="489.0" layoutY="34.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Offline">
+         <font>
+            <Font size="9.0" />
          </font>
       </Text>
    </children>
