@@ -276,6 +276,7 @@ public class connectController {
 
         Stage stage = (Stage) logInButton.getScene().getWindow();
         stage.setTitle("Chat");
+        stage.setResizable(false);
         stage.setScene(chatScene);
 
         stage.setOnCloseRequest(event -> {

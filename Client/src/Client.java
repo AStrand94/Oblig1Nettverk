@@ -105,7 +105,10 @@ public class Client {
         return lastConnectedUser;
     }
 
-    //TODO fikse farge etter status på brukerne
+    public void setLastConnectedUser(String lastConnectedUser) {
+        this.lastConnectedUser = lastConnectedUser;
+    }
+
     public void updateOnlineUsers(String userString) {
 
         Platform.runLater(() -> {

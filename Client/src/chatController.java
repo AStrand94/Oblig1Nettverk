@@ -3,6 +3,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 
@@ -47,14 +48,14 @@ public class chatController {
 
     @FXML
     protected void selectUser() {
-        /*if(onlineUsers.getSelectionModel().getSelectedItem() != null) {
-            client.print().println("*QUIT*");
-            client.print().println(onlineUsers.getSelectionModel().getSelectedItem());
-        }*/
-
         if(tableView.getSelectionModel().getSelectedItem() != null) {
             ObservableList<User> userSelected;
             userSelected = tableView.getSelectionModel().getSelectedItems();
+
+            if(userSelected.get(0).getColor().equals(Color.GRAY)) {
+                chatArea.appendText("<" + userSelected.get(0).getUsername() + " is offline. Please connect to an online user>");
+                return;
+            }
 
             //If you try to connect with the one you're already connected to
             if(userSelected.get(0).getUsername().equals(client.getLastConnectedUser())) {
@@ -63,6 +64,20 @@ public class chatController {
                 client.print().println("*QUIT*");
                 client.print().println(userSelected.get(0).getUsername());
             }
+        }
+    }
+
+    @FXML
+    protected void disconnect() {
+        ObservableList<User> userSelected;
+        userSelected = tableView.getSelectionModel().getSelectedItems();
+
+        if(!(userSelected.get(0).getUsername().equals(client.getLastConnectedUser()))) {
+            chatArea.appendText("<You are not connected to " + userSelected.get(0).getUsername() + ">\n");
+        } else {
+            client.setLastConnectedUser("");
+            client.print().println("*QUIT*");
+            client.print().println("ok");
         }
     }
 

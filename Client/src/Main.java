@@ -25,6 +25,7 @@ public class Main extends Application{
         loginScene = new Scene(root, 600, 400);
 
         stage.setTitle("Connect");
+        stage.setResizable(false);
         stage.setScene(loginScene);
         stage.show();
     }

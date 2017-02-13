@@ -1,3 +1,5 @@
+import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Shape;
 
@@ -27,5 +29,9 @@ public class User {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public Paint getColor() {
+        return circle.getFill();
     }
 }
