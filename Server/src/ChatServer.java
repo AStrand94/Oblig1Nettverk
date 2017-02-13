@@ -93,7 +93,7 @@ public class ChatServer {
                 if (text.equals("ok")){
                     endChatNewChat(client1);
                 } else if (text.equals("*QUIT*") && client2 != null) {
-                    //client1.writeMessage("*d*" + client2.getUsername());
+                    client1.writeMessage("*d*" + client2.getUsername());
                     endChatSeeUsers(client1);
                     chatAlive = false;
                     if (client2 != null) client2.writeMessage("*d*" + client1.getUsername());
@@ -127,6 +127,7 @@ public class ChatServer {
                 if (text.equals("ok")){
                     endChatNewChat(client2);
                 } else if (text.equals("*QUIT*")) {
+                    client2.writeMessage("*d*" + client1.getUsername());
                     endChatSeeUsers(client2);
                     chatAlive = false;
                     if (client1 != null)client1.writeMessage("*d*" + client2.getUsername());
