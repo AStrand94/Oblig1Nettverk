@@ -56,8 +56,13 @@ public class chatController {
             ObservableList<User> userSelected;
             userSelected = tableView.getSelectionModel().getSelectedItems();
 
-            client.print().println("*QUIT*");
-            client.print().println(userSelected.get(0).getUsername());
+            //If you try to connect with the one you're already connected to
+            if(userSelected.get(0).getUsername().equals(client.getLastConnectedUser())) {
+                chatArea.appendText("<You are already connected to " + client.getLastConnectedUser() + ">\n");
+            } else {
+                client.print().println("*QUIT*");
+                client.print().println(userSelected.get(0).getUsername());
+            }
         }
     }
 

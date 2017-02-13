@@ -33,6 +33,7 @@ public class Client {
     private TextArea chatArea;
     private Button connectButton;
     public boolean firstConnectionDone;
+    public String lastConnectedUser = "";
 
     private TableView<User> tableView;
     private TableColumn<User, Circle> statusColumn;
@@ -98,6 +99,10 @@ public class Client {
     public void setNameColumn(TableColumn nameColumn) {
         this.nameColumn = nameColumn;
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("username"));
+    }
+
+    public String getLastConnectedUser() {
+        return lastConnectedUser;
     }
 
     //TODO fikse farge etter status på brukerne
@@ -174,6 +179,7 @@ public class Client {
                                 });
                                 firstConnectionDone = true;
                             }
+                            lastConnectedUser = received.substring(3, received.length());
                             connected = true;
                             chatArea.setText("<Connected to " + received.substring(3, received.length()) + ">\n");
                         } else if (received.substring(0, 3).equals("*d*")) {
