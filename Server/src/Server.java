@@ -120,13 +120,13 @@ public class Server {
     }
 
     public static void logIn(User u){
-        u.setStatus("online");
+        u.setStatus("available");
     }
 
     private boolean logInUser(String uname){
         for (User u : allUsers)
             if (uname.equals(u.getUserName())){
-                u.setStatus("online");
+                u.setStatus("available");
                 return true;
             }
 
@@ -135,7 +135,6 @@ public class Server {
 
     public static boolean checkUser(String uname, String passw){
 
-        System.out.println("test");
         boolean exists = false;
 
         for (User u : allUsers){
@@ -161,6 +160,7 @@ public class Server {
 
     public static void logOff(ServerClient sc){
         sc.getUser().setStatus("offline");
+        sendUpdatedUsers();
 
 
     }
@@ -183,16 +183,12 @@ public class Server {
         boolean inChat = false;
         while (!inChat) try {
             String chat = client.in.readLine();
-            System.out.println("User trying to reconnect, chat: " + chat);
-
-            System.out.println("User "+client.getUsername() + " is in putInChat(), received message: <" +
-                    chat + ">");
             if (chat.length() > 4 && chat.substring(0, 4).equals("*OK*")) {
-                System.out.println("STRING IS *OK*");
+
                 chat = chat.substring(4, chat.length());
                 for (ChatServer cs : chatServers) {
                     if (cs.getUsername().equals(chat)) {
-                        System.out.println("CHATSERVER IS :" + cs.isAvailable());
+
                         if (cs.isAvailable()) {
                             cs.addClient(client);
                         } else {
@@ -302,7 +298,7 @@ public class Server {
     private static boolean isOnline(String s){
         for (User u : allUsers) {
             if (u.getUserName().equals(s)) {
-                if (u.getStatus().equals("online") || u.getStatus().equals("busy")) {
+                if (u.getStatus().equals("available") || u.getStatus().equals("busy")) {
                     return true;
                 } else {
                     return false;

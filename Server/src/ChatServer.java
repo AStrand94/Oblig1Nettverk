@@ -15,8 +15,6 @@ public class ChatServer {
     ServerClient client1, client2;
     InetAddress address1, address2;
 
-    ChatServer thisChat = this;
-
     Thread t1,t2,st;
     String s1,s2;
 

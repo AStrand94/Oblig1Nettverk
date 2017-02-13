@@ -42,7 +42,12 @@ public class chatController {
 
     @FXML
     protected void sendMessage() throws IOException {
-        client.sendMessageToServer(messageField.getText());
+        String s = messageField.getText();
+        if (s.charAt(0) == '*'){
+            chatArea.appendText("<First character can not be \'*\'>\n");
+        }else {
+            client.sendMessageToServer(s);
+        }
         messageField.clear();
     }
 
