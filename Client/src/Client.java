@@ -171,7 +171,6 @@ public class Client {
                             if (!firstConnectionDone) {
                                 Platform.runLater(() -> {
                                     connectButton.setText("Reconnect");
-                                    connectButton.setStyle("-fx-background-color: lightgray");
                                 });
                                 firstConnectionDone = true;
                             }

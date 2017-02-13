@@ -108,6 +108,7 @@ public class Server {
 
                     putInNewChat(client);
                     connected = true;
+                    user.setStatus("available");
                     sendUpdatedUsers();
                 }
 
