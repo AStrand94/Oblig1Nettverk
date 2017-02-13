@@ -1,11 +1,16 @@
 import javafx.application.Platform;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextArea;
+import javafx.scene.text.*;
 
+import java.awt.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.Arrays;
 import java.util.Optional;
 
 /**
@@ -141,6 +146,7 @@ public class Client {
                             chatArea.setText("<Connected to " + received.substring(3, received.length()) + ">\n");
                         } else if (received.substring(0, 3).equals("*d*")) {
                             out.println("ok");
+                            //out.println("ok");
                             connected = false;
                             chatArea.setText("<Disconnected from " + received.substring(3, received.length()) + ">\n");
                         } else if (received.substring(0, 4).equals("*ui*")) {

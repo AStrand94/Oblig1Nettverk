@@ -27,7 +27,7 @@ public class ChatServer {
 
 
     public ChatServer(ServerClient client1){
-        System.out.println("NEW CHATSERVER");
+        System.out.println("NEW CHATSERVER with " + client1.getUsername());
         this.client1 = client1;
         address1 = client1.getClientAddr();
         s1 = '[' + client1.getUsername() + ']' + ':' + ' ';
@@ -40,8 +40,6 @@ public class ChatServer {
 
     public void addClient(ServerClient client2){
         chatAlive = true;
-        System.out.println(client2.getUsername() + " is now in chat with thread number " + t1.getId());
-        //st.interrupt();
         this.client2 = client2;
         address2 = client2.getClientAddr();
 
@@ -51,9 +49,7 @@ public class ChatServer {
         s2 = '[' + client2.getUsername() + ']' + ':' + ' ';
         confirmConnection();
 
-        //t1 = client1();
         t2 = client2();
-        //t1.start();
         t2.start();
     }
 
@@ -79,8 +75,6 @@ public class ChatServer {
         if (client2 == null) return client1.getUsername();
         else if (client1 == null) return client2.getUsername();
         else return client1.getUsername() + ' ' + client2.getUsername();
-
-
     }
 
     private Thread client1(){
@@ -88,24 +82,27 @@ public class ChatServer {
             try {
 
                 String text;
-                System.out.println("client1()" + Thread.currentThread().getId() + client1.getUsername());
-                //client1.writeMessage("connected to " + client2.getUsername());
                 while (!(text = client1.getMessage().readLine()).equals("*QUIT*") && chatAlive){
-                    System.out.println(client1.getUsername() + ": <" + text + '>');
-                    //System.out.print("text from client1, " + client1.getUsername() + " " + text);
-                    client1.writeMessage(s1 + text);
-                    if(client2 != null) client2.writeMessage(s1 + text);
+
+                    sendMessage(s1,text);
                 }
-                System.out.println("(after while)"+client1.getUsername() + ": <" + text + '>');
-                System.out.println("while loop done, nr: " + Thread.currentThread().getId());
-                if (text.equals("*QUIT*") && client2 != null) {
-                    client2.writeMessage("*d*" + client1.getUsername());
-                    client1.writeMessage("*d*" + client2.getUsername());
+                /*
+                    client returns the string "ok" when disconnected, to break out of the readLine() method,
+                    and will be put in a new chat.
+                   */
+                if (text.equals("ok")){
+                    endChatNewChat(client1);
+                } else if (text.equals("*QUIT*") && client2 != null) {
+                    //client1.writeMessage("*d*" + client2.getUsername());
+                    endChatSeeUsers(client1);
+                    chatAlive = false;
+                    if (client2 != null) client2.writeMessage("*d*" + client1.getUsername());
+                }else {
+                    chatAlive = false;
+                    endChatSeeUsers(client1);
                 }
-                chatAlive = false;
-                endChatSeeUsers(client1);
-                System.out.println("done client1()" + Thread.currentThread().getId());
             }catch(SocketException|NullPointerException se){
+                se.printStackTrace();
                 chatAlive = false;
                 client1.closeSocket();
                 Server.logOff(client1);
@@ -123,37 +120,50 @@ public class ChatServer {
             try {
                 String text;
                 System.out.println("client2()");
-                //client2.writeMessage("connected to " + client1.getUsername());
                 while (!(text = client2.getMessage().readLine()).equals("*QUIT*") && chatAlive){
-                    client2.writeMessage(s2 + text);
-                    client1.writeMessage(s2 + text);
+                    sendMessage(s2,text);
                 }
-                if (text.equals("*QUIT*")) {
-                    client1.writeMessage("*d*" + client2.getUsername());
-                    client2.writeMessage("*d*" + client1.getUsername());
+
+                if (text.equals("ok")){
+                    endChatNewChat(client2);
+                } else if (text.equals("*QUIT*")) {
+                    endChatSeeUsers(client2);
+                    chatAlive = false;
+                    if (client1 != null)client1.writeMessage("*d*" + client2.getUsername());
+                }else {
+                    chatAlive = false;
+                    endChatSeeUsers(client2);
                 }
-                chatAlive = false;
-                endChatSeeUsers(client2);
                 System.out.println("done client2()");
             }catch(SocketException|NullPointerException se){
+                se.printStackTrace();
                 chatAlive = false;
                 client2.closeSocket();
                 Server.logOff(client2);
                 client2 = null;
-                client1.writeMessage("*d*");
+                if(client1 != null) client1.writeMessage("*d*");
             }catch (IOException e){
                 e.printStackTrace();
             }
         });
     }
 
+    synchronized void sendMessage(String from,String text){
+        client2.writeMessage(s2 + text);
+        client1.writeMessage(s2 + text);
+    }
+
     public void endChatSeeUsers(ServerClient client){
-        System.out.print("ending chat for " + client.getUsername());
-        if (client == client1) System.out.println("tid: "+t1.getId());
-        else System.out.println(t2.getId());
         client.setStatus("available");
         Server.endChat(this);
         Server.putInChat(client);
+        Server.sendUpdatedUsers();
+    }
+
+    private void endChatNewChat(ServerClient client){
+        client.setStatus("available");
+        Server.endChat(this);
+        Server.putInNewChat(client);
         Server.sendUpdatedUsers();
     }
 

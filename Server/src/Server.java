@@ -18,7 +18,6 @@ public class Server {
 
     static int portNumber;
     static ArrayList<User> allUsers = new ArrayList<>();
-    static ArrayList<User> onlineUsers = new ArrayList<>();
     static ArrayList<ChatServer> chatServers = new ArrayList<>();
 
 
@@ -53,12 +52,6 @@ public class Server {
         }
     }
 
-
-
-
-
-
-
     private static Thread logInProcedure(Socket connect){
 
         return new Thread(() -> {
@@ -76,7 +69,6 @@ public class Server {
                     //Wants 'y' or 'n' from user. 'y' if user is registered, 'n' if needs to register
                     out.println("Are you a registered user? y/n");
                     isUser = in.readLine();
-                    System.out.println(isUser);
 
                     out.println("requser");
 
@@ -113,13 +105,9 @@ public class Server {
                     //Done checking user
                     out.println("loginAccept");
                     ServerClient client = new ServerClient(connect, user);
-                    //looking for available chats
-                    out.println("*ui*" + onlineUsers());
 
                     putInNewChat(client);
                     connected = true;
-                    System.out.println("Done connecting");
-                    onlineUsers.add(user);
                     sendUpdatedUsers();
                 }
 
@@ -127,9 +115,7 @@ public class Server {
                 System.out.println("User disconnected");
 
             }
-
         });
-
     }
 
     public static void logIn(User u){
@@ -151,9 +137,7 @@ public class Server {
         System.out.println("test");
         boolean exists = false;
 
-        int i = 0;
         for (User u : allUsers){
-            System.out.println(i++);
             if (u.getUserName().equals(uname) &&
                     u.getPassword().equals(passw))
                 exists = true;
@@ -171,7 +155,6 @@ public class Server {
         allUsers.add(u);
 
         return true;
-
     }
 
 
@@ -201,8 +184,9 @@ public class Server {
             String chat = client.in.readLine();
             System.out.println("User trying to reconnect, chat: " + chat);
 
-
-            if (chat.substring(0, 4).equals("*OK*")) {
+            System.out.println("User "+client.getUsername() + " is in putInChat(), received message: <" +
+                    chat + ">");
+            if (chat.length() > 4 && chat.substring(0, 4).equals("*OK*")) {
                 System.out.println("STRING IS *OK*");
                 chat = chat.substring(4, chat.length());
                 for (ChatServer cs : chatServers) {
@@ -212,7 +196,7 @@ public class Server {
                             cs.addClient(client);
                         } else {
                             client.writeMessage("Could not connect to " + chat);
-                            chatServers.add(new ChatServer(client));
+                            putInNewChat(client);
                         }
                         inChat = true;
                         break;
@@ -220,6 +204,7 @@ public class Server {
                 }
             } else {
                 chatServers.add(new ChatServer(client));
+                if (chat.equals("ok")) break;
                 ServerClient serverClient;
                 boolean req;
                 for (ChatServer cs : chatServers) {
@@ -233,7 +218,6 @@ public class Server {
                         reqChat(client, serverClient);
                         break;
                     }
-
                 }
                 inChat = true;
             }
@@ -251,7 +235,7 @@ public class Server {
         return false;
     }
 
-    private static synchronized void putInNewChat(ServerClient client){
+    static synchronized void putInNewChat(ServerClient client){
         chatServers.add(new ChatServer(client));
     }
 
@@ -278,7 +262,7 @@ public class Server {
     }
 
     synchronized static void sendUpdatedUsers(){
-        String userInfo = "*ui*" + onlineUsers();
+        String userInfo = "*ui*" + allUsers();
         for (ChatServer cs : chatServers){
             cs.client1.writeMessage(userInfo);
             if (cs.client2 != null) cs.client2.writeMessage(userInfo);
@@ -294,16 +278,24 @@ public class Server {
      */
     private static ServerClient findServerClient(String s){
 
-
         for (ChatServer cs : chatServers){
 
             if (cs.client1.getUsername().equals(s)) return cs.client1;
             else if(cs.client2.getUsername() != null)
                 if (cs.client2.getUsername().equals(s))
                     return cs.client2;
-
         }
         return null;
+    }
+
+    public static String allUsers(){
+        StringBuilder sb = new StringBuilder();
+        for (User u : allUsers){
+            char status;
+            status = u.getStatus().charAt(0);
+            sb.append(status).append(':').append(u.getUserName()).append(' ');
+        }
+        return sb.toString();
     }
 
     private static boolean isOnline(String s){

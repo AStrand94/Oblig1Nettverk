@@ -67,4 +67,10 @@ public class ServerClient {
             e.printStackTrace();
         }
     }
+
+    public boolean isClosed(){
+        if (socket.isConnected())
+            return socket.isClosed();
+        return false;
+    }
 }
