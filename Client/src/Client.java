@@ -1,5 +1,12 @@
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
+import javafx.scene.shape.Circle;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -24,9 +31,14 @@ public class Client {
     private BufferedReader in = null;
     private BufferedReader stdIn = null;
     private TextArea chatArea;
-    private ListView<String> onlineUsers;
     private Button connectButton;
     public boolean firstConnectionDone;
+
+    private TableView<User> tableView;
+    private TableColumn<User, Circle> statusColumn;
+    private TableColumn<User, String> nameColumn;
+
+    ObservableList<User> users = FXCollections.observableArrayList();
 
     public static Client getInstance() {
         if (instance == null) {
@@ -69,23 +81,35 @@ public class Client {
         this.chatArea = chatArea;
     }
 
-    public void setOnlineUsers(ListView<String> onlineUsers) {
-        this.onlineUsers = onlineUsers;
-    }
-
     public void setConnectButton(Button connectButton) {
         this.connectButton = connectButton;
     }
 
+    public void setTableView(TableView tableView) {
+        this.tableView = tableView;
+        this.tableView.setPlaceholder(new Label(""));
+    }
+
+    public void setStatusColumn(TableColumn statusColumn) {
+        this.statusColumn = statusColumn;
+        statusColumn.setCellValueFactory(new PropertyValueFactory<>("circle"));
+    }
+
+    public void setNameColumn(TableColumn nameColumn) {
+        this.nameColumn = nameColumn;
+        nameColumn.setCellValueFactory(new PropertyValueFactory<>("username"));
+    }
+
     //TODO fikse farge etter status på brukerne
-    public void updateOnlineUsers(String users) {
+    public void updateOnlineUsers(String userString) {
 
         Platform.runLater(() -> {
+            char status = ' ';
 
             // Deletes all items in ListView
-            onlineUsers.getItems().clear();
+            tableView.getItems().clear(); //????
 
-            char[] charArray = users.toCharArray();
+            char[] charArray = userString.toCharArray();
 
             StringBuilder sb = new StringBuilder();
             for (int i = 5; i < charArray.length; i++) {
@@ -93,14 +117,17 @@ public class Client {
                 //User is available
                 if (charArray[i - 1] == 'a' && charArray[i] == ':') {
                     //Do something
+                    status = 'a';
                     continue;
                     //User is busy
                 } else if (charArray[i - 1] == 'b' && charArray[i] == ':') {
                     //Do something
+                    status = 'b';
                     continue;
                     //User is offline
                 } else if (charArray[i - 1] == 'o' && charArray[i] == ':') {
                     //Do something
+                    status = 'o';
                     continue;
                 } else if (charArray[i - 1] == ' ') {
                     continue;
@@ -111,11 +138,23 @@ public class Client {
                 } else {
                     if (!sb.toString().equals(username)) {
                         //Adds all items to ListView, except the user himself
-                        onlineUsers.getItems().add(sb.toString());
+                        switch (status) {
+                            case 'a':
+                                users.add(new User(new Circle(8, Color.GREEN), sb.toString()));
+                                break;
+                            case 'b':
+                                users.add(new User(new Circle(8, Color.ORANGE), sb.toString()));
+                                break;
+                            case 'o':
+                                users.add(new User(new Circle(8, Color.GRAY), sb.toString()));
+                                break;
+                        }
                     }
                     sb.setLength(0);
                 }
             }
+
+            tableView.setItems(users);
         });
     }
 
@@ -132,7 +171,6 @@ public class Client {
                             if (!firstConnectionDone) {
                                 Platform.runLater(() -> {
                                     connectButton.setText("Reconnect");
-                                    connectButton.setStyle("-fx-effect: innershadow(gaussian,rgba(0,0,0,0.5),1,0,1,1);");
                                     connectButton.setStyle("-fx-background-color: lightgray");
                                 });
                                 firstConnectionDone = true;
@@ -209,5 +247,4 @@ public class Client {
             e.printStackTrace();
         }
     }
-
 }
