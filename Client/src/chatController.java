@@ -54,8 +54,7 @@ public class chatController {
     @FXML
     protected void selectUser() {
         if(tableView.getSelectionModel().getSelectedItem() != null) {
-            ObservableList<User> userSelected;
-            userSelected = tableView.getSelectionModel().getSelectedItems();
+            ObservableList<User> userSelected = tableView.getSelectionModel().getSelectedItems();
 
             if(userSelected.get(0).getColor().equals(Color.GRAY)) {
                 chatArea.appendText("<" + userSelected.get(0).getUsername() +
@@ -77,19 +76,12 @@ public class chatController {
 
     @FXML
     protected void disconnect() {
-        if(tableView.getSelectionModel().getSelectedItem() != null) {
-            ObservableList<User> userSelected;
-            userSelected = tableView.getSelectionModel().getSelectedItems();
-
-            if (!(userSelected.get(0).getUsername().equals(client.getLastConnectedUser()))) {
-                chatArea.appendText("<You are not connected to " + userSelected.get(0).getUsername() + ">\n");
-            } else {
-                client.setLastConnectedUser("");
-                client.print().println("*QUIT*");
-                client.print().println("ok");
-            }
+        //if you are connected to someone, disconnect
+        if(client.getConnected()) {
+            client.print().println("*QUIT*");
+            client.print().println("ok");
         } else {
-            chatArea.appendText("<Please select a user>\n");
+            chatArea.appendText("<You are not connected to anyone>\n");
         }
     }
 

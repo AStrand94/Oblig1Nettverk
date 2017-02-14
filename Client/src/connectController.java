@@ -255,19 +255,6 @@ public class connectController {
         }
     }
 
-    //Opens a popup-box with hostname and port input
-    @FXML
-    protected void openSetServerWindow() throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("setServer.fxml"));
-
-        Scene setServerScene = new Scene(root, 400, 200);
-
-        Stage stage = new Stage();
-        stage.setTitle("Set server");
-        stage.setScene(setServerScene);
-        stage.show();
-    }
-
     //Opens the chat scene
     protected void goToChatWindow() throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("chat.fxml"));

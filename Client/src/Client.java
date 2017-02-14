@@ -78,6 +78,14 @@ public class Client {
         return username;
     }
 
+    public void setConnected(boolean connected) {
+        this.connected = connected;
+    }
+
+    public boolean getConnected() {
+        return connected;
+    }
+
     public void setChatArea(TextArea chatArea) {
         this.chatArea = chatArea;
     }
@@ -187,6 +195,7 @@ public class Client {
                             chatArea.setText("<Connected to " + received.substring(3, received.length()) + ">\n");
                         } else if (received.substring(0, 3).equals("*d*")) {
                             out.println("ok");
+                            lastConnectedUser = "";
                             connected = false;
                             chatArea.setText("<Disconnected from " + received.substring(3, received.length()) + ">\n");
                         } else if (received.substring(0, 4).equals("*ui*")) {
@@ -245,6 +254,14 @@ public class Client {
     public void sendMessageToServer(String message) throws IOException {
         if (connected) {
             out.println(message);
+        }
+    }
+
+    public void closeSocket(){
+        try {
+            socket.close();
+        }catch (IOException e){
+            e.printStackTrace();
         }
     }
 

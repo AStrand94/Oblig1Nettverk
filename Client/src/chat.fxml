@@ -24,8 +24,8 @@
       </Text>
       <TableView fx:id="tableView" layoutX="476.0" layoutY="43.0" prefHeight="275.0" prefWidth="116.0">
         <columns>
-          <TableColumn fx:id="statusColumn" editable="false" minWidth="0.0" prefWidth="24.982269287109375" resizable="false" text="#" />
-            <TableColumn fx:id="nameColumn" editable="false" prefWidth="88.66644287109375" text="Name" />
+          <TableColumn fx:id="statusColumn" editable="false" minWidth="0.0" prefWidth="24.0" resizable="false" />
+            <TableColumn fx:id="nameColumn" editable="false" prefWidth="90.0" text="Name" />
         </columns>
       </TableView>
       <Circle fill="#27a83e" layoutX="482.0" layoutY="7.0" radius="5.0" stroke="WHITE" strokeType="INSIDE" />

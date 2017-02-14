@@ -59,16 +59,5 @@
          </children>
       </TextFlow>
       <Hyperlink fx:id="backToLoginLink" disable="true" layoutX="269.0" layoutY="300.0" onAction="#backToLogin" opacity="0.0" text="Go back" />
-      <MenuBar layoutY="-1.0" prefHeight="29.0" prefWidth="600.0">
-        <menus>
-          <Menu mnemonicParsing="false" text="File">
-               <items>
-                  <MenuItem fx:id="setServer" mnemonicParsing="false" onAction="#openSetServerWindow" text="Set server" />
-               </items>
-          </Menu>
-          <Menu mnemonicParsing="false" text="Edit" />
-          <Menu mnemonicParsing="false" text="Help" />
-        </menus>
-      </MenuBar>
    </children>
 </AnchorPane>
