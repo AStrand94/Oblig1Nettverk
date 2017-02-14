@@ -31,6 +31,9 @@ public class chatController {
     @FXML
     private TableColumn<User, String> nameColumn;
 
+    /**
+     * Initializes chat window
+     */
     public void initialize() {
         client.setChatArea(chatArea);
         client.setConnectButton(connectButton);
@@ -40,6 +43,10 @@ public class chatController {
         userName.setText(client.getUsername());
     }
 
+    /**
+     * Sends message to server, then clears messageField
+     * @throws IOException if server returns an error
+     */
     @FXML
     protected void sendMessage() throws IOException {
         String s = messageField.getText();
@@ -51,6 +58,10 @@ public class chatController {
         messageField.clear();
     }
 
+    /**
+     * Sends connectRequest to selected user in the tableView.
+     * User must be online.
+     */
     @FXML
     protected void selectUser() {
         if(tableView.getSelectionModel().getSelectedItem() != null) {
@@ -74,9 +85,12 @@ public class chatController {
         }
     }
 
+    /**
+     * Disconnects from current chat
+     * Must be in an active chat
+     */
     @FXML
     protected void disconnect() {
-        //if you are connected to someone, disconnect
         if(client.getConnected()) {
             client.print().println("*QUIT*");
             client.print().println("ok");
