@@ -24,21 +24,19 @@ public class Server {
 
 
     /**
-     * The main function runs a while(true) loop that awaits for clients to connect
-     * to the socket, and then starts a new Thread for the log-in procedure.
-     * @param args String[] terminal input
+     * This function returns a thread that listens for new clients to connect,
+     * and once connected, a new thread starts with that user and the login procedure.
+     * Should only be called once.
+     *
+     * @return Thread - which listens for new users to connect.
      */
-    public static void main(String[] args) {
+    public static Thread startListening() {
+        return new Thread(() -> {
+
         allUsers.add(new User("admin", "admin"));
         allUsers.add(new User("stian", "stian"));
 
         portNumber = 5555; //default
-
-        if (args.length > 1) {
-            System.err.println("Wrong input");
-            System.exit(1);
-        }
-        if (args.length == 1) portNumber = Integer.parseInt(args[0]);
 
         System.out.println("Hi, this is ChatServer");
 
@@ -56,6 +54,7 @@ public class Server {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        });
     }
 
     /**

@@ -3,6 +3,8 @@
  * Created by dusja on 06.02.2017.
  */
 import com.sun.deploy.util.SessionState;
+import com.sun.deploy.util.SystemUtils;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -59,6 +61,9 @@ public class serverController implements Initializable {
 
     public void initialize(URL location, ResourceBundle resources) {
 
+        //Denne tråden lytter kontinuerlig etter at nye brukere skal koble seg til serveren
+        Thread t = Server.startListening();
+        t.start();
         // creates table data
 
         iID.setCellValueFactory(new PropertyValueFactory("ID"));
@@ -87,6 +92,11 @@ public class serverController implements Initializable {
     private void clearInputs() {
         usernameInput.clear();
         passwordInput.clear();
+    }
+
+    protected void finalize(){
+        Platform.exit();
+        System.exit(0);
     }
 }
 
