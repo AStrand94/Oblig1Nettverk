@@ -214,8 +214,9 @@ public class Server {
     }
 
     /**
-     * Puts a client in a new chat. Should only
-     * @param client
+     * Puts a client in a new chat. Should only be called if a user wants to
+     * request a chat with a new user.
+     * @param client ServerClient
      */
     public static void putInChat(ServerClient client){
         client.out.println("*ui*" + onlineUsers() + " new");
@@ -264,17 +265,18 @@ public class Server {
         }
     }
 
-    private static boolean availableChats(){
-        for (ChatServer cs : chatServers){
-            if (cs.isAvailable()) return true;
-        }
-        return false;
-    }
-
+    /**
+     * Adds a ChatServer in the active chatservers List
+     * @param client ServerClient
+     */
     static synchronized void putInNewChat(ServerClient client){
         chatServers.add(new ChatServer(client));
     }
 
+    /**
+     * Returns a string with all the available users
+     * @return String
+     */
     private static String isAvailable(){
         StringBuilder sb = new StringBuilder();
         for (ChatServer cs : chatServers){
@@ -284,6 +286,10 @@ public class Server {
         return sb.toString();
     }
 
+    /**
+     * Returns a string with all the busy users.
+     * @return String
+     */
     private static String busyUsers(){
         StringBuilder sb = new StringBuilder();
         for (User u : allUsers){
@@ -293,10 +299,17 @@ public class Server {
         return sb.toString();
     }
 
+    /**
+     * returns a String with all online users (available and busy)
+     * @return String
+     */
     private static String onlineUsers(){
         return isAvailable() + busyUsers();
     }
 
+    /**
+     * Sends an update with the status of all users, to all online users
+     */
     synchronized static void sendUpdatedUsers(){
         String userInfo = "*ui*" + allUsers();
         for (ChatServer cs : chatServers){
@@ -309,8 +322,8 @@ public class Server {
      * Searches the active chats for a user by the username.
      * The function takes as granted that the input parameter is
      * the username of an online user.
-     * @param s
-     * @return
+     * @param s String, username
+     * @return ServerClient
      */
     private static ServerClient findServerClient(String s){
 
@@ -325,6 +338,10 @@ public class Server {
         return null;
     }
 
+    /**
+     * Returns a String with all the users
+     * @return String
+     */
     public static String allUsers(){
         StringBuilder sb = new StringBuilder();
         for (User u : allUsers){
@@ -335,6 +352,11 @@ public class Server {
         return sb.toString();
     }
 
+    /**
+     * Checks if a user is online
+     * @param s String, username
+     * @return boolean
+     */
     private static boolean isOnline(String s){
         for (User u : allUsers) {
             if (u.getUserName().equals(s)) {
@@ -348,10 +370,21 @@ public class Server {
         return false;
     }
 
+    /**
+     * Sends a requestmessage to another user, to chat with that user.
+     * @param requester ServerClient
+     * @param client ServerClient
+     */
     public static void reqChat(ServerClient requester, ServerClient client){
         client.writeMessage("*c?*" + requester.getUsername());
     }
 
+    /**
+     * Is called when a user declines a request from another user, to send
+     * the descline to that user.
+     * @param user String, the user declining
+     * @param requester String, the user that requested the chat
+     */
     public static void noChat(String user, String requester){
         ServerClient sc = findServerClient(requester);
 
