@@ -261,7 +261,7 @@ public class Server {
     synchronized static void sendUpdatedUsers(){
         String userInfo = "*ui*" + allUsers();
         for (ChatServer cs : chatServers){
-            cs.client1.writeMessage(userInfo);
+            if (cs.client1 != null) cs.client1.writeMessage(userInfo);
             if (cs.client2 != null) cs.client2.writeMessage(userInfo);
         }
     }
@@ -278,9 +278,10 @@ public class Server {
         for (ChatServer cs : chatServers){
 
             if (cs.client1.getUsername().equals(s)) return cs.client1;
-            else if(cs.client2.getUsername() != null)
+            else if(cs.client2 != null) {
                 if (cs.client2.getUsername().equals(s))
                     return cs.client2;
+            }
         }
         return null;
     }
@@ -310,5 +311,16 @@ public class Server {
 
     public static void reqChat(ServerClient requester, ServerClient client){
         client.writeMessage("*c?*" + requester.getUsername());
+    }
+
+    public static void noChat(String user, String requester){
+        ServerClient sc = findServerClient(requester);
+
+        System.out.println("ER SC NULL?: " + (sc == null));
+
+        if (sc == null) return;
+
+        sc.writeMessage('<' + user + " declined your chat request.>");
+
     }
 }

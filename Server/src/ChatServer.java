@@ -80,8 +80,12 @@ public class ChatServer {
             try {
 
                 String text;
-                while (!(text = client1.getMessage().readLine()).equals("*QUIT*") && chatAlive){
-
+                while (!(text = client1.getMessage().readLine()).equals("*QUIT*") && (chatAlive || text.substring(0,4).equals("*no*"))){
+                    System.out.println(text);
+                    if (text.length() > 4 && text.substring(0,4).equals("*no*")){
+                        System.out.println("RECEIVED NO");
+                        Server.noChat(client1.getUsername(),text.substring(4,text.length()));
+                    }
                     sendMessage(s1,text);
                 }
                 /*
@@ -106,7 +110,7 @@ public class ChatServer {
                 Server.logOff(client1);
                 client1 = null;
                 Server.endChat(this);
-                if(client2 != null) client2.writeMessage("*d*");
+                if(client2 != null) client2.writeMessage("*d*" + client1);
             }catch (IOException e) {
                 e.printStackTrace();
             }
@@ -119,6 +123,9 @@ public class ChatServer {
                 String text;
                 System.out.println("client2()");
                 while (!(text = client2.getMessage().readLine()).equals("*QUIT*") && chatAlive){
+                    if (text.length() > 4 && text.substring(0,4).equals("*no*")){
+                        Server.noChat(client2.getUsername(),text.substring(4,text.length()));
+                    }
                     sendMessage(s2,text);
                 }
 
@@ -140,7 +147,7 @@ public class ChatServer {
                 client2.closeSocket();
                 Server.logOff(client2);
                 client2 = null;
-                if(client1 != null) client1.writeMessage("*d*");
+                if(client1 != null) client1.writeMessage("*d*" + client2.getUsername());
             }catch (IOException e){
                 e.printStackTrace();
             }
@@ -148,8 +155,10 @@ public class ChatServer {
     }
 
     synchronized void sendMessage(String from,String text){
-        client2.writeMessage(s2 + text);
-        client1.writeMessage(s2 + text);
+        if (chatAlive) {
+            client2.writeMessage(from + text);
+            client1.writeMessage(from + text);
+        }
     }
 
     public void endChatSeeUsers(ServerClient client){
