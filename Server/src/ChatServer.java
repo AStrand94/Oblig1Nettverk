@@ -8,7 +8,9 @@ import java.net.SocketException;
 import java.util.NoSuchElementException;
 
 /**
- * Created by strand117 on 25.01.2017.
+ * Class ChatServer
+ *
+ * Is an object that controls the text-based chat between two users.
  */
 public class ChatServer {
 
@@ -23,7 +25,10 @@ public class ChatServer {
     int j;
 
 
-
+    /**
+     * Constructor, to take one client and start the first thread
+     * @param client1 ServerClient
+     */
     public ChatServer(ServerClient client1){
         System.out.println("NEW CHATSERVER with " + client1.getUsername());
         this.client1 = client1;
@@ -36,6 +41,11 @@ public class ChatServer {
         j = i++;
     }
 
+    /**
+     * Adds a new client to the chat. Is nessescary to call addClient to
+     * start the chat between two clients.
+     * @param client2 ServerClient
+     */
     public void addClient(ServerClient client2){
         chatAlive = true;
         this.client2 = client2;
@@ -51,12 +61,20 @@ public class ChatServer {
         t2.start();
     }
 
+    /**
+     * Called when connection is confirmed, to send out confirmation
+     * to both clients.
+     */
     private void confirmConnection(){
         String connected = "*c*";
         client1.writeMessage(connected + client2.getUsername());
         client2.writeMessage(connected + client1.getUsername());
     }
 
+    /**
+     * Returns true if there is at least one client
+     * @return true if no ServerClients = null
+     */
     public boolean isAvailable(){
         if (client1 == null && client2 == null)
             throw new IllegalStateException("Empty ChatServer still alive");
@@ -64,7 +82,12 @@ public class ChatServer {
         return (client1 == null || client2 == null);
     }
 
-    //should call isAvailable first
+
+    /**
+     * Should call isAvailable() first.
+     * @return the username(s) of the clients
+     * @throws NullPointerException if isAvailable == false
+     */
     public String getUsername(){
 
         if (client1 == null && client2 == null)
@@ -75,6 +98,11 @@ public class ChatServer {
         else return client1.getUsername() + ' ' + client2.getUsername();
     }
 
+    /**
+     * Returns a Thread that starts the thread for
+     * the ServerClient initialized in the constructor
+     * @return Thread
+     */
     private Thread client1(){
         return new Thread(() -> {
             try {
@@ -117,6 +145,10 @@ public class ChatServer {
         });
     }
 
+    /**
+     * Returns a Thread for client2, to start the chat.
+     * @return Thread
+     */
     private Thread client2(){
         return new Thread(() -> {
             try {
@@ -154,6 +186,11 @@ public class ChatServer {
         });
     }
 
+    /**
+     * Sends messages to the clients in the chat.
+     * @param from String, username to the sender
+     * @param text String, the message
+     */
     synchronized void sendMessage(String from,String text){
         if (chatAlive) {
             client2.writeMessage(from + text);
@@ -161,6 +198,11 @@ public class ChatServer {
         }
     }
 
+    /**
+     * Ends the chat for a client, and puts the client in a new chat
+     * and lets the client chose a new client to connect to
+     * @param client ServerClient
+     */
     public void endChatSeeUsers(ServerClient client){
         client.setStatus("available");
         Server.endChat(this);
@@ -168,6 +210,11 @@ public class ChatServer {
         Server.sendUpdatedUsers();
     }
 
+    /**
+     * Ends the chat for a client, and puts the client in a new chat.
+     * Called when the other user already has disconnected.
+     * @param client
+     */
     private void endChatNewChat(ServerClient client){
         client.setStatus("available");
         Server.endChat(this);

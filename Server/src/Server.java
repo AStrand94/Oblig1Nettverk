@@ -12,7 +12,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Created by strand117 on 25.01.2017.
+ * The Server class is a static class that controls all the chats,
+ * contains all users in an ArrayList, runs a Thread waiting for users to connect,
+ * contains functions to move users between chats.
  */
 public class Server {
 
@@ -21,7 +23,11 @@ public class Server {
     static ArrayList<ChatServer> chatServers = new ArrayList<>();
 
 
-
+    /**
+     * The main function runs a while(true) loop that awaits for clients to connect
+     * to the socket, and then starts a new Thread for the log-in procedure.
+     * @param args String[] terminal input
+     */
     public static void main(String[] args) {
         allUsers.add(new User("admin", "admin"));
         allUsers.add(new User("stian", "stian"));
@@ -52,6 +58,13 @@ public class Server {
         }
     }
 
+    /**
+     * Returns a Thread that contains a log-in procedure, or to register new client,
+     * and then puts the client in a new, empty chat and awaits further instructions
+     * from the client.
+     * @param connect Socket
+     * @return a Thread that contains a log-in procedure
+     */
     private static Thread logInProcedure(Socket connect){
 
         return new Thread(() -> {
@@ -71,6 +84,7 @@ public class Server {
                     isUser = in.readLine();
 
                     out.println("requser");
+                    System.out.println("TESTESTETSTEST");
 
                     // req username and password with a single space between them
                     Pattern p = Pattern.compile("(.+) (.+)");
@@ -119,20 +133,20 @@ public class Server {
         });
     }
 
-    public static void logIn(User u){
+    /**
+     * Sets the status for a user to "available"
+     * @param u User
+     */
+    private static void logIn(User u){
         u.setStatus("available");
     }
 
-    private boolean logInUser(String uname){
-        for (User u : allUsers)
-            if (uname.equals(u.getUserName())){
-                u.setStatus("available");
-                return true;
-            }
-
-        return false;
-    }
-
+    /**
+     * Checks if a user exists in the server program.
+     * @param uname String, username
+     * @param passw String, password
+     * @return
+     */
     public static boolean checkUser(String uname, String passw){
 
         boolean exists = false;
@@ -146,6 +160,12 @@ public class Server {
         return exists;
     }
 
+    /**
+     * Registers a user by username and password
+     * @param uname String, username
+     * @param passw String, password
+     * @return
+     */
     public static boolean registerUser(String uname, String passw){
 
         for (User u : allUsers){
@@ -157,7 +177,11 @@ public class Server {
         return true;
     }
 
-
+    /**
+     * Sets the status of a client to "offline"
+     * Takes a ServerClient as parameter
+     * @param sc ServerClient
+     */
     public static void logOff(ServerClient sc){
         sc.getUser().setStatus("offline");
         sendUpdatedUsers();
@@ -166,6 +190,13 @@ public class Server {
     }
 
     //Needs to check if user exists before calling method
+
+    /**
+     * Returns a user. Should check if a user exists first.
+     * It throws a NoSuchElementException if the user doe not exist.
+     * @param uname String, username
+     * @return User
+     */
     public static User getUser(String uname){
         for (User u : allUsers){
             if (u.getUserName().equals(uname)) return u;
@@ -174,10 +205,18 @@ public class Server {
         throw new NoSuchElementException("No user with username" + uname);
     }
 
+    /**
+     * Remoces a chat from existing chats
+     * @param cs ChatServer
+     */
     public static void endChat(ChatServer cs){
         chatServers.remove(cs);
     }
 
+    /**
+     * Puts a client in a new chat. Should only
+     * @param client
+     */
     public static void putInChat(ServerClient client){
         client.out.println("*ui*" + onlineUsers() + " new");
         boolean inChat = false;
