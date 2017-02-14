@@ -15,10 +15,20 @@ public class Main extends Application{
      Scene loginScene;
      Stage stage;
 
+    /**
+     * Launches application
+     * @param args - Command-line arguments
+     * @throws IOException if application returns error
+     */
     public static void main(String[] args) throws IOException {
         launch(args);
     }
 
+    /**
+     * Opens connect scene
+     * @param stage - The stage where the scene is.
+     * @throws Exception if FXMLLoader returns an error
+     */
     public void start(Stage stage) throws Exception {
         this.stage = stage;
         Parent root = FXMLLoader.load(getClass().getResource("connect.fxml"));

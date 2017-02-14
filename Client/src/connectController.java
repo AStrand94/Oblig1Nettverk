@@ -39,11 +39,18 @@ public class connectController {
     @FXML
     private Button registerButton;
 
-
+    /**
+     *
+     * @throws IOException
+     */
     public connectController() throws IOException {
         System.out.println(client.read().readLine());
     }
 
+    /**
+     * Initializes connect window
+     * Tries to log in on ENTER
+     */
     public void initialize() {
         userName.setOnKeyPressed(event -> {
             if(event.getCode().equals(KeyCode.ENTER))
@@ -64,7 +71,9 @@ public class connectController {
         });
     }
 
-    //Enables registration nodes, and goes to registration scheme
+    /**
+     * Enables registration nodes, and goes to registration scheme
+     */
     @FXML
     protected void registerNewUser() {
         userName.clear();
@@ -119,7 +128,9 @@ public class connectController {
         });
     }
 
-    //Disables registration nodes, and goes back to logIn-mode
+    /**
+     * Disables registration nodes, and goes back to logIn-mode
+     */
     @FXML
     protected void backToLogin() {
         userName.clear();
@@ -164,7 +175,10 @@ public class connectController {
         });
     }
 
-    //Tries to register a new user, with the given username and password
+    /**
+     * Tries to register a new user, with the given username and password
+     * @throws IOException if server returns error
+     */
     @FXML
     protected void registerUser() throws IOException {
         client.print().println("n");
@@ -211,7 +225,10 @@ public class connectController {
         }
     }
 
-    //Tries to log the user in, with the given username and password
+    /**
+     * Tries to log the user in, with the given username and password
+     * @throws IOException if server returns error
+     */
     @FXML
     protected void logIn() throws IOException {
 
@@ -255,7 +272,10 @@ public class connectController {
         }
     }
 
-    //Opens the chat scene
+    /**
+     * Opens the chat scene
+     * @throws IOException if FXMLLoader returns an error
+     */
     protected void goToChatWindow() throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("chat.fxml"));
 
