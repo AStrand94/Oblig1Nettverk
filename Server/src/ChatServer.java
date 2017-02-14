@@ -19,6 +19,7 @@ public class ChatServer {
 
     Thread t1,t2,st;
     String s1,s2;
+    String u1,u2;
 
     boolean chatAlive;
     static int i = 0;
@@ -39,6 +40,7 @@ public class ChatServer {
         t1 = client1();
         t1.start();
         j = i++;
+        u1 = client1.getUsername();
     }
 
     /**
@@ -56,6 +58,7 @@ public class ChatServer {
 
         s2 = '[' + client2.getUsername() + ']' + ':' + ' ';
         confirmConnection();
+        u2 = client2.getUsername();
 
         t2 = client2();
         t2.start();
@@ -138,7 +141,7 @@ public class ChatServer {
                 Server.logOff(client1);
                 client1 = null;
                 Server.endChat(this);
-                if(client2 != null) client2.writeMessage("*d*" + client1);
+                if(client2 != null) client2.writeMessage("*d*" + u1);
             }catch (IOException e) {
                 e.printStackTrace();
             }
@@ -179,7 +182,7 @@ public class ChatServer {
                 client2.closeSocket();
                 Server.logOff(client2);
                 client2 = null;
-                if(client1 != null) client1.writeMessage("*d*" + client2.getUsername());
+                if(client1 != null) client1.writeMessage("*d*" + u2);
             }catch (IOException e){
                 e.printStackTrace();
             }
