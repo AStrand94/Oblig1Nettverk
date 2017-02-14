@@ -238,6 +238,9 @@ public class Client {
                 System.out.println("RESULT IS PRESENT, user: <" + user + '>');
                 out.println("*QUIT*");
                 out.println("*OK*" + user);
+            }else{
+                System.out.println("Sending *no* to the server");
+                out.println("*no*" + user);
             }
         });
     }
