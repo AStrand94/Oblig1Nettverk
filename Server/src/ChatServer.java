@@ -80,7 +80,7 @@ public class ChatServer {
             try {
 
                 String text;
-                while (!(text = client1.getMessage().readLine()).equals("*QUIT*") && (chatAlive || text.substring(0,4).equals("*no*"))){
+                while (!(text = client1.getMessage().readLine()).equals("*QUIT*") && (chatAlive || (text.length() > 4 && text.substring(0,4).equals("*no*")))){
                     System.out.println(text);
                     if (text.length() > 4 && text.substring(0,4).equals("*no*")){
                         System.out.println("RECEIVED NO");
