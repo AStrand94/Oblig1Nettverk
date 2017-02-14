@@ -18,30 +18,34 @@ import java.util.Optional;
 /**
  * Created by stiangrim on 25.01.2017.
  */
+
+/**
+ * The Client class represent the user.
+ */
 public class Client {
 
     private static Client instance = null;
-    private String hostName = "127.0.0.1";
-    private String username = "";
-    String received;
-    private int portNumber = 5555;
+    private String username;
+    private String lastConnectedUser;
+    private String received;
     private boolean connected;
     private Socket socket = null;
     private PrintWriter out = null;
-    private BufferedReader in = null;
-    private BufferedReader stdIn = null;
+    private BufferedReader in;
     private TextArea chatArea;
     private Button connectButton;
-    public boolean firstConnectionDone;
-    public String lastConnectedUser = "";
+    private boolean firstConnectionDone;
 
     private TableView<User> tableView;
-    private TableColumn<User, Circle> statusColumn;
-    private TableColumn<User, String> nameColumn;
 
-    ObservableList<User> users = FXCollections.observableArrayList();
+    private ObservableList<User> users = FXCollections.observableArrayList();
 
-    public static Client getInstance() {
+    /**
+     * Returns the same object of Client to all requests (Singleton).
+     *
+     * @return Client an instance of the Client object
+     */
+    static Client getInstance() {
         if (instance == null) {
             try {
                 instance = new Client();
@@ -52,72 +56,141 @@ public class Client {
         return instance;
     }
 
-    public BufferedReader read() {
+    /**
+     * Returns the BufferedReader to read from socket.
+     *
+     * @return BufferedReader
+     */
+    BufferedReader read() {
         return in;
     }
 
-    public PrintWriter print() {
+    /**
+     * Returns the PrintWriter to write to the socket.
+     *
+     * @return PrintWriter
+     */
+    PrintWriter print() {
         return out;
     }
 
-    protected Client() throws IOException {
+    /**
+     * Instantiates the Socket, PrintWriter and BufferedReader.
+     *
+     * @throws IOException
+     */
+    private Client() throws IOException {
+        int portNumber = 5555;
+        String hostName = "127.0.0.1";
         socket = new Socket(hostName, portNumber);
 
         out = new PrintWriter(socket.getOutputStream(), true);
+        in = null;
         in = new BufferedReader(
                 new InputStreamReader(socket.getInputStream()));
-        stdIn = new BufferedReader(
-                new InputStreamReader(System.in));
+        username = "";
+        lastConnectedUser = "";
     }
 
-    public void setUsername(String username) {
+    /**
+     * Sets the username of the logged in user.
+     *
+     * @param username
+     */
+    void setUsername(String username) {
         this.username = username;
     }
 
-    public String getUsername() {
+    /**
+     * Returns the username of the logged in user.
+     *
+     * @return String username
+     */
+    String getUsername() {
         return username;
     }
 
-    public void setConnected(boolean connected) {
-        this.connected = connected;
-    }
-
-    public boolean getConnected() {
+    /**
+     * Returns true if the user is connected to someone,
+     * and false if not connected
+     *
+     * @return boolean connected
+     */
+    boolean getConnected() {
         return connected;
     }
 
-    public void setChatArea(TextArea chatArea) {
+    /**
+     * Sets and gives the Client object a reference to the chat area.
+     *
+     * @param chatArea
+     */
+    void setChatArea(TextArea chatArea) {
         this.chatArea = chatArea;
     }
 
-    public void setConnectButton(Button connectButton) {
+    /**
+     * Sets and gives the Client object a reference to the connect button.
+     *
+     * @param connectButton
+     */
+    void setConnectButton(Button connectButton) {
         this.connectButton = connectButton;
     }
 
-    public void setTableView(TableView tableView) {
+    /**
+     * Sets and gives the Client object a reference to the Table View.
+     * Sets the prompt text of the users view to an empty text.
+     *
+     * @param tableView
+     */
+    void setTableView(TableView tableView) {
         this.tableView = tableView;
         this.tableView.setPlaceholder(new Label(""));
     }
 
-    public void setStatusColumn(TableColumn statusColumn) {
-        this.statusColumn = statusColumn;
+    /**
+     * Sets and gives the Client object a reference to the status column.
+     *
+     * @param statusColumn
+     */
+    void setStatusColumn(TableColumn statusColumn) {
         statusColumn.setCellValueFactory(new PropertyValueFactory<>("circle"));
     }
 
-    public void setNameColumn(TableColumn nameColumn) {
-        this.nameColumn = nameColumn;
+    /**
+     * Sets and gives the Client object a reference to the name column.
+     *
+     * @param nameColumn
+     */
+    void setNameColumn(TableColumn nameColumn) {
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("username"));
     }
 
+    /**
+     * Returns the username of the last person the user is connected with.
+     *
+     * @return String lastConnectedUser
+     */
     public String getLastConnectedUser() {
         return lastConnectedUser;
     }
 
+    /**
+     * Sets the String of the last person the user is connected with.
+     *
+     * @param lastConnectedUser
+     */
     public void setLastConnectedUser(String lastConnectedUser) {
         this.lastConnectedUser = lastConnectedUser;
     }
 
-    public void updateOnlineUsers(String userString) {
+    /**
+     * Updates the users list along with their status.
+     *
+     * @param userString
+     */
+    void updateOnlineUsers(String userString) {
 
         Platform.runLater(() -> {
             char status = ' ';
@@ -174,7 +247,12 @@ public class Client {
         });
     }
 
-    public Thread receiver() {
+    /**
+     * Returns a Thread that constantly waits and receives information from the Socket.
+     *
+     * @return Thread
+     */
+    Thread receiver() {
         return new Thread(() -> {
             try {
                 while ((received = in.readLine()) != null) {
@@ -214,9 +292,13 @@ public class Client {
         });
     }
 
-    // Opens up a pop-up box. Asks if you want to connect
-    // to an incoming user or not
-    public void connectRequest(String receivedText) {
+    /**
+     * Opens a popup box that asks if you want to connect to a user that
+     * has requested a chat with you.
+     *
+     * @param receivedText
+     */
+    private void connectRequest(String receivedText) {
         Platform.runLater(() -> {
 
             String user = receivedText.substring(4, receivedText.length());
@@ -245,12 +327,22 @@ public class Client {
         });
     }
 
-    public void sendMessageToServer(String message) throws IOException {
+    /**
+     * Sends a message from the message field to the Socket,
+     * if you are connected with someone
+     *
+     * @param message
+     * @throws IOException
+     */
+    void sendMessageToServer(String message) throws IOException {
         if (connected) {
             out.println(message);
         }
     }
 
+    /**
+     * Closes the socket when the user exits the chat window.
+     */
     protected void finalize() {
         try {
             socket.close();
