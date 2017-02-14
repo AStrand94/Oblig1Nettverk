@@ -245,26 +245,9 @@ public class Client {
         });
     }
 
-    public boolean createNewSocket(String hostName, int portNumber) {
-        try {
-            socket = new Socket(hostName, portNumber);
-        } catch (IOException e) {
-            return false;
-        }
-        return true;
-    }
-
     public void sendMessageToServer(String message) throws IOException {
         if (connected) {
             out.println(message);
-        }
-    }
-
-    public void closeSocket(){
-        try {
-            socket.close();
-        }catch (IOException e){
-            e.printStackTrace();
         }
     }
 
