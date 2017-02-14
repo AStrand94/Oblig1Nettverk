@@ -58,7 +58,8 @@ public class chatController {
             userSelected = tableView.getSelectionModel().getSelectedItems();
 
             if(userSelected.get(0).getColor().equals(Color.GRAY)) {
-                chatArea.appendText("<" + userSelected.get(0).getUsername() + " is offline. Please connect to an online user>");
+                chatArea.appendText("<" + userSelected.get(0).getUsername() +
+                        " is offline. Please connect to an online user>\n");
                 return;
             }
 
@@ -69,20 +70,26 @@ public class chatController {
                 client.print().println("*QUIT*");
                 client.print().println(userSelected.get(0).getUsername());
             }
+        } else {
+            chatArea.appendText("<Please select a user>\n");
         }
     }
 
     @FXML
     protected void disconnect() {
-        ObservableList<User> userSelected;
-        userSelected = tableView.getSelectionModel().getSelectedItems();
+        if(tableView.getSelectionModel().getSelectedItem() != null) {
+            ObservableList<User> userSelected;
+            userSelected = tableView.getSelectionModel().getSelectedItems();
 
-        if(!(userSelected.get(0).getUsername().equals(client.getLastConnectedUser()))) {
-            chatArea.appendText("<You are not connected to " + userSelected.get(0).getUsername() + ">\n");
+            if (!(userSelected.get(0).getUsername().equals(client.getLastConnectedUser()))) {
+                chatArea.appendText("<You are not connected to " + userSelected.get(0).getUsername() + ">\n");
+            } else {
+                client.setLastConnectedUser("");
+                client.print().println("*QUIT*");
+                client.print().println("ok");
+            }
         } else {
-            client.setLastConnectedUser("");
-            client.print().println("*QUIT*");
-            client.print().println("ok");
+            chatArea.appendText("<Please select a user>\n");
         }
     }
 
