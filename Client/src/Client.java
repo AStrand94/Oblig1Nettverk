@@ -43,7 +43,7 @@ public class Client {
     /**
      * Returns the same object of Client to all requests (Singleton).
      *
-     * @return Client an instance of the Client object
+     * @return Client
      */
     static Client getInstance() {
         if (instance == null) {
@@ -95,7 +95,7 @@ public class Client {
     /**
      * Sets the username of the logged in user.
      *
-     * @param username
+     * @param username The username of the logged in person.
      */
     void setUsername(String username) {
         this.username = username;
@@ -104,7 +104,7 @@ public class Client {
     /**
      * Returns the username of the logged in user.
      *
-     * @return String username
+     * @return String
      */
     String getUsername() {
         return username;
@@ -114,7 +114,7 @@ public class Client {
      * Returns true if the user is connected to someone,
      * and false if not connected
      *
-     * @return boolean connected
+     * @return boolean
      */
     boolean getConnected() {
         return connected;
@@ -123,7 +123,7 @@ public class Client {
     /**
      * Sets and gives the Client object a reference to the chat area.
      *
-     * @param chatArea
+     * @param chatArea the chat area where all messages appear
      */
     void setChatArea(TextArea chatArea) {
         this.chatArea = chatArea;
@@ -132,7 +132,7 @@ public class Client {
     /**
      * Sets and gives the Client object a reference to the connect button.
      *
-     * @param connectButton
+     * @param connectButton the connect button
      */
     void setConnectButton(Button connectButton) {
         this.connectButton = connectButton;
@@ -142,7 +142,7 @@ public class Client {
      * Sets and gives the Client object a reference to the Table View.
      * Sets the prompt text of the users view to an empty text.
      *
-     * @param tableView
+     * @param tableView the user list
      */
     void setTableView(TableView tableView) {
         this.tableView = tableView;
@@ -152,7 +152,7 @@ public class Client {
     /**
      * Sets and gives the Client object a reference to the status column.
      *
-     * @param statusColumn
+     * @param statusColumn the status list
      */
     void setStatusColumn(TableColumn statusColumn) {
         statusColumn.setCellValueFactory(new PropertyValueFactory<>("circle"));
@@ -161,7 +161,7 @@ public class Client {
     /**
      * Sets and gives the Client object a reference to the name column.
      *
-     * @param nameColumn
+     * @param nameColumn the name list
      */
     void setNameColumn(TableColumn nameColumn) {
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("username"));
@@ -170,7 +170,7 @@ public class Client {
     /**
      * Returns the username of the last person the user is connected with.
      *
-     * @return String lastConnectedUser
+     * @return String
      */
     public String getLastConnectedUser() {
         return lastConnectedUser;
@@ -179,7 +179,7 @@ public class Client {
     /**
      * Sets the String of the last person the user is connected with.
      *
-     * @param lastConnectedUser
+     * @param lastConnectedUser the last user you're connected with
      */
     public void setLastConnectedUser(String lastConnectedUser) {
         this.lastConnectedUser = lastConnectedUser;
@@ -188,7 +188,7 @@ public class Client {
     /**
      * Updates the users list along with their status.
      *
-     * @param userString
+     * @param userString the full user list received from the Socket as a String
      */
     void updateOnlineUsers(String userString) {
 
@@ -296,7 +296,7 @@ public class Client {
      * Opens a popup box that asks if you want to connect to a user that
      * has requested a chat with you.
      *
-     * @param receivedText
+     * @param receivedText the String received from the Socket
      */
     private void connectRequest(String receivedText) {
         Platform.runLater(() -> {
@@ -331,7 +331,7 @@ public class Client {
      * Sends a message from the message field to the Socket,
      * if you are connected with someone
      *
-     * @param message
+     * @param message the message the user sends from the message field
      * @throws IOException
      */
     void sendMessageToServer(String message) throws IOException {
