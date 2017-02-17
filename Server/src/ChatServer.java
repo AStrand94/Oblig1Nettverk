@@ -117,6 +117,7 @@ public class ChatServer {
                         System.out.println("RECEIVED NO");
                         Server.noChat(client1.getUsername(),text.substring(4,text.length()));
                     }
+
                     sendMessage(s1,text);
                 }
                 /*
