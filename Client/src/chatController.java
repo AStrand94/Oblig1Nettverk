@@ -2,11 +2,15 @@ import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.input.MouseButton;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 
+import java.awt.*;
 import java.io.IOException;
 
 /**
@@ -14,7 +18,7 @@ import java.io.IOException;
  */
 public class chatController {
 
-    Client client = Client.getInstance();
+    private Client client = Client.getInstance();
 
     @FXML
     private TextArea chatArea;
@@ -45,14 +49,15 @@ public class chatController {
 
     /**
      * Sends message to server, then clears messageField
+     *
      * @throws IOException if server returns an error
      */
     @FXML
     protected void sendMessage() throws IOException {
         String s = messageField.getText();
-        if (s.charAt(0) == '*'){
+        if (s.charAt(0) == '*') {
             chatArea.appendText("<First character can not be \'*\'>\n");
-        }else {
+        } else {
             client.sendMessageToServer(s);
         }
         messageField.clear();
@@ -64,17 +69,17 @@ public class chatController {
      */
     @FXML
     protected void selectUser() {
-        if(tableView.getSelectionModel().getSelectedItem() != null) {
+        if (tableView.getSelectionModel().getSelectedItem() != null) {
             ObservableList<User> userSelected = tableView.getSelectionModel().getSelectedItems();
 
-            if(userSelected.get(0).getColor().equals(Color.GRAY)) {
+            if (userSelected.get(0).getColor().equals(Color.GRAY)) {
                 chatArea.appendText("<" + userSelected.get(0).getUsername() +
                         " is offline. Please connect to an online user>\n");
                 return;
             }
 
             //If you try to connect with the one you're already connected to
-            if(userSelected.get(0).getUsername().equals(client.getLastConnectedUser())) {
+            if (userSelected.get(0).getUsername().equals(client.getLastConnectedUser())) {
                 chatArea.appendText("<You are already connected to " + client.getLastConnectedUser() + ">\n");
             } else {
                 client.print().println("*QUIT*");
@@ -91,7 +96,7 @@ public class chatController {
      */
     @FXML
     protected void disconnect() {
-        if(client.getConnected()) {
+        if (client.getConnected()) {
             client.print().println("*QUIT*");
             client.print().println("ok");
         } else {

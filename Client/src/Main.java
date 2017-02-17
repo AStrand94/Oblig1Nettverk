@@ -12,9 +12,6 @@ import java.io.IOException;
  */
 public class Main extends Application{
 
-     Scene loginScene;
-     Stage stage;
-
     /**
      * Launches application
      * @param args - Command-line arguments
@@ -30,10 +27,9 @@ public class Main extends Application{
      * @throws Exception if FXMLLoader returns an error
      */
     public void start(Stage stage) throws Exception {
-        this.stage = stage;
         Parent root = FXMLLoader.load(getClass().getResource("connect.fxml"));
 
-        loginScene = new Scene(root, 600, 400);
+        Scene loginScene = new Scene(root, 600, 400);
 
         stage.setTitle("Connect");
         stage.setResizable(false);

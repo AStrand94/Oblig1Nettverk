@@ -16,9 +16,7 @@ import java.io.IOException;
 
 public class connectController {
 
-    Client client = Client.getInstance();
-    Scene chatScene;
-    String receivedText;
+    private Client client = Client.getInstance();
 
     @FXML
     private Hyperlink backToLoginLink;
@@ -181,10 +179,6 @@ public class connectController {
      */
     @FXML
     protected void registerUser() throws IOException {
-        client.print().println("n");
-        String receivedText = client.read().readLine();
-        System.out.println(receivedText);
-
         //Username contains space
         if (userName.getText().contains(" "))
             errorMessage.setText("Username cannot contains any spaces");
@@ -202,6 +196,10 @@ public class connectController {
         else if (password.getText().equals(""))
             errorMessage.setText("Please enter a password");
         else {
+            client.print().println("n");
+            String receivedText = client.read().readLine();
+            System.out.println(receivedText);
+
             client.print().println(userName.getText() + " " + password.getText());
 
             receivedText = client.read().readLine();
@@ -241,7 +239,7 @@ public class connectController {
         client.print().println(userName.getText() + " " + password.getText());
 
         //Stores server's response to the login in a String
-        receivedText = client.read().readLine();
+        String receivedText = client.read().readLine();
 
 
         //Username and password correct
@@ -276,10 +274,10 @@ public class connectController {
      * Opens the chat scene
      * @throws IOException if FXMLLoader returns an error
      */
-    protected void goToChatWindow() throws IOException {
+    private void goToChatWindow() throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("chat.fxml"));
 
-        chatScene = new Scene(root, 600, 400);
+        Scene chatScene = new Scene(root, 600, 400);
 
         Stage stage = (Stage) logInButton.getScene().getWindow();
         stage.setTitle("Chat");
