@@ -14,6 +14,9 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
+/**
+ * Controls the connect scene.
+ */
 public class connectController {
 
     private Client client = Client.getInstance();

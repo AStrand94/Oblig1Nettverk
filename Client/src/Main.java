@@ -10,6 +10,10 @@ import java.io.IOException;
 /**
  * Created by stiangrim on 25.01.2017.
  */
+
+/**
+ * Runs the client program
+ */
 public class Main extends Application{
 
     /**

@@ -1,20 +1,18 @@
 import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
-import javafx.scene.input.MouseButton;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 
-import java.awt.*;
 import java.io.IOException;
 
 /**
  * Created by stiangrim on 28.01.2017.
+ */
+
+/**
+ * Controls the chat scene.
  */
 public class chatController {
 
@@ -48,19 +46,25 @@ public class chatController {
     }
 
     /**
-     * Sends message to server, then clears messageField
+     * If connected, sends a message to the server and clears the message field.
      *
      * @throws IOException if server returns an error
      */
     @FXML
     protected void sendMessage() throws IOException {
         String s = messageField.getText();
-        if (s.charAt(0) == '*') {
-            chatArea.appendText("<First character can not be \'*\'>\n");
-        } else {
-            client.sendMessageToServer(s);
+        if(s.length() > 0) {
+            if (s.charAt(0) == '*') {
+                chatArea.appendText("<First character can not be \'*\'>\n");
+            } else {
+                if(client.getConnected()) {
+                    client.print().println(s);
+                    messageField.clear();
+                } else {
+                    chatArea.appendText("<You have to be connected to a user to send a message.>\n");
+                }
+            }
         }
-        messageField.clear();
     }
 
     /**

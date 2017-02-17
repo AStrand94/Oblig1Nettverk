@@ -1,17 +1,11 @@
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 
-import java.awt.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -181,15 +175,6 @@ public class Client {
     }
 
     /**
-     * Sets the String of the last person the user is connected with.
-     *
-     * @param lastConnectedUser the last user you're connected with
-     */
-    public void setLastConnectedUser(String lastConnectedUser) {
-        this.lastConnectedUser = lastConnectedUser;
-    }
-
-    /**
      * Updates the users list along with their status.
      *
      * @param userString the full user list received from the Socket as a String
@@ -200,7 +185,7 @@ public class Client {
             char status = ' ';
 
             // Deletes all items in ListView
-            tableView.getItems().clear(); //????
+            tableView.getItems().clear();
 
             char[] charArray = userString.toCharArray();
 
@@ -209,17 +194,14 @@ public class Client {
 
                 //User is available
                 if (charArray[i - 1] == 'a' && charArray[i] == ':') {
-                    //Do something
                     status = 'a';
                     continue;
                     //User is busy
                 } else if (charArray[i - 1] == 'b' && charArray[i] == ':') {
-                    //Do something
                     status = 'b';
                     continue;
                     //User is offline
                 } else if (charArray[i - 1] == 'o' && charArray[i] == ':') {
-                    //Do something
                     status = 'o';
                     continue;
                 } else if (charArray[i - 1] == ' ') {
@@ -230,7 +212,7 @@ public class Client {
                     sb.append(charArray[i]);
                 } else {
                     if (!sb.toString().equals(username)) {
-                        //Adds all items to ListView, except the user himself
+                        //Adds all items to the ObservableList, except the user himself
                         switch (status) {
                             case 'a':
                                 users.add(new User(new Circle(8, Color.GREEN), sb.toString()));
@@ -247,6 +229,7 @@ public class Client {
                 }
             }
 
+            //Adds all users from the ObservableList.
             tableView.setItems(users);
         });
     }
@@ -329,19 +312,6 @@ public class Client {
                 out.println("*no*" + user);
             }
         });
-    }
-
-    /**
-     * Sends a message from the message field to the Socket,
-     * if you are connected with someone
-     *
-     * @param message the message the user sends from the message field
-     * @throws IOException
-     */
-    void sendMessageToServer(String message) throws IOException {
-        if (connected) {
-            out.println(message);
-        }
     }
 
     /**
