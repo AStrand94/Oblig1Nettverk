@@ -1,3 +1,5 @@
+import javafx.scene.shape.Circle;
+
 import java.awt.*;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -44,7 +46,7 @@ public class ServerClient {
      * @return String username
      */
     public String getUsername(){
-        return user.getUserName();
+        return user.getUsername();
     }
 
     /**
@@ -76,7 +78,7 @@ public class ServerClient {
      * Sets the status of an user.
      * @param status String
      */
-    public void setStatus(String status){
+    public void setStatus(Circle status){
         user.setStatus(status);
     }
 
