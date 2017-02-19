@@ -52,7 +52,7 @@ public class serverController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
 
         //Denne tråden lytter kontinuerlig etter at nye brukere skal koble seg til serveren
-        Thread t = Server.startListening();
+        Thread t = Server.startListening(this);
         t.start();
 
         username.setCellValueFactory(cellData -> cellData.getValue().usernameProperty());
@@ -151,7 +151,7 @@ public class serverController implements Initializable {
     //Checks if user is already exists
     private boolean userExist(String search, ObservableList<User> list){
         for (User u : list) {
-            if (u.getUsername().trim().contains(search))
+            if (u.getUsername().trim().equals(search))
                 return true;
         }
         return false;

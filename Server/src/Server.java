@@ -36,11 +36,15 @@ public class Server {
     static TableView<User> tableView;
     static ObservableList<User> allUsers = FXCollections.observableArrayList();
 
+    static serverController sc;
+/*
+Trengs nok ikke da hele Server klassen er statisk.
     private static Server instance =  null;
     static Server getInstance() {
         if (instance == null) instance = new Server();
         return instance;
     }
+    */
 
 
     /**
@@ -50,7 +54,9 @@ public class Server {
      *
      * @return Thread - which listens for new users to connect.
      */
-    public static Thread startListening() {
+    public static Thread startListening(serverController serverControllersc) {
+
+        sc = serverControllersc;
         return new Thread(() -> {
 
         allUsers.add(new User("admin", "admin", new Circle(8, Color.GRAY)));
@@ -341,6 +347,7 @@ public class Server {
             if (cs.client1 != null) cs.client1.writeMessage(userInfo);
             if (cs.client2 != null) cs.client2.writeMessage(userInfo);
         }
+        sc.updateTable();
     }
 
     /**
