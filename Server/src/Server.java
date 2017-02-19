@@ -341,7 +341,6 @@ public class Server {
             if (cs.client1 != null) cs.client1.writeMessage(userInfo);
             if (cs.client2 != null) cs.client2.writeMessage(userInfo);
         }
-
     }
 
     /**

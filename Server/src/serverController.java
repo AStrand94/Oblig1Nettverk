@@ -4,6 +4,7 @@
  */
 
 import javafx.application.Platform;
+import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
@@ -14,6 +15,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import java.lang.management.ManagementFactory;
+import java.lang.reflect.Array;
 import java.net.URL;
 import java.util.ResourceBundle;
 import com.sun.management.OperatingSystemMXBean;
@@ -21,8 +23,8 @@ import com.sun.management.OperatingSystemMXBean;
 
 public class serverController implements Initializable {
 
-    @FXML
-    private Text cpuDisplay;
+    //@FXML
+    //private Text cpuDisplay;
     @FXML
     private TextField usernameInput;
     @FXML
@@ -93,29 +95,39 @@ public class serverController implements Initializable {
     }
 
     public void updateTable() {
-        userTable.setItems(Server.allUsers);
+        userTable.refresh();
     }
 
-    public void onCreate(){
-        User enterNewU = new User(usernameInput.getText(),passwordInput.getText(),new Circle(8, Color.GRAY));
-        if(username != null && password != null) {
+    public void onCreate() {
+        if (usernameInput.getText().trim().isEmpty() || passwordInput.getText().trim().isEmpty())
+            setInfoAlertMessage("CreateError", "Fill out the Username and Password fields", "");
+
+        String search = usernameInput.getText();
+
+        if(userExist(search, Server.allUsers)) setInfoAlertMessage("CreateError", "Username already exists", "Choose a different username");
+
+
+        if(!userExist(search,Server.allUsers)){
+            User enterNewU = new User(usernameInput.getText(), passwordInput.getText(), new Circle(8, Color.GRAY));
             Server.allUsers.add(enterNewU);
-            userTable.setItems(Server.allUsers);
+            userTable.refresh();
             clearInputs();
         }
     }
+
+
 
     public void onRemove() {
         if (userTable.getSelectionModel().getSelectedItem().getColor().equals(Color.GRAY)) {
             Server.allUsers.remove(userTable.getSelectionModel().getSelectedItem());
             clearInputs();
         } else {
-                    Alert notRemovable = new Alert(Alert.AlertType.INFORMATION);
-                    notRemovable.setTitle("Error");
-                    notRemovable.setHeaderText("Not removable!");
-                    notRemovable.setContentText("Cannot remove this user because it is online");
-                    notRemovable.showAndWait();
-            }
+            Alert notRemovable = new Alert(Alert.AlertType.INFORMATION);
+            notRemovable.setTitle("Error");
+            notRemovable.setHeaderText("Not removable!");
+            notRemovable.setContentText("Cannot remove this user because it is online");
+            notRemovable.showAndWait();
+        }
     }
 
     private void clearInputs() {
@@ -123,12 +135,28 @@ public class serverController implements Initializable {
         passwordInput.clear();
     }
 
-    public void cpuInfo(){
-        cpuDisplay.setText("hello there");
-    }
-
     protected void finalize(){
         Platform.exit();
         System.exit(0);
     }
+
+    private void setInfoAlertMessage(String title, String header, String content){
+        Alert notRemovable = new Alert(Alert.AlertType.INFORMATION);
+        notRemovable.setTitle(title);
+        notRemovable.setHeaderText(header);
+        notRemovable.setContentText(content);
+        notRemovable.showAndWait();
+    }
+
+    //Checks if user is already exists
+    private boolean userExist(String search, ObservableList<User> list){
+        for (User u : list) {
+            if (u.getUsername().trim().contains(search))
+                return true;
+        }
+        return false;
+    }
+
 }
+
+
