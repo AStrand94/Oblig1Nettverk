@@ -136,7 +136,7 @@ public class ChatServer {
                     endChatSeeUsers(client1);
                 }
             }catch(SocketException|NullPointerException se){
-                se.printStackTrace();
+                System.out.println(client1.getUsername() + " has logged out");
                 chatAlive = false;
                 client1.closeSocket();
                 Server.logOff(client1);
