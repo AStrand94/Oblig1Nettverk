@@ -1,10 +1,13 @@
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.util.Pair;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -12,6 +15,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.SocketException;
+import java.net.UnknownHostException;
 import java.util.Optional;
 
 
@@ -76,9 +80,11 @@ public class Client {
      * @throws IOException
      */
     private Client() throws IOException {
-        int portNumber = 5555;
-        String hostName = "127.0.0.1";
-        socket = new Socket(hostName, portNumber);
+        try {
+            connectToServer();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         out = new PrintWriter(socket.getOutputStream(), true);
         in = null;
@@ -86,6 +92,58 @@ public class Client {
                 new InputStreamReader(socket.getInputStream()));
         username = "";
         lastConnectedUser = "";
+    }
+
+    void connectToServer() {
+
+        Dialog<Pair<String, String>> dialog = new Dialog<>();
+        dialog.setTitle("Connect");
+        dialog.setHeaderText("Please connect to server");
+
+        ButtonType connect = new ButtonType("Connect", ButtonBar.ButtonData.OK_DONE);
+        ButtonType cancel = ButtonType.CANCEL;
+        dialog.getDialogPane().getButtonTypes().addAll(connect, cancel);
+
+        GridPane grid = new GridPane();
+        grid.setHgap(10);
+        grid.setVgap(10);
+        grid.setPadding(new Insets(20, 150, 10, 10));
+
+        TextField ipAddress = new TextField();
+        ipAddress.setText("127.0.0.1");
+        ipAddress.setPromptText("IP address");
+        TextField portNumber = new TextField();
+        portNumber.setText("5555");
+        portNumber.setPromptText("Port number");
+
+        grid.add(new Label("IP address:"), 0, 0);
+        grid.add(ipAddress, 1, 0);
+        grid.add(new Label("Port number:"), 0, 1);
+        grid.add(portNumber, 1, 1);
+
+        dialog.getDialogPane().setContent(grid);
+
+        dialog.setResultConverter(dialogButton -> {
+            if (dialogButton == connect) {
+                return new Pair<>(ipAddress.getText(), portNumber.getText());
+            }
+            return null;
+        });
+
+        Optional<Pair<String, String>> result = dialog.showAndWait();
+
+        result.ifPresent(pair -> {
+            try {
+                socket = new Socket(pair.getKey(), Integer.parseInt(pair.getValue()));
+            } catch (UnknownHostException host) {
+                System.out.println("Unknown host");
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (RuntimeException runtime) {
+                System.out.println("Make sure you have a server running.");
+            }
+        });
+
     }
 
     /**
