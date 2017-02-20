@@ -5,6 +5,7 @@ import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 
 import java.io.IOException;
@@ -30,6 +31,14 @@ public class chatController {
     private TableColumn<User, Circle> statusColumn;
     @FXML
     private TableColumn<User, String> nameColumn;
+    @FXML
+    private RadioButton black;
+    @FXML
+    private RadioButton red;
+    @FXML
+    private RadioButton blue;
+    @FXML
+    private Rectangle activeColor;
 
     /**
      * Initializes chat window
@@ -41,6 +50,7 @@ public class chatController {
         client.setStatusColumn(statusColumn);
         client.setNameColumn(nameColumn);
         userName.setText(client.getUsername());
+        black.setSelected(true);
     }
 
     /**
@@ -97,6 +107,28 @@ public class chatController {
         } else {
             chatArea.appendText("<You are not connected to anyone>\n");
         }
+    }
+
+    public void setBlackTextColor(){
+        chatArea.setStyle("-fx-text-fill: black");
+        messageField.setStyle("-fx-text-fill: black");
+        activeColor.setFill(Color.BLACK);
+        blue.setSelected(false);
+        red.setSelected(false);
+    }
+    public void setRedTextColor(){
+        chatArea.setStyle("-fx-text-fill: darkred");
+        activeColor.setFill(Color.DARKRED);
+        messageField.setStyle("-fx-text-fill: darkred");
+        black.setSelected(false);
+        blue.setSelected(false);
+    }
+    public void setBlueTextColor(){
+        chatArea.setStyle("-fx-text-fill: dodgerblue");
+        messageField.setStyle("-fx-text-fill: dodgerblue");
+        activeColor.setFill(Color.DODGERBLUE);
+        black.setSelected(false);
+        red.setSelected(false);
     }
 
 }

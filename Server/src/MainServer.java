@@ -29,7 +29,7 @@ public class MainServer extends Application{
         try {
             Parent root = FXMLLoader.load(getClass().getResource("./server.fxml"));
             this.stage = stage;
-            serverScene = new Scene(root, 670, 560);
+            serverScene = new Scene(root, 650, 400);
             stage.setTitle("Server");
             stage.setScene(serverScene);
             stage.show();
@@ -49,5 +49,3 @@ public class MainServer extends Application{
         System.exit(0);
     }
 }
-
-
