@@ -21,12 +21,9 @@
                         <Insets bottom="5.0" left="5.0" top="5.0" />
                      </HBox.margin>
                   </Text>
-                  <Text fx:id="userName" fill="WHITE" stroke="#656565" strokeType="OUTSIDE" strokeWidth="0.1" wrappingWidth="150.21875">
-                     <font>
-                        <Font size="14.0" />
-                     </font>
+                  <Text fx:id="userName" fill="WHITE" stroke="#656565" strokeType="OUTSIDE" strokeWidth="0.1" wrappingWidth="105.21875">
                      <HBox.margin>
-                        <Insets left="5.0" top="5.0" />
+                        <Insets bottom="5.0" top="5.0" />
                      </HBox.margin>
                   </Text>
                </children>
