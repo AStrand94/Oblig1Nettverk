@@ -37,14 +37,6 @@ public class Server {
     static ObservableList<User> allUsers = FXCollections.observableArrayList();
 
     static serverController sc;
-/*
-Trengs nok ikke da hele Server klassen er statisk.
-    private static Server instance =  null;
-    static Server getInstance() {
-        if (instance == null) instance = new Server();
-        return instance;
-    }
-    */
 
 
     /**
@@ -54,16 +46,18 @@ Trengs nok ikke da hele Server klassen er statisk.
      *
      * @return Thread - which listens for new users to connect.
      */
-    public static Thread startListening(serverController serverControllersc) {
+    public static Thread startListening(serverController serverController) {
 
-        sc = serverControllersc;
+        sc = serverController;
         return new Thread(() -> {
 
-        allUsers.add(new User("admin", "admin", new Circle(8, Color.GRAY)));
-        allUsers.add(new User("stian", "stian", new Circle(8, Color.GRAY)));
-            allUsers.add(new User("andreas", "andreas", new Circle(8, Color.GRAY)));
-            allUsers.add(new User("dusan", "dusan", new Circle(8, Color.GRAY)));
+        Platform.runLater(() ->{
+            allUsers.add(new User("admin", "admin", new Circle(8, Color.GRAY)));
+            allUsers.add(new User("stian", "stian", new Circle(8, Color.GRAY)));
+            allUsers.add(new User("andreas", "andreas", new Circle(8, Color.GRAY)));allUsers.add(new User("dusan", "dusan", new Circle(8, Color.GRAY)));
             allUsers.add(new User("martin", "martin", new Circle(8, Color.GRAY)));
+        });
+        //tableView.setItems(allUsers);
 
         portNumber = 5555; //default
 
@@ -141,6 +135,7 @@ Trengs nok ikke da hele Server klassen er statisk.
                             continue;
                         }
                         user = getUser(m.group(1));
+                        if (isOnline(user.getUsername())) continue;
                         logIn(user);
                     }
 
@@ -393,11 +388,7 @@ Trengs nok ikke da hele Server klassen er statisk.
     private static boolean isOnline(String s){
         for (User u : allUsers) {
             if (u.getUsername().equals(s)) {
-                if (u.getStatus().equals("available") || u.getStatus().equals("busy")) {
-                    return true;
-                } else {
-                    return false;
-                }
+                return !u.getColor().equals(Color.GREY);
             }
         }
         return false;

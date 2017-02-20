@@ -3,9 +3,6 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Shape;
 
-/**
- * Created by stiangrim on 13.02.2017.
- */
 public class User {
     private Circle circle;
     private String username;

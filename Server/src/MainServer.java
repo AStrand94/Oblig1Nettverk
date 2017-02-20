@@ -12,9 +12,6 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- * Created by dusja on 06.02.2017.
- */
 public class MainServer extends Application{
     static Scene serverScene;
     static Stage stage;
@@ -44,6 +41,9 @@ public class MainServer extends Application{
         }
     }
 
+    /**
+     * Calls when window is closed to completely exit the program.
+     */
     protected void finalize(){
         Platform.exit();
         System.exit(0);

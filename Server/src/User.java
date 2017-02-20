@@ -1,6 +1,4 @@
-/**
- * Created by brandhaug on 25.01.2017.
- */
+
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.scene.paint.Paint;
