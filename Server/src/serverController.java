@@ -8,15 +8,9 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-import javafx.scene.text.Text;
 
-import java.io.IOException;
-import java.lang.management.ManagementFactory;
-import java.lang.reflect.Array;
 import java.net.URL;
 import java.util.ResourceBundle;
-import com.sun.management.OperatingSystemMXBean;
-
 
 public class serverController implements Initializable {
 

@@ -1,14 +1,9 @@
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-import sun.misc.ClassFileTransformer;
-
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -18,7 +13,6 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.NoSuchElementException;
-import java.util.Observable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -30,10 +24,7 @@ import java.util.regex.Pattern;
 public class Server {
 
     static int portNumber;
-    //static ArrayList<User> allUsers = new ArrayList<>();
     static ArrayList<ChatServer> chatServers = new ArrayList<>();
-
-    static TableView<User> tableView;
     static ObservableList<User> allUsers = FXCollections.observableArrayList();
 
     static serverController sc;

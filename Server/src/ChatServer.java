@@ -18,16 +18,13 @@ import javafx.scene.paint.Color;
 public class ChatServer {
 
     ServerClient client1, client2;
-    InetAddress address1, address2;
 
-    Thread t1,t2,st;
-    String s1,s2;
-    String u1,u2;
+    private Thread t1,t2;
+    private String s1,s2;
+    private String u1,u2;
 
-    boolean chatAlive;
-    static int i = 0;
-    int j;
-
+    private boolean chatAlive;
+    private static int i = 0;
 
     /**
      * Constructor, to take one client and start the first thread

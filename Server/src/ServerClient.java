@@ -13,7 +13,7 @@ import java.net.Socket;
  * username and password. The ServerClient class contains an User object, together
  * with the Socket object that this User is connected to.
  */
-public class ServerClient {
+class ServerClient {
 
         private Socket socket;
         private User user;
@@ -27,7 +27,7 @@ public class ServerClient {
      * @param socket Socket
      * @param user User
      */
-    public ServerClient(Socket socket, User user){
+    ServerClient(Socket socket, User user){
         this.user = user;
         this.socket = socket;
         clientAddr = socket.getInetAddress();
@@ -45,7 +45,7 @@ public class ServerClient {
      *
      * @return String username
      */
-    public String getUsername(){
+    String getUsername(){
         return user.getUsername();
     }
 
@@ -53,7 +53,7 @@ public class ServerClient {
      *
      * @return InetAddress
      */
-    public InetAddress getClientAddr(){
+    InetAddress getClientAddr(){
         return clientAddr;
     }
 
@@ -61,7 +61,7 @@ public class ServerClient {
      * Writes a message to this User, using its socket
      * @param text String
      */
-    public void writeMessage(String text){
+    void writeMessage(String text){
         out.println(text);
     }
 
@@ -70,7 +70,7 @@ public class ServerClient {
      * Should call readLine() from this BufferedReader to get the message.
      * @return BufferedReader
      */
-    public BufferedReader getMessage(){
+    BufferedReader getMessage(){
         return in;
     }
 
@@ -78,7 +78,7 @@ public class ServerClient {
      * Sets the status of an user.
      * @param status String
      */
-    public void setStatus(Circle status){
+    void setStatus(Circle status){
         user.setStatus(status);
     }
 
@@ -86,14 +86,14 @@ public class ServerClient {
      * Returns the user in this ServerClient object
      * @return User
      */
-    public User getUser(){
+    User getUser(){
         return user;
     }
 
     /**
      * Terminates the connection to this user
      */
-    public void closeSocket(){
+    void closeSocket(){
         try {
             socket.close();
         }catch(IOException e){
