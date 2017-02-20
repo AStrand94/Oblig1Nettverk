@@ -10,9 +10,6 @@ import javafx.scene.text.Text;
 
 import java.io.IOException;
 
-/**
- * Created by stiangrim on 28.01.2017.
- */
 public class chatController {
 
     Client client = Client.getInstance();
