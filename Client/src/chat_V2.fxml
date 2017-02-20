@@ -41,7 +41,7 @@
             <TableView fx:id="tableView" prefHeight="339.0" prefWidth="164.0">
                <columns>
                   <TableColumn fx:id="statusColumn" editable="false" minWidth="0.0" prefWidth="24.0" resizable="false" />
-                  <TableColumn fx:id="nameColumn" editable="false" prefWidth="106.0" text="Name" />
+                  <TableColumn fx:id="nameColumn" editable="false" prefWidth="154.0" text="Name" />
                </columns>
             </TableView>
             <VBox prefHeight="75.0" prefWidth="131.0" style="-fx-background-color: white;">
