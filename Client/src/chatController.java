@@ -60,6 +60,7 @@ public class chatController {
     @FXML
     protected void sendMessage() throws IOException {
         String s = messageField.getText();
+        if(s.equals("")) return;
         if (s.charAt(0) == '*'){
             chatArea.appendText("<First character can not be \'*\'>\n");
         }else {
