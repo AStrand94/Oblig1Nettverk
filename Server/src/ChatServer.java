@@ -1,3 +1,6 @@
+import javafx.scene.shape.Circle;
+
+import java.awt.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -6,7 +9,7 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.NoSuchElementException;
-
+import javafx.scene.paint.Color;
 /**
  * Class ChatServer
  *
@@ -15,16 +18,13 @@ import java.util.NoSuchElementException;
 public class ChatServer {
 
     ServerClient client1, client2;
-    InetAddress address1, address2;
 
-    Thread t1,t2,st;
-    String s1,s2;
-    String u1,u2;
+    private Thread t1,t2;
+    private String s1,s2;
+    private String u1,u2;
 
-    boolean chatAlive;
-    static int i = 0;
-    int j;
-
+    private boolean chatAlive;
+    private static int i = 0;
 
     /**
      * Constructor, to take one client and start the first thread
@@ -53,8 +53,8 @@ public class ChatServer {
         this.client2 = client2;
         address2 = client2.getClientAddr();
 
-        client2.setStatus("busy");
-        client1.setStatus("busy");
+        client2.setStatus(new Circle(8, Color.ORANGE));
+        client1.setStatus(new Circle(8, Color.ORANGE));
 
         s2 = '[' + client2.getUsername() + ']' + ':' + ' ';
         confirmConnection();
@@ -208,7 +208,7 @@ public class ChatServer {
      * @param client ServerClient
      */
     public void endChatSeeUsers(ServerClient client){
-        client.setStatus("available");
+        client.setStatus(new Circle(8, Color.GREEN));
         Server.endChat(this);
         Server.putInChat(client);
         Server.sendUpdatedUsers();
@@ -220,7 +220,7 @@ public class ChatServer {
      * @param client
      */
     private void endChatNewChat(ServerClient client){
-        client.setStatus("available");
+        client.setStatus(new Circle(8, Color.GREEN));
         Server.endChat(this);
         Server.putInNewChat(client);
         Server.sendUpdatedUsers();

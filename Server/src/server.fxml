@@ -1,47 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.effect.*?>
-<?import javafx.scene.shape.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.text.*?>
-<?import java.lang.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="800.0" style="-fx-background-color: #59656F;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="serverController">
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="700.0" style="-fx-background-color: #59656F;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="serverController">
     <right>
-        <VBox prefHeight="508.0" prefWidth="189.0" style="-fx-background-color: white;" BorderPane.alignment="CENTER">
+        <VBox prefHeight="378.0" prefWidth="193.0" style="-fx-background-color: white;" BorderPane.alignment="CENTER">
             <children>
-            <Label alignment="CENTER" contentDisplay="CENTER" layoutX="10.0" layoutY="10.0" minHeight="-Infinity" prefHeight="26.0" prefWidth="189.0" style="-fx-background-color: lightgrey;" text="\@" textFill="#59656f">
+            <Label alignment="CENTER" contentDisplay="CENTER" layoutX="10.0" layoutY="10.0" minHeight="-Infinity" prefHeight="26.0" prefWidth="266.0" style="-fx-background-color: lightgrey;" textFill="#59656f">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
-            <VBox>
+            <VBox prefHeight="179.0" prefWidth="193.0">
                <children>
-                      <Label alignment="CENTER" contentDisplay="CENTER" minHeight="-Infinity" prefHeight="36.0" prefWidth="189.0" text="Create new user" textFill="#59656f">
+                      <Label alignment="CENTER" contentDisplay="CENTER" minHeight="-Infinity" prefHeight="45.0" prefWidth="193.0" text="Create new user" textFill="#59656f">
                           <VBox.margin>
                               <Insets />
                           </VBox.margin>
                           <font>
                               <Font size="14.0" />
                           </font>
+                     <padding>
+                        <Insets bottom="10.0" top="10.0" />
+                     </padding>
                       </Label>
                   <TextField fx:id="usernameInput" maxWidth="-Infinity" prefHeight="23.0" prefWidth="170.0" promptText="Enter username">
                      <padding>
                         <Insets top="4.0" />
                      </padding>
                      <VBox.margin>
-                        <Insets left="10.0" top="3.0" />
+                        <Insets left="11.0" top="3.0" />
                      </VBox.margin>
                      <font>
                         <Font size="14.0" />
                      </font>
                   </TextField>
-                  <TextField fx:id="passwordInput" layoutX="20.0" layoutY="79.0" maxWidth="-Infinity" prefHeight="23.0" prefWidth="170.0" promptText="Enter ">
+                  <TextField fx:id="passwordInput" layoutX="20.0" layoutY="79.0" maxWidth="-Infinity" prefHeight="23.0" prefWidth="170.0" promptText="Enter Password">
                      <font>
                         <Font size="14.0" />
                      </font>
@@ -49,30 +47,38 @@
                         <Insets top="4.0" />
                      </padding>
                      <VBox.margin>
-                        <Insets left="10.0" top="10.0" />
+                        <Insets left="11.0" top="5.0" />
                      </VBox.margin>
                   </TextField>
-                  <Button fx:id="create" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onCreate" prefHeight="35.0" prefWidth="169.0" style="-fx-background-color: green;" text="Create" textFill="WHITE">
+                  <Button fx:id="create" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onCreate" prefHeight="35.0" prefWidth="169.0" style="-fx-background-color: #3bb235;" text="Create" textFill="WHITE">
                      <VBox.margin>
-                        <Insets left="10.0" top="10.0" />
+                        <Insets left="11.0" top="15.0" />
                      </VBox.margin>
                   </Button>
-               </children>
-            </VBox>
-            <VBox>
-               <children>
-                  <Label alignment="CENTER" contentDisplay="CENTER" minHeight="-Infinity" prefHeight="50.0" prefWidth="189.0" text="Remove User" textFill="#59656f">
-                     <font>
-                        <Font size="14.0" />
-                     </font>
-                     <padding>
-                        <Insets bottom="8.0" left="8.0" right="8.0" top="9.0" />
-                     </padding>
+                  <Label maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" prefHeight="6.0" prefWidth="193.0" style="-fx-background-color: #59656F;">
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
                      <VBox.margin>
-                        <Insets top="10.0" />
+                        <Insets top="22.0" />
                      </VBox.margin>
                   </Label>
-                  <TextField fx:id="usernameInput11" maxWidth="-Infinity" prefHeight="23.0" prefWidth="170.0" promptText="Enter Username">
+               </children>
+            </VBox>
+            <VBox prefHeight="157.0" prefWidth="207.0">
+               <children>
+                  <Label alignment="CENTER" contentDisplay="CENTER" minHeight="-Infinity" prefHeight="44.0" prefWidth="193.0" text="Remove User" textFill="#59656f">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets top="8.0" />
+                     </VBox.margin>
+                     <padding>
+                        <Insets bottom="10.0" />
+                     </padding>
+                  </Label>
+                  <TextField fx:id="searchUsername" maxWidth="-Infinity" prefHeight="23.0" prefWidth="170.0" promptText="Enter Username">
                      <font>
                         <Font size="14.0" />
                      </font>
@@ -80,66 +86,41 @@
                         <Insets top="4.0" />
                      </padding>
                      <VBox.margin>
-                        <Insets bottom="10.0" left="10.0" />
+                        <Insets left="11.0" />
                      </VBox.margin>
                   </TextField>
-                  <TextField fx:id="usernameInput2" maxWidth="-Infinity" prefHeight="23.0" prefWidth="170.0" promptText="Enter username">
-                     <font>
-                        <Font size="14.0" />
-                     </font>
-                     <padding>
-                        <Insets top="4.0" />
-                     </padding>
+                  <Button fx:id="remove" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onRemove" prefHeight="35.0" prefWidth="169.0" style="-fx-background-color: #d31919;" text="Remove" textFill="WHITE">
                      <VBox.margin>
-                        <Insets left="10.0" />
-                     </VBox.margin>
-                  </TextField>
-                  <Button fx:id="remove" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onRemove" prefHeight="35.0" prefWidth="169.0" style="-fx-background-color: red;" text="Remove" textFill="WHITE">
-                     <VBox.margin>
-                        <Insets left="10.0" top="10.0" />
+                        <Insets left="11.0" top="15.0" />
                      </VBox.margin>
                   </Button>
                </children>
             </VBox>
             </children>
+         <BorderPane.margin>
+            <Insets right="10.0" />
+         </BorderPane.margin>
         </VBox>
     </right>
     <top>
-        <HBox prefHeight="6.0" prefWidth="1200.0" BorderPane.alignment="CENTER">
-         <children>
-            <MenuBar prefHeight="70.0" prefWidth="1213.0" style="-fx-background-color: #59656F;">
-              <menus>
-                <Menu mnemonicParsing="false" text="File">
-                  <items>
-                    <MenuItem mnemonicParsing="false" text="Close" />
-                  </items>
-                </Menu>
-                <Menu mnemonicParsing="false" text="Edit">
-                  <items>
-                    <MenuItem mnemonicParsing="false" text="Delete" />
-                  </items>
-                </Menu>
-                <Menu mnemonicParsing="false" text="Help">
-                  <items>
-                    <MenuItem mnemonicParsing="false" text="About" />
-                  </items>
-                </Menu>
-              </menus>
-            </MenuBar>
-         </children>
-        </HBox>
+        <HBox prefHeight="16.0" prefWidth="650.0" BorderPane.alignment="CENTER" />
     </top>
     <bottom>
-        <HBox prefHeight="127.0" prefWidth="1000.0" BorderPane.alignment="CENTER" />
+        <HBox prefHeight="14.0" prefWidth="650.0" BorderPane.alignment="CENTER" />
     </bottom>
    <center>
-      <TableView fx:id="userTable" prefHeight="508.0" prefWidth="704.0" tableMenuButtonVisible="true" BorderPane.alignment="CENTER">
+      <TableView fx:id="userTable" prefHeight="378.0" prefWidth="450.0" tableMenuButtonVisible="true" BorderPane.alignment="CENTER">
         <columns>
-          <TableColumn fx:id="iID" minWidth="50.0" prefWidth="150.0" text="ID" />
-          <TableColumn fx:id="iUsername" minWidth="50.0" prefWidth="150.0" text="Username" />
-            <TableColumn fx:id="iPassword" minWidth="50.0" prefWidth="150.0" text="Password" />
-            <TableColumn fx:id="iStatus" minWidth="50.0" prefWidth="150.0" text="Status" />
+          <TableColumn fx:id="username" minWidth="40.0" prefWidth="200.0" text="Username" />
+            <TableColumn fx:id="password" minWidth="40.0" prefWidth="194.0" text="Password" />
+            <TableColumn fx:id="status" minWidth="31.0" prefWidth="75.0" text="Status" />
         </columns>
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+         <BorderPane.margin>
+            <Insets left="10.0" right="5.0" />
+         </BorderPane.margin>
       </TableView>
    </center>
 </BorderPane>

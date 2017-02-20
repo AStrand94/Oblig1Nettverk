@@ -20,6 +20,7 @@ import java.io.IOException;
 public class connectController {
 
     private Client client = Client.getInstance();
+    Scene chatScene;
 
     @FXML
     private Hyperlink backToLoginLink;
@@ -277,10 +278,10 @@ public class connectController {
      * Opens the chat scene
      * @throws IOException if FXMLLoader returns an error
      */
-    private void goToChatWindow() throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("chat.fxml"));
+    protected void goToChatWindow() throws IOException {
+        Parent root = FXMLLoader.load(getClass().getResource("chat_V2.fxml"));
 
-        Scene chatScene = new Scene(root, 600, 400);
+        chatScene = new Scene(root, 700, 430);
 
         Stage stage = (Stage) logInButton.getScene().getWindow();
         stage.setTitle("Chat");

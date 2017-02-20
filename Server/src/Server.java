@@ -1,4 +1,9 @@
-import sun.misc.ClassFileTransformer;
+import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.scene.control.TableView;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -19,8 +24,10 @@ import java.util.regex.Pattern;
 public class Server {
 
     static int portNumber;
-    static ArrayList<User> allUsers = new ArrayList<>();
     static ArrayList<ChatServer> chatServers = new ArrayList<>();
+    static ObservableList<User> allUsers = FXCollections.observableArrayList();
+
+    static serverController sc;
 
 
     /**
@@ -30,11 +37,18 @@ public class Server {
      *
      * @return Thread - which listens for new users to connect.
      */
-    public static Thread startListening() {
+    public static Thread startListening(serverController serverController) {
+
+        sc = serverController;
         return new Thread(() -> {
 
-        allUsers.add(new User("admin", "admin"));
-        allUsers.add(new User("stian", "stian"));
+        Platform.runLater(() ->{
+            allUsers.add(new User("admin", "admin", new Circle(8, Color.GRAY)));
+            allUsers.add(new User("stian", "stian", new Circle(8, Color.GRAY)));
+            allUsers.add(new User("andreas", "andreas", new Circle(8, Color.GRAY)));allUsers.add(new User("dusan", "dusan", new Circle(8, Color.GRAY)));
+            allUsers.add(new User("martin", "martin", new Circle(8, Color.GRAY)));
+        });
+        //tableView.setItems(allUsers);
 
         portNumber = 5555; //default
 
@@ -49,6 +63,7 @@ public class Server {
                 Socket connect = serverSocket.accept();
 
                 Thread t = logInProcedure(connect);
+
                 t.start();
             }
         } catch (IOException e) {
@@ -101,16 +116,17 @@ public class Server {
 
                             continue;   //continue makes you go on from start in loop again.
                         }
-                        if (isOnline(m.group(1))) continue;;
+                        if (isOnline(m.group(1))) continue;
                         user = getUser(m.group(1));
                         logIn(user);
 
                     } else { //if user is not a registered user
 
-                        if (!registerUser(m.group(1), m.group(2))) {
+                        if (!registerUser(m.group(1), m.group(2))){
                             continue;
                         }
                         user = getUser(m.group(1));
+                        if (isOnline(user.getUsername())) continue;
                         logIn(user);
                     }
 
@@ -121,7 +137,7 @@ public class Server {
 
                     putInNewChat(client);
                     connected = true;
-                    user.setStatus("available");
+                    user.setStatus(new Circle(8,Color.GREEN));
                     sendUpdatedUsers();
                 }
 
@@ -137,7 +153,7 @@ public class Server {
      * @param u User
      */
     private static void logIn(User u){
-        u.setStatus("available");
+        u.setStatus(new Circle(8,Color.GRAY));
     }
 
     /**
@@ -151,7 +167,7 @@ public class Server {
         boolean exists = false;
 
         for (User u : allUsers){
-            if (u.getUserName().equals(uname) &&
+            if (u.getUsername().equals(uname) &&
                     u.getPassword().equals(passw))
                 exists = true;
         }
@@ -168,9 +184,10 @@ public class Server {
     public static boolean registerUser(String uname, String passw){
 
         for (User u : allUsers){
-            if (uname.equals(u.getUserName())) return false;
+            if (uname.equals(u.getUsername())) return false;
         }
-        User u = new User(uname,passw);
+        Circle stat = new Circle(8,Color.GRAY);
+        User u = new User(uname,passw,stat);
         allUsers.add(u);
 
         return true;
@@ -182,7 +199,7 @@ public class Server {
      * @param sc ServerClient
      */
     public static void logOff(ServerClient sc){
-        sc.getUser().setStatus("offline");
+        sc.getUser().setStatus(new Circle(8,Color.GRAY));
         sendUpdatedUsers();
 
 
@@ -198,7 +215,7 @@ public class Server {
      */
     public static User getUser(String uname){
         for (User u : allUsers){
-            if (u.getUserName().equals(uname)) return u;
+            if (u.getUsername().equals(uname)) return u;
         }
 
         throw new NoSuchElementException("No user with username" + uname);
@@ -292,8 +309,8 @@ public class Server {
     private static String busyUsers(){
         StringBuilder sb = new StringBuilder();
         for (User u : allUsers){
-            if (u.getStatus().equals("busy"))
-                sb.append("b:").append(u.getUserName()).append(' ');
+            if (u.getStatus().equals(Color.GREY))
+                sb.append("b:").append(u.getUsername()).append(' ');
         }
         return sb.toString();
     }
@@ -315,6 +332,7 @@ public class Server {
             if (cs.client1 != null) cs.client1.writeMessage(userInfo);
             if (cs.client2 != null) cs.client2.writeMessage(userInfo);
         }
+        sc.updateTable();
     }
 
     /**
@@ -343,11 +361,13 @@ public class Server {
      */
     public static String allUsers(){
         StringBuilder sb = new StringBuilder();
-        for (User u : allUsers){
+        for (User u : allUsers) {
             char status;
-            status = u.getStatus().charAt(0);
-            sb.append(status).append(':').append(u.getUserName()).append(' ');
-        }
+            if(u.getColor().equals(Color.GREEN)) status = 'a';
+            else if(u.getColor().equals(Color.ORANGE)) status ='b';
+            else status = 'o';
+            sb.append(status).append(':').append(u.getUsername()).append(' ');
+       }
         return sb.toString();
     }
 
@@ -358,12 +378,8 @@ public class Server {
      */
     private static boolean isOnline(String s){
         for (User u : allUsers) {
-            if (u.getUserName().equals(s)) {
-                if (u.getStatus().equals("available") || u.getStatus().equals("busy")) {
-                    return true;
-                } else {
-                    return false;
-                }
+            if (u.getUsername().equals(s)) {
+                return !u.getColor().equals(Color.GREY);
             }
         }
         return false;
@@ -394,4 +410,5 @@ public class Server {
         sc.writeMessage('<' + user + " declined your chat request.>");
 
     }
+
 }
