@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="430.0" prefWidth="700.0" style="-fx-background-color: #59656F;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="chatController">
+   <top>
+      <HBox prefHeight="11.0" prefWidth="600.0" style="-fx-background-color: #59656F;" BorderPane.alignment="CENTER">
+         <children>
+            <HBox prefHeight="27.0" prefWidth="531.0">
+               <children>
+                  <Text fill="WHITE" opacity="0.3" strokeType="OUTSIDE" strokeWidth="0.0" text="Logged in as: " wrappingWidth="88.21875">
+                     <font>
+                        <Font size="12.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets bottom="5.0" left="5.0" top="5.0" />
+                     </HBox.margin>
+                  </Text>
+                  <Text fx:id="userName" fill="WHITE" stroke="#656565" strokeType="OUTSIDE" strokeWidth="0.1" wrappingWidth="150.21875">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets left="5.0" top="5.0" />
+                     </HBox.margin>
+                  </Text>
+               </children>
+            </HBox>
+         </children>
+      </HBox>
+   </top>
+   <right>
+      <VBox prefHeight="351.0" prefWidth="164.0" BorderPane.alignment="CENTER">
+         <children>
+            <VBox prefHeight="27.0" prefWidth="164.0">
+               <children>
+                  <ToolBar prefHeight="40.0" prefWidth="200.0">
+                     <items>
+                        <Label prefHeight="17.0" prefWidth="108.0" text="Set your status" />
+                        <RadioButton mnemonicParsing="false" text="Online" />
+                        <RadioButton mnemonicParsing="false" text="Busy" />
+                        <RadioButton mnemonicParsing="false" text="Offline" />
+                     </items>
+                  </ToolBar>
+               </children>
+            </VBox>
+            <TableView fx:id="tableView" prefHeight="339.0" prefWidth="164.0">
+               <columns>
+                  <TableColumn fx:id="statusColumn" editable="false" minWidth="0.0" prefWidth="24.0" resizable="false" />
+                  <TableColumn fx:id="nameColumn" editable="false" prefWidth="106.0" text="Name" />
+               </columns>
+            </TableView>
+            <VBox prefHeight="75.0" prefWidth="131.0" style="-fx-background-color: white;">
+               <children>
+                  <ToolBar prefHeight="45.0" prefWidth="164.0">
+                    <items>
+                      <Button fx:id="connectButton" mnemonicParsing="false" onAction="#selectUser" opacity="0.9" prefHeight="25.0" prefWidth="70.0" style="-fx-background-color: #3bb235;" text="Connect" textFill="WHITE" />
+                        <Button layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#disconnect" opacity="0.9" prefWidth="75.0" style="-fx-background-color: #d31919;" text="Disconnect" textFill="WHITE" />
+                    </items>
+                  </ToolBar>
+               </children>
+            </VBox>
+         </children>
+         <BorderPane.margin>
+            <Insets right="5.0" />
+         </BorderPane.margin>
+      </VBox>
+   </right>
+   <bottom>
+      <HBox prefHeight="53.0" prefWidth="600.0" style="-fx-background-color: #59656F;" BorderPane.alignment="CENTER">
+         <children>
+            <TextField fx:id="messageField" onAction="#sendMessage" prefHeight="38.0" prefWidth="465.0" promptText="Enter you message..">
+               <HBox.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="10.0" />
+               </HBox.margin>
+               <font>
+                  <Font size="17.0" />
+               </font>
+            </TextField>
+            <Button mnemonicParsing="false" onAction="#sendMessage" prefHeight="38.0" prefWidth="43.0" text="Send">
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <HBox.margin>
+                  <Insets bottom="5.0" top="10.0" />
+               </HBox.margin>
+            </Button>
+            <VBox prefHeight="53.0" prefWidth="174.0">
+               <children>
+                  <Label prefHeight="15.0" prefWidth="126.0" text="Choose text color:" textFill="WHITE">
+                     <VBox.margin>
+                        <Insets left="5.0" top="3.0" />
+                     </VBox.margin>
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </Label>
+                  <ColorPicker prefHeight="25.0" prefWidth="83.0">
+                     <VBox.margin>
+                        <Insets left="5.0" top="2.0" />
+                     </VBox.margin>
+                  </ColorPicker>
+               </children>
+               <HBox.margin>
+                  <Insets left="5.0" />
+               </HBox.margin>
+            </VBox>
+         </children>
+      </HBox>
+   </bottom>
+   <center>
+      <HBox prefHeight="350.0" prefWidth="478.0" BorderPane.alignment="CENTER">
+         <children>
+            <TextArea fx:id="chatArea" editable="false" prefHeight="351.0" prefWidth="515.0" wrapText="true">
+               <HBox.margin>
+                  <Insets left="5.0" right="10.0" />
+               </HBox.margin></TextArea>
+         </children>
+      </HBox>
+   </center>
+</BorderPane>

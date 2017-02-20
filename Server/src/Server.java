@@ -63,6 +63,7 @@ Trengs nok ikke da hele Server klassen er statisk.
         allUsers.add(new User("stian", "stian", new Circle(8, Color.GRAY)));
             allUsers.add(new User("andreas", "andreas", new Circle(8, Color.GRAY)));
             allUsers.add(new User("dusan", "dusan", new Circle(8, Color.GRAY)));
+            allUsers.add(new User("martin", "martin", new Circle(8, Color.GRAY)));
 
         //tableView.setItems(allUsers);
 

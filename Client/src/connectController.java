@@ -277,9 +277,9 @@ public class connectController {
      * @throws IOException if FXMLLoader returns an error
      */
     protected void goToChatWindow() throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("chat.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("chat_V2.fxml"));
 
-        chatScene = new Scene(root, 600, 400);
+        chatScene = new Scene(root, 700, 430);
 
         Stage stage = (Stage) logInButton.getScene().getWindow();
         stage.setTitle("Chat");
