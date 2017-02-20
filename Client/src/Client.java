@@ -11,11 +11,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.Optional;
 
-/**
- * Created by stiangrim on 25.01.2017.
- */
 
 /**
  * The Client class represent the user.
@@ -273,6 +271,15 @@ public class Client {
                     }
 
                 }
+            }catch(SocketException e){
+                Alert a = new Alert(Alert.AlertType.ERROR);
+                a.setTitle("DISCONNECTED");
+                a.setHeaderText("The connection with the server has been terminated.\n" +
+                        "The program will now exit.");
+                a.showAndWait();
+                Platform.exit();
+                System.exit(0);
+
             } catch (IOException e) {
                 e.printStackTrace();
             }

@@ -2,10 +2,6 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.paint.Color;
 
-
-/**
- * Created by dusja on 07.02.2017.
- */
 public class UserTable {
 
     private final SimpleIntegerProperty rID;

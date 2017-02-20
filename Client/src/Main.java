@@ -8,13 +8,12 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 /**
- * Created by stiangrim on 25.01.2017.
- */
-
-/**
  * Runs the client program
  */
 public class Main extends Application{
+
+     Scene loginScene;
+     Stage stage;
 
     /**
      * Launches application
@@ -31,9 +30,10 @@ public class Main extends Application{
      * @throws Exception if FXMLLoader returns an error
      */
     public void start(Stage stage) throws Exception {
+        this.stage = stage;
         Parent root = FXMLLoader.load(getClass().getResource("connect.fxml"));
 
-        Scene loginScene = new Scene(root, 600, 400);
+        loginScene = new Scene(root, 600, 400);
 
         stage.setTitle("Connect");
         stage.setResizable(false);
@@ -42,3 +42,4 @@ public class Main extends Application{
     }
 
 }
+

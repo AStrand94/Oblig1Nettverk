@@ -1,16 +1,31 @@
+import java.lang.management.ManagementFactory;
+import java.lang.management.OperatingSystemMXBean;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-/**
- * Created by strand117 on 25.01.2017.
- */
 
 
 public class TestClass {
     public static void main(String[] args) {
 
-        String s = "12345678";
+        printUsage();
+    }
 
-        System.out.println(s.substring(2,s.length()));
+    private static void printUsage() {
+        OperatingSystemMXBean operatingSystemMXBean = ManagementFactory.getOperatingSystemMXBean();
+        for (Method method : operatingSystemMXBean.getClass().getDeclaredMethods()) {
+            method.setAccessible(true);
+            if (method.getName().startsWith("get")
+                    && Modifier.isPublic(method.getModifiers())) {
+                Object value;
+                try {
+                    value = method.invoke(operatingSystemMXBean);
+                } catch (Exception e) {
+                    value = e;
+                } // try
+                System.out.println(method.getName() + " = " + value);
+            } // if
+        } // for
     }
 }
