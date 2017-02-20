@@ -1,4 +1,5 @@
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -32,11 +33,21 @@ public class MainServer extends Application{
             stage.setTitle("Server");
             stage.setScene(serverScene);
             stage.show();
+
+            stage.setOnCloseRequest(e -> {
+                Platform.exit();
+                System.exit(0);
+            });
+
         }catch (Exception e) {
                 Logger.getLogger(MainServer.class.getName()).log(Level.SEVERE,null,e);
         }
     }
 
+    protected void finalize(){
+        Platform.exit();
+        System.exit(0);
+    }
 }
 
 
