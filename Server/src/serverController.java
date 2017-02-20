@@ -109,6 +109,7 @@ public class serverController implements Initializable {
         if (userTable.getSelectionModel().getSelectedItem().getColor().equals(Color.GRAY)) {
             Server.allUsers.remove(userTable.getSelectionModel().getSelectedItem());
             clearInputs();
+            Server.sendUpdatedUsers();
         } else {
             Alert notRemovable = new Alert(Alert.AlertType.INFORMATION);
             notRemovable.setTitle("Error");
