@@ -109,7 +109,9 @@ public class chatController {
             chatArea.appendText("<You are not connected to anyone>\n");
         }
     }
-
+    /**
+     * Sets textColor on chatArea and messageArea to black(default).
+     */
     public void setBlackTextColor(){
         chatArea.setStyle("-fx-text-fill: black");
         messageField.setStyle("-fx-text-fill: black");
@@ -117,6 +119,10 @@ public class chatController {
         blue.setSelected(false);
         red.setSelected(false);
     }
+
+    /**
+     * Sets textColor on chatArea and messageArea to blue.
+     */
     public void setRedTextColor(){
         chatArea.setStyle("-fx-text-fill: darkred");
         activeColor.setFill(Color.DARKRED);
@@ -124,6 +130,10 @@ public class chatController {
         black.setSelected(false);
         blue.setSelected(false);
     }
+
+    /**
+     * Sets textColor on chatArea and messageArea to red.
+     */
     public void setBlueTextColor(){
         chatArea.setStyle("-fx-text-fill: dodgerblue");
         messageField.setStyle("-fx-text-fill: dodgerblue");

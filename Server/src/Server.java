@@ -65,8 +65,6 @@ Trengs nok ikke da hele Server klassen er statisk.
             allUsers.add(new User("dusan", "dusan", new Circle(8, Color.GRAY)));
             allUsers.add(new User("martin", "martin", new Circle(8, Color.GRAY)));
 
-        //tableView.setItems(allUsers);
-
         portNumber = 5555; //default
 
         System.out.println("Hi, this is ChatServer");
