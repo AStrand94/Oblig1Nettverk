@@ -19,8 +19,8 @@ import java.io.IOException;
  */
 public class connectController {
 
-    Client client = Client.getInstance();
     private Client client = Client.getInstance();
+    Scene chatScene;
 
     @FXML
     private Hyperlink backToLoginLink;
