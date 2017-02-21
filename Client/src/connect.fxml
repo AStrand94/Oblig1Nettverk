@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.*?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="400.0" style="-fx-background-color: #59656F;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="connectController">
+<Pane fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="400.0" style="-fx-background-color: #59656F;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="connectController">
    <children>
       <TextField fx:id="ip" layoutX="180.0" layoutY="31.0" onAction="#connect" promptText="127.0.0.1" text="127.0.0.1" />
       <TextField fx:id="port" layoutX="180.0" layoutY="71.0" onAction="#connect" prefHeight="27.0" prefWidth="91.0" promptText="5555" text="5555" />

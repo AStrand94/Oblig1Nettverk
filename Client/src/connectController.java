@@ -1,12 +1,16 @@
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Rectangle2D;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.Pane;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 import java.io.*;
@@ -20,6 +24,8 @@ public class connectController {
 
     Client client = Client.getInstance();
 
+    @FXML
+    Pane pane;
     @FXML
     TextField ip;
     @FXML
@@ -70,8 +76,7 @@ public class connectController {
         Parent root = FXMLLoader.load(getClass().getResource("login.fxml"));
 
         Scene loginScene = new Scene(root, 600, 400);
-
-        Stage stage = new Stage();
+        Stage stage = (Stage) pane.getScene().getWindow();
         stage.setTitle("Login");
         stage.setResizable(false);
         stage.setScene(loginScene);
@@ -82,7 +87,11 @@ public class connectController {
             System.exit(0);
         });
 
+        Rectangle2D primScreenBounds = Screen.getPrimary().getVisualBounds();
+        stage.setX((primScreenBounds.getWidth() - stage.getWidth()) / 2);
+        stage.setY((primScreenBounds.getHeight() - stage.getHeight()) / 2);
         stage.show();
+
     }
 
 }
