@@ -46,6 +46,9 @@ public class connectController {
         } catch (UnknownHostException e) {
             errorText.setText("Invalid IP");
             return;
+        } catch (Exception e) {
+            errorText.setText("Could not connect");
+            return;
         }
 
         client.setSocket(socket);
