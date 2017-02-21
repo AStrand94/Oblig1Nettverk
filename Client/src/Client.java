@@ -25,8 +25,8 @@ import java.util.Optional;
 public class Client {
 
     private static Client instance = null;
-    private String username;
-    private String lastConnectedUser;
+    private String username = "";
+    private String lastConnectedUser = "";
     private String received;
     private boolean connected;
     private Socket socket = null;
@@ -47,11 +47,7 @@ public class Client {
      */
     static Client getInstance() {
         if (instance == null) {
-            try {
-                instance = new Client();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            instance = new Client();
         }
         return instance;
     }
@@ -72,16 +68,6 @@ public class Client {
      */
     PrintWriter print() {
         return out;
-    }
-
-    /**
-     * Instantiates the Socket, PrintWriter and BufferedReader.
-     *
-     * @throws IOException
-     */
-    private Client() throws IOException {
-        username = "";
-        lastConnectedUser = "";
     }
 
     /**
