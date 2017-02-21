@@ -8,7 +8,9 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.text.Text;
 
+import java.net.BindException;
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -37,6 +39,10 @@ public class serverController implements Initializable {
     private TableColumn<User, Circle> status;
     @FXML
     private Button changePortButton;
+    @FXML
+    private Text statusText;
+    @FXML
+    private Text portText;
 
     private String portNumber = "5555";
     private Thread t;
@@ -49,6 +55,8 @@ public class serverController implements Initializable {
 
         t = Server.startListening(this,portNumber);
         t.start();
+
+        updateStatusText();
 
         username.setCellValueFactory(cellData -> cellData.getValue().usernameProperty());
         password.setCellValueFactory(cellData -> cellData.getValue().passwordProperty());
@@ -80,6 +88,17 @@ public class serverController implements Initializable {
 
     userTable.setItems(sortedData);
     }
+
+    /**
+     * Checks if the thread listening for users is alive, and then sets the server-status
+     * to online or offline.
+     */
+    private void updateStatusText(){
+        statusText.setText("Server is : " + (t.isAlive() ? "online" : "offline"));
+        portText.setText("Portnumber: " + (t.isAlive()? portNumber : ""));
+    }
+
+
 
     /**
      * Refreshes the table whenever sendUpdatedUSers() is called.
@@ -185,22 +204,24 @@ public class serverController implements Initializable {
 
             result.ifPresent(s ->{
 
-                if (s.chars().allMatch(Character::isDigit)){
+                if (s.chars().allMatch(Character::isDigit) && Integer.parseInt(s) < 65536){
                     t.interrupt();
+                    clearInputs();
                     portNumber = s;
                     t = Server.startListening(this,portNumber);
                     t.start();
                 }else{
                     Alert a = new Alert(Alert.AlertType.ERROR);
                     a.setTitle("Invalid portnumber");
-                    a.setHeaderText("Please provide a number for portnumber");
+                    a.setHeaderText("Please provide a valid number for portnumber");
                 }
-
             });
-
-
-
-
+            try {
+                Thread.sleep(10);
+            }catch(InterruptedException e){
+                e.printStackTrace();
+            }
+            updateStatusText();
         }
     }
 

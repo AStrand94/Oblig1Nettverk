@@ -1,6 +1,7 @@
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.control.Alert;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
@@ -8,6 +9,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.net.BindException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -40,13 +42,14 @@ public class Server {
 
         sc = serverController;
         return new Thread(() -> {
-
+/*
         Platform.runLater(() ->{
             allUsers.add(new User("admin", "admin", new Circle(8, Color.GRAY)));
             allUsers.add(new User("stian", "stian", new Circle(8, Color.GRAY)));
             allUsers.add(new User("andreas", "andreas", new Circle(8, Color.GRAY)));allUsers.add(new User("dusan", "dusan", new Circle(8, Color.GRAY)));
             allUsers.add(new User("martin", "martin", new Circle(8, Color.GRAY)));
         });
+        */
         //tableView.setItems(allUsers);
 
         portNumber = Integer.parseInt(port);
@@ -65,7 +68,15 @@ public class Server {
 
                 t.start();
             }
-        } catch (IOException e) {
+        }catch (BindException be){
+            System.out.println("ERROR WHEN CONNECTING TO PORT " +portNumber);
+            Platform.runLater(() -> {
+                Alert a = new Alert(Alert.AlertType.ERROR);
+                a.setTitle("ERROR");
+                a.setHeaderText("Permission denied when connecting to portnumber " + portNumber);
+                a.showAndWait();
+            });
+        }catch (IOException e) {
             e.printStackTrace();
         }
         });
