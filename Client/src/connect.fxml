@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.image.*?>
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.control.*?>
@@ -30,10 +31,5 @@
             <Font size="16.0" />
          </font>
       </Button>
-      <Label fx:id="errorText" layoutX="226.0" layoutY="139.0" prefHeight="20.0" prefWidth="147.0" textFill="#ff0707">
-         <font>
-            <Font size="16.0" />
-         </font>
-      </Label>
    </children>
 </Pane>

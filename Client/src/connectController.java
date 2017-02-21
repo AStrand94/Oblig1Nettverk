@@ -5,13 +5,14 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 import java.io.*;
+import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.regex.Matcher;
@@ -30,38 +31,36 @@ public class connectController {
     TextField ip;
     @FXML
     TextField port;
-    @FXML
-    Label errorText;
 
     @FXML
     void connect() throws IOException {
-
         Pattern p = Pattern.compile("(\\d+).(\\d+).(\\d+).(\\d+)");
         Matcher m = p.matcher(ip.getText());
 
         if (!m.find()){
-            errorText.setText("Invalid IP");
+            alertBox("Invalid IP");
+            return;
         }
 
         if(ip.getText().equals("") || port.getText().equals("")) {
-            errorText.setText("Enter IP and port");
+            alertBox("Enter IP address and port number");
             return;
         }
 
         int portNumber = Integer.parseInt(port.getText());
         if(portNumber < 1 || portNumber > 65535) {
-            errorText.setText("Invalid port");
+            alertBox("Invalid port.\nValid range: 1-65535");
             return;
         }
 
-        Socket socket;
+        Socket socket = new Socket();
         try {
-            socket = new Socket(ip.getText(), portNumber);
+            socket.connect(new InetSocketAddress(ip.getText(), portNumber), 2000);
         } catch (UnknownHostException e) {
-            errorText.setText("Invalid IP");
+            alertBox("Invalid IP");
             return;
         } catch (Exception e) {
-            errorText.setText("Could not connect");
+            alertBox("Could not connect to server.\nCheck your IP and port number.");
             return;
         }
 
@@ -71,6 +70,13 @@ public class connectController {
                 new InputStreamReader(socket.getInputStream())));
 
         goToLoginScene();
+    }
+
+    void alertBox(String error) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setHeaderText("Could not connect");
+        alert.setContentText(error);
+        alert.showAndWait();
     }
 
     @FXML
