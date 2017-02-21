@@ -1,5 +1,4 @@
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -12,7 +11,7 @@ import java.io.IOException;
  */
 public class Main extends Application{
 
-     Scene loginScene;
+     Scene connectScene;
      Stage stage;
 
     /**
@@ -31,13 +30,14 @@ public class Main extends Application{
      */
     public void start(Stage stage) throws Exception {
         this.stage = stage;
+
         Parent root = FXMLLoader.load(getClass().getResource("connect.fxml"));
 
-        loginScene = new Scene(root, 600, 400);
+        connectScene = new Scene(root, 400, 200);
 
         stage.setTitle("Connect");
         stage.setResizable(false);
-        stage.setScene(loginScene);
+        stage.setScene(connectScene);
         stage.show();
     }
 

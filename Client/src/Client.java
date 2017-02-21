@@ -31,7 +31,7 @@ public class Client {
     private boolean connected;
     private Socket socket = null;
     private PrintWriter out = null;
-    private BufferedReader in;
+    private BufferedReader in = null;
     private TextArea chatArea;
     private Button connectButton;
     private boolean firstConnectionDone;
@@ -80,70 +80,35 @@ public class Client {
      * @throws IOException
      */
     private Client() throws IOException {
-        try {
-            connectToServer();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        out = new PrintWriter(socket.getOutputStream(), true);
-        in = null;
-        in = new BufferedReader(
-                new InputStreamReader(socket.getInputStream()));
         username = "";
         lastConnectedUser = "";
     }
 
-    void connectToServer() {
+    /**
+     * Sets the Socket
+     *
+     * @param socket The socket to communicate with server
+     */
+    void setSocket(Socket socket) {
+        this.socket = socket;
+    }
 
-        Dialog<Pair<String, String>> dialog = new Dialog<>();
-        dialog.setTitle("Connect");
-        dialog.setHeaderText("Please connect to server");
+    /**
+     * Sets the PrintWriter
+     *
+     * @param out PrintWriter to print to socket
+     */
+    void setPrintWriter(PrintWriter out) {
+        this.out = out;
+    }
 
-        ButtonType connect = new ButtonType("Connect", ButtonBar.ButtonData.OK_DONE);
-        ButtonType cancel = ButtonType.CANCEL;
-        dialog.getDialogPane().getButtonTypes().addAll(connect, cancel);
-
-        GridPane grid = new GridPane();
-        grid.setHgap(10);
-        grid.setVgap(10);
-        grid.setPadding(new Insets(20, 150, 10, 10));
-
-        TextField ipAddress = new TextField();
-        ipAddress.setText("127.0.0.1");
-        ipAddress.setPromptText("IP address");
-        TextField portNumber = new TextField();
-        portNumber.setText("5555");
-        portNumber.setPromptText("Port number");
-
-        grid.add(new Label("IP address:"), 0, 0);
-        grid.add(ipAddress, 1, 0);
-        grid.add(new Label("Port number:"), 0, 1);
-        grid.add(portNumber, 1, 1);
-
-        dialog.getDialogPane().setContent(grid);
-
-        dialog.setResultConverter(dialogButton -> {
-            if (dialogButton == connect) {
-                return new Pair<>(ipAddress.getText(), portNumber.getText());
-            }
-            return null;
-        });
-
-        Optional<Pair<String, String>> result = dialog.showAndWait();
-
-        result.ifPresent(pair -> {
-            try {
-                socket = new Socket(pair.getKey(), Integer.parseInt(pair.getValue()));
-            } catch (UnknownHostException host) {
-                System.out.println("Unknown host");
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (RuntimeException runtime) {
-                System.out.println("Make sure you have a server running.");
-            }
-        });
-
+    /**
+     * Sets the BufferedReader
+     *
+     * @param in BufferedReader to read from socket
+     */
+    void setBufferedReader(BufferedReader in) {
+        this.in = in;
     }
 
     /**

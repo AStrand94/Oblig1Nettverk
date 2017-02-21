@@ -1,59 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.text.*?>
 <?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #59656F;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="connectController">
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.*?>
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="400.0" style="-fx-background-color: #59656F;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="connectController">
    <children>
-      <TextField id="userName" fx:id="userName" layoutX="185.0" layoutY="125.0" prefHeight="27.0" prefWidth="237.0" promptText="Username">
+      <TextField fx:id="ip" layoutX="180.0" layoutY="31.0" promptText="127.0.0.1" text="127.0.0.1" />
+      <TextField fx:id="port" layoutX="180.0" layoutY="71.0" prefHeight="27.0" prefWidth="91.0" promptText="5555" text="5555" />
+      <Label layoutX="43.0" layoutY="33.0" text="IP address:" textFill="WHITE">
          <font>
-            <Font size="12.0" />
-         </font></TextField>
-      <PasswordField fx:id="password" layoutX="185.0" layoutY="166.0" prefHeight="27.0" prefWidth="237.0" promptText="Password">
-         <font>
-            <Font size="11.0" />
-         </font></PasswordField>
-      <PasswordField fx:id="retypePasswordField" disable="true" layoutX="186.0" layoutY="206.0" opacity="0.0" prefHeight="27.0" prefWidth="237.0" promptText="Retype your password">
-         <font>
-            <Font size="11.0" />
+            <Font size="18.0" />
          </font>
-      </PasswordField>
-      <Button id="connect" fx:id="logInButton" layoutX="247.0" layoutY="249.0" mnemonicParsing="false" onAction="#logIn" prefHeight="37.0" prefWidth="104.0" style="-fx-background-color: darkgray; -fx-border-color: lightgray;" text="Log in" textFill="WHITE">
+      </Label>
+      <Label layoutX="43.0" layoutY="73.0" text="Port number:" textFill="WHITE">
          <font>
             <Font size="18.0" />
-         </font></Button>
-      <Button id="connect" fx:id="registerButton" disable="true" layoutX="247.0" layoutY="249.0" mnemonicParsing="false" onAction="#registerUser" opacity="0.0" prefHeight="37.0" prefWidth="105.0" style="-fx-background-color: darkgray; -fx-border-color: lightgray;" text="Registrer" textFill="WHITE">
+         </font>
+      </Label>
+      <Button layoutX="43.0" layoutY="133.0" mnemonicParsing="false" onAction="#quit" text="Quit" textFill="#544d4d">
          <font>
-            <Font size="18.0" />
+            <Font size="16.0" />
          </font>
       </Button>
-      <Text fx:id="errorMessage" fill="WHITE" layoutX="182.0" layoutY="79.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" underline="true" wrappingWidth="237.0">
+      <Button layoutX="108.0" layoutY="133.0" mnemonicParsing="false" onAction="#connect" style="-fx-background-color: #00cc00;" text="Connect" textFill="WHITE">
          <font>
-            <Font size="15.0" />
+            <Font size="16.0" />
          </font>
-      </Text>
-      <Text fill="WHITE" layoutX="107.0" layoutY="144.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Username:">
+      </Button>
+      <Label fx:id="errorText" layoutX="226.0" layoutY="139.0" prefHeight="20.0" prefWidth="147.0" textFill="#ff0707">
          <font>
-            <Font size="14.0" />
+            <Font size="16.0" />
          </font>
-      </Text>
-      <Text fill="WHITE" layoutX="109.0" layoutY="185.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Password:">
-         <font>
-            <Font size="14.0" />
-         </font>
-      </Text>
-      <Text fx:id="retypePasswordText" disable="true" fill="WHITE" layoutX="108.0" layoutY="224.0" opacity="0.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Password:">
-         <font>
-            <Font size="14.0" />
-         </font>
-      </Text>
-      <TextFlow fx:id="textFlow" layoutX="209.0" layoutY="207.0" prefHeight="24.0" prefWidth="175.0">
-         <children>
-            <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Not a user?" />
-            <Hyperlink onAction="#registerNewUser" text="Register now" />
-         </children>
-      </TextFlow>
-      <Hyperlink fx:id="backToLoginLink" disable="true" layoutX="269.0" layoutY="300.0" onAction="#backToLogin" opacity="0.0" text="Go back" />
+      </Label>
    </children>
-</AnchorPane>
+</Pane>
