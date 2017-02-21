@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.paint.*?>
 <?import java.lang.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.text.*?>
@@ -94,7 +95,7 @@
                         <Insets left="11.0" top="15.0" />
                      </VBox.margin>
                   </Button>
-                  <Button fx:id="changePortButton" alignment="CENTER" mnemonicParsing="false" onAction="#changePort" prefHeight="30.0" prefWidth="169.0" text="Button">
+                  <Button fx:id="changePortButton" alignment="CENTER" mnemonicParsing="false" onAction="#changePort" prefHeight="30.0" prefWidth="169.0" text="Change Port" textFill="#0000008f">
                      <VBox.margin>
                         <Insets left="11.0" top="5.0" />
                      </VBox.margin>
@@ -108,7 +109,19 @@
         </VBox>
     </right>
     <top>
-        <HBox prefHeight="16.0" prefWidth="650.0" BorderPane.alignment="CENTER" />
+        <HBox prefHeight="16.0" prefWidth="650.0" BorderPane.alignment="CENTER">
+         <children>
+            <Text fx:id="portText" strokeType="OUTSIDE" strokeWidth="0.0">
+               <HBox.margin>
+                  <Insets left="400.0" />
+               </HBox.margin>
+            </Text>
+            <Text fx:id="statusText" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="RIGHT">
+               <HBox.margin>
+                  <Insets left="50.0" />
+               </HBox.margin>
+            </Text>
+         </children></HBox>
     </top>
     <bottom>
         <HBox prefHeight="14.0" prefWidth="650.0" BorderPane.alignment="CENTER" />
