@@ -12,7 +12,7 @@ public class User {
      * @param circle - Status of user
      * @param username - Username used to log in, and shown to other users
      */
-    public User(Circle circle, String username) {
+    User(Circle circle, String username) {
         this.circle = circle;
         this.username = username;
     }

@@ -1,7 +1,6 @@
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.control.TableView;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
@@ -37,7 +36,7 @@ public class Server {
      *
      * @return Thread - which listens for new users to connect.
      */
-    public static Thread startListening(serverController serverController) {
+    public static Thread startListening(serverController serverController,String port) {
 
         sc = serverController;
         return new Thread(() -> {
@@ -50,7 +49,7 @@ public class Server {
         });
         //tableView.setItems(allUsers);
 
-        portNumber = 5555; //default
+        portNumber = Integer.parseInt(port);
 
         System.out.println("Hi, this is ChatServer");
 
@@ -71,6 +70,8 @@ public class Server {
         }
         });
     }
+
+
 
     /**
      * Returns a Thread that contains a log-in procedure, or to register new client,
@@ -409,6 +410,20 @@ public class Server {
 
         sc.writeMessage('<' + user + " declined your chat request.>");
 
+    }
+
+    /**
+     * Checks if there are any users online
+     * @return boolean, true if there are users online, false if no users are online.
+     */
+    static boolean areUsersOnline(){
+        if (chatServers.isEmpty()) return false;
+
+        for (User u : allUsers){
+            if (!u.getColor().equals(Color.GREY)) return true;
+        }
+
+        return false;
     }
 
 }

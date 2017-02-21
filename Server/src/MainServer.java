@@ -22,10 +22,10 @@ public class MainServer extends Application{
         Application.launch(MainServer.class,(String[])null);
     }
 
-    public void start(Stage stage) throws Exception {
+    public void start(Stage stagee) throws Exception {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("./server.fxml"));
-            this.stage = stage;
+            stage = stagee;
             serverScene = new Scene(root, 700, 400);
             stage.setTitle("Server");
             stage.setScene(serverScene);

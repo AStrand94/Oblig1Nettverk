@@ -10,6 +10,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
 import java.net.URL;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class serverController implements Initializable {
@@ -27,13 +28,18 @@ public class serverController implements Initializable {
     @FXML
     private Button remove;
     @FXML
-    TableView<User> userTable;
+    private TableView<User> userTable;
     @FXML
-    TableColumn<User,String> username;
+    private TableColumn<User,String> username;
     @FXML
-    TableColumn<User,String> password;
+    private TableColumn<User,String> password;
     @FXML
-    TableColumn<User, Circle> status;
+    private TableColumn<User, Circle> status;
+    @FXML
+    private Button changePortButton;
+
+    private String portNumber = "5555";
+    private Thread t;
 
     /**
      * Initializes Server-window.
@@ -41,7 +47,7 @@ public class serverController implements Initializable {
      */
     public void initialize(URL location, ResourceBundle resources) {
 
-        Thread t = Server.startListening(this);
+        t = Server.startListening(this,portNumber);
         t.start();
 
         username.setCellValueFactory(cellData -> cellData.getValue().usernameProperty());
@@ -157,6 +163,45 @@ public class serverController implements Initializable {
                 return true;
         }
         return false;
+    }
+
+    public void changePort(){
+        if (Server.areUsersOnline()){
+            System.out.println(Server.areUsersOnline());
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+
+            alert.setHeaderText("Users are online, cannot change portnumber! \n" +
+                            "Tell users to log off!");
+            alert.setTitle("Error");
+
+            alert.showAndWait();
+        }else{
+
+            TextInputDialog input = new TextInputDialog(portNumber);
+            input.setTitle("Portnumber");
+            input.setHeaderText("Input wanted portnumbers");
+
+            Optional<String> result = input.showAndWait();
+
+            result.ifPresent(s ->{
+
+                if (s.chars().allMatch(Character::isDigit)){
+                    t.interrupt();
+                    portNumber = s;
+                    t = Server.startListening(this,portNumber);
+                    t.start();
+                }else{
+                    Alert a = new Alert(Alert.AlertType.ERROR);
+                    a.setTitle("Invalid portnumber");
+                    a.setHeaderText("Please provide a number for portnumber");
+                }
+
+            });
+
+
+
+
+        }
     }
 
 }

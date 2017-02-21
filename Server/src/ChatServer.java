@@ -33,13 +33,11 @@ public class ChatServer {
     public ChatServer(ServerClient client1){
         System.out.println("NEW CHATSERVER with " + client1.getUsername());
         this.client1 = client1;
-        address1 = client1.getClientAddr();
         s1 = '[' + client1.getUsername() + ']' + ':' + ' ';
 
 
         t1 = client1();
         t1.start();
-        j = i++;
         u1 = client1.getUsername();
     }
 
@@ -51,7 +49,6 @@ public class ChatServer {
     public void addClient(ServerClient client2){
         chatAlive = true;
         this.client2 = client2;
-        address2 = client2.getClientAddr();
 
         client2.setStatus(new Circle(8, Color.ORANGE));
         client1.setStatus(new Circle(8, Color.ORANGE));
