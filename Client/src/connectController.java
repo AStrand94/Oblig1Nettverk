@@ -6,8 +6,6 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
-import javafx.scene.control.ProgressBar;
-import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.stage.Screen;
@@ -16,6 +14,8 @@ import javafx.stage.Stage;
 import java.io.*;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by stiangrim on 21.02.2017.
@@ -35,8 +35,16 @@ public class connectController {
 
     @FXML
     void connect() throws IOException {
+
+        Pattern p = Pattern.compile("(\\d+).(\\d+).(\\d+).(\\d+)");
+        Matcher m = p.matcher(ip.getText());
+
+        if (!m.find()){
+            errorText.setText("Invalid IP");
+        }
+
         if(ip.getText().equals("") || port.getText().equals("")) {
-            errorText.setText("Enter ip and port");
+            errorText.setText("Enter IP and port");
             return;
         }
 

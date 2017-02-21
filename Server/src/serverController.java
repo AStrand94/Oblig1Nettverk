@@ -10,7 +10,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 
-import java.net.BindException;
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -95,7 +94,7 @@ public class serverController implements Initializable {
      */
     private void updateStatusText(){
         statusText.setText("Server is : " + (t.isAlive() ? "online" : "offline"));
-        portText.setText("Portnumber: " + (t.isAlive()? portNumber : ""));
+        portText.setText("Portnumber: " + (t.isAlive() ? portNumber : ""));
     }
 
 
@@ -198,14 +197,14 @@ public class serverController implements Initializable {
 
             TextInputDialog input = new TextInputDialog(portNumber);
             input.setTitle("Portnumber");
-            input.setHeaderText("Input wanted portnumbers");
+            input.setHeaderText("Input portnumber");
 
             Optional<String> result = input.showAndWait();
 
             result.ifPresent(s ->{
 
-                if (s.chars().allMatch(Character::isDigit) && Integer.parseInt(s) < 65536){
-                    t.interrupt();
+                if (s.chars().allMatch(Character::isDigit) && Integer.parseInt(s) < 65536 && !s.equals(portNumber)){
+                    t.stop();
                     clearInputs();
                     portNumber = s;
                     t = Server.startListening(this,portNumber);
@@ -214,9 +213,13 @@ public class serverController implements Initializable {
                     Alert a = new Alert(Alert.AlertType.ERROR);
                     a.setTitle("Invalid portnumber");
                     a.setHeaderText("Please provide a valid number for portnumber");
+                    a.showAndWait();
+                    for (char r : s.toCharArray()) System.out.print(r);
+                    System.out.println();
                 }
             });
             try {
+                //Waits for the thread to stop, and then updates the status text
                 Thread.sleep(10);
             }catch(InterruptedException e){
                 e.printStackTrace();
