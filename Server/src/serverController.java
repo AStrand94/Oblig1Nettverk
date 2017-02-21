@@ -37,7 +37,9 @@ public class serverController implements Initializable {
     @FXML
     private TableColumn<User, Circle> status;
     @FXML
-    private Button changePortButton;
+    private MenuItem changePortButton;
+    @FXML
+    private MenuItem broadcast;
     @FXML
     private Text statusText;
     @FXML
@@ -183,6 +185,9 @@ public class serverController implements Initializable {
         return false;
     }
 
+    /**
+     * Lets the user change port - only if there are no online users.
+     */
     public void changePort(){
         if (Server.areUsersOnline()){
             System.out.println(Server.areUsersOnline());
@@ -226,6 +231,21 @@ public class serverController implements Initializable {
             }
             updateStatusText();
         }
+    }
+
+    /**
+     * Pops up TextInputDialog and lets the user broadcast a message to all clients that are online
+     */
+    public void broadcastMessages(){
+
+        System.out.println("BROADCASTMESSAGES CALLED");
+        TextInputDialog input = new TextInputDialog();
+        input.setHeaderText("Broadcast message");
+        input.setHeaderText("Write a message to broadcast");
+
+        Optional<String> result = input.showAndWait();
+
+        result.ifPresent(Server::broadcaster);
     }
 
 }

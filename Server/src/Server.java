@@ -42,15 +42,6 @@ public class Server {
 
         sc = serverController;
         return new Thread(() -> {
-/*
-        Platform.runLater(() ->{
-            allUsers.add(new User("admin", "admin", new Circle(8, Color.GRAY)));
-            allUsers.add(new User("stian", "stian", new Circle(8, Color.GRAY)));
-            allUsers.add(new User("andreas", "andreas", new Circle(8, Color.GRAY)));allUsers.add(new User("dusan", "dusan", new Circle(8, Color.GRAY)));
-            allUsers.add(new User("martin", "martin", new Circle(8, Color.GRAY)));
-        });
-        */
-        //tableView.setItems(allUsers);
 
         portNumber = Integer.parseInt(port);
 
@@ -340,9 +331,28 @@ public class Server {
      */
     synchronized static void sendUpdatedUsers(){
         String userInfo = "*ui*" + allUsers();
+        sendToAll(userInfo);
+        sc.updateTable();
+    }
+
+    /**
+     * Sends a message from the server, to all online users
+     * @param m String - message to be sent
+     */
+    static void broadcaster(String m){
+        String s = "[SERVER]: " + m;
+        sendToAll(s);
+        sc.updateTable();
+    }
+
+    /**
+     * Sends a message to all user
+     * @param s String - message to be broadcasted
+     */
+    private static void sendToAll(String s){
         for (ChatServer cs : chatServers){
-            if (cs.client1 != null) cs.client1.writeMessage(userInfo);
-            if (cs.client2 != null) cs.client2.writeMessage(userInfo);
+            if (cs.client1 != null) cs.client1.writeMessage(s);
+            if (cs.client2 != null) cs.client2.writeMessage(s);
         }
         sc.updateTable();
     }

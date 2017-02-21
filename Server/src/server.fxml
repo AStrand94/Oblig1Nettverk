@@ -79,7 +79,7 @@
                         <Insets bottom="10.0" />
                      </padding>
                   </Label>
-                  <TextField fx:id="searchUsername" maxWidth="-Infinity" prefHeight="23.0" prefWidth="170.0" promptText="Enter Username">
+                  <TextField fx:id="searchUsername" maxWidth="-Infinity" onAction="#broadcastMessages" prefHeight="23.0" prefWidth="170.0" promptText="Enter Username">
                      <font>
                         <Font size="14.0" />
                      </font>
@@ -95,11 +95,15 @@
                         <Insets left="11.0" top="15.0" />
                      </VBox.margin>
                   </Button>
-                  <Button fx:id="changePortButton" alignment="CENTER" mnemonicParsing="false" onAction="#changePort" prefHeight="30.0" prefWidth="169.0" text="Change Port" textFill="#0000008f">
+                  <MenuButton mnemonicParsing="false" text="Admin Options">
+                    <items>
+                      <MenuItem fx:id="changePortButton" mnemonicParsing="false" onAction="#changePort" text="Change Port" />
+                      <MenuItem fx:id="broadcast" mnemonicParsing="false" onAction="#broadcastMessages" text="Broadcast" />
+                    </items>
                      <VBox.margin>
-                        <Insets left="11.0" top="5.0" />
+                        <Insets left="35.0" top="5.0" />
                      </VBox.margin>
-                  </Button>
+                  </MenuButton>
                </children>
             </VBox>
             </children>
