@@ -10,7 +10,7 @@
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="430.0" prefWidth="700.0" style="-fx-background-color: #59656F;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="chatController">
    <top>
-      <HBox prefHeight="46.0" prefWidth="700.0" style="-fx-background-color: #59656F;" BorderPane.alignment="CENTER">
+      <HBox prefHeight="49.0" prefWidth="700.0" style="-fx-background-color: #59656F;" BorderPane.alignment="CENTER">
          <children>
             <HBox prefHeight="41.0" prefWidth="518.0">
                <children>
@@ -29,9 +29,9 @@
                   </Text>
                </children>
             </HBox>
-            <HBox prefHeight="46.0" prefWidth="178.0">
+            <HBox prefHeight="49.0" prefWidth="186.0">
                <children>
-                  <VBox prefHeight="46.0" prefWidth="70.0">
+                  <VBox prefHeight="49.0" prefWidth="57.0">
                      <children>
                         <Circle fill="green" layoutX="15.0" layoutY="20.0" radius="7.0" stroke="WHITE" strokeType="INSIDE">
                            <VBox.margin>
@@ -40,8 +40,11 @@
                         </Circle>
                         <Label text="Available" textFill="WHITE" />
                      </children>
+                     <HBox.margin>
+                        <Insets right="20.0" />
+                     </HBox.margin>
                   </VBox>
-                  <VBox layoutX="528.0" layoutY="10.0" prefHeight="40.0" prefWidth="60.0">
+                  <VBox layoutX="528.0" layoutY="10.0" prefHeight="49.0" prefWidth="41.0">
                      <children>
                         <Circle fill="orange" layoutX="15.0" layoutY="20.0" radius="7.0" stroke="WHITE" strokeType="INSIDE">
                            <VBox.margin>
@@ -54,8 +57,11 @@
                            </VBox.margin>
                         </Label>
                      </children>
+                     <HBox.margin>
+                        <Insets right="20.0" />
+                     </HBox.margin>
                   </VBox>
-                  <VBox layoutX="570.0" layoutY="10.0" prefHeight="40.0" prefWidth="42.0">
+                  <VBox layoutX="570.0" layoutY="10.0" prefHeight="28.0" prefWidth="40.0">
                      <children>
                         <Circle fill="gray" layoutX="15.0" layoutY="20.0" radius="7.0" stroke="WHITE" strokeType="INSIDE">
                            <VBox.margin>
@@ -70,6 +76,9 @@
                      </children>
                   </VBox>
                </children>
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin>
             </HBox>
          </children>
       </HBox>
@@ -77,11 +86,11 @@
    <right>
       <VBox prefHeight="351.0" prefWidth="179.0" BorderPane.alignment="CENTER">
          <children>
-            <VBox prefHeight="27.0" prefWidth="164.0" />
+            <VBox prefHeight="0.0" prefWidth="179.0" />
             <TableView fx:id="tableView" prefHeight="339.0" prefWidth="164.0">
                <columns>
                   <TableColumn fx:id="statusColumn" editable="false" minWidth="0.0" prefWidth="24.0" resizable="false" />
-                  <TableColumn fx:id="nameColumn" editable="false" prefWidth="154.0" text="Name" />
+                  <TableColumn fx:id="nameColumn" editable="false" prefWidth="140.0" text="Name" />
                </columns>
             </TableView>
             <VBox prefHeight="75.0" prefWidth="131.0" style="-fx-background-color: white;">

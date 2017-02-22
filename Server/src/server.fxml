@@ -7,7 +7,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="470.0" prefWidth="750.0" style="-fx-background-color: #59656F;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="serverController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="630.0" prefWidth="750.0" style="-fx-background-color: #59656F;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="serverController">
     <right>
         <VBox prefHeight="378.0" prefWidth="193.0" style="-fx-background-color: white;" BorderPane.alignment="CENTER">
             <children>
@@ -17,7 +17,7 @@
                   <MenuItem fx:id="broadcast" mnemonicParsing="false" onAction="#broadcastMessages" text="Broadcast" />
                </items>
             </MenuButton>
-            <VBox prefHeight="221.0" prefWidth="193.0">
+            <VBox prefHeight="204.0" prefWidth="193.0">
                <children>
                       <Label alignment="CENTER" contentDisplay="CENTER" minHeight="-Infinity" prefHeight="57.0" prefWidth="193.0" text="Create new user" textFill="#59656f">
                           <VBox.margin>
@@ -62,14 +62,70 @@
                         <Insets />
                      </opaqueInsets>
                      <VBox.margin>
-                        <Insets top="35.0" />
+                        <Insets top="20.0" />
+                     </VBox.margin>
+                  </Label>
+               </children>
+            </VBox>
+            <VBox layoutX="10.0" layoutY="256.0" prefHeight="194.0" prefWidth="193.0">
+               <children>
+                  <Label alignment="CENTER" contentDisplay="CENTER" minHeight="-Infinity" prefHeight="43.0" prefWidth="193.0" text="Edit user" textFill="#59656f">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                     <padding>
+                        <Insets bottom="10.0" />
+                     </padding>
+                     <VBox.margin>
+                        <Insets top="8.0" />
+                     </VBox.margin>
+                  </Label>
+                  <TextField fx:id="editUsername" maxWidth="-Infinity" prefHeight="23.0" prefWidth="170.0" promptText="Enter Username">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
+                     <padding>
+                        <Insets bottom="4.0" left="5.0" top="4.0" />
+                     </padding>
+                     <VBox.margin>
+                        <Insets left="11.0" />
+                     </VBox.margin>
+                  </TextField>
+                  <TextField fx:id="editPassword" layoutX="21.0" layoutY="70.0" maxWidth="-Infinity" prefHeight="23.0" prefWidth="170.0" promptText="Enter Username">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
+                     <padding>
+                        <Insets bottom="4.0" left="5.0" top="4.0" />
+                     </padding>
+                     <VBox.margin>
+                        <Insets left="11.0" top="5.0" />
+                     </VBox.margin>
+                  </TextField>
+                  <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#editUser" prefHeight="35.0" prefWidth="169.0" style="-fx-background-color: #4c90ff;" text="Edit" textFill="WHITE">
+                     <VBox.margin>
+                        <Insets left="11.0" top="20.0" />
+                     </VBox.margin>
+                  </Button>
+                  <Label maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" prefHeight="6.0" prefWidth="193.0" style="-fx-background-color: #59656F;">
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
+                     <VBox.margin>
+                        <Insets top="20.0" />
                      </VBox.margin>
                   </Label>
                </children>
             </VBox>
             <VBox prefHeight="154.0" prefWidth="193.0">
                <children>
-                  <Label alignment="CENTER" contentDisplay="CENTER" minHeight="-Infinity" prefHeight="52.0" prefWidth="193.0" text="Remove User" textFill="#59656f">
+                  <Label alignment="CENTER" contentDisplay="CENTER" minHeight="-Infinity" prefHeight="39.0" prefWidth="193.0" text="Remove user" textFill="#59656f">
                      <font>
                         <Font size="14.0" />
                      </font>
@@ -108,19 +164,7 @@
         </VBox>
     </right>
     <top>
-        <HBox prefHeight="16.0" prefWidth="650.0" BorderPane.alignment="CENTER">
-         <children>
-            <Text fx:id="portText" strokeType="OUTSIDE" strokeWidth="0.0">
-               <HBox.margin>
-                  <Insets left="400.0" />
-               </HBox.margin>
-            </Text>
-            <Text fx:id="statusText" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="RIGHT">
-               <HBox.margin>
-                  <Insets left="50.0" />
-               </HBox.margin>
-            </Text>
-         </children></HBox>
+        <HBox prefHeight="16.0" prefWidth="650.0" BorderPane.alignment="CENTER" />
     </top>
     <bottom>
         <HBox prefHeight="32.0" prefWidth="700.0" BorderPane.alignment="CENTER">
@@ -156,9 +200,9 @@
    <center>
       <TableView fx:id="userTable" prefHeight="378.0" prefWidth="450.0" tableMenuButtonVisible="true" BorderPane.alignment="CENTER">
         <columns>
-          <TableColumn fx:id="username" minWidth="40.0" prefWidth="200.0" text="Username" />
-            <TableColumn fx:id="password" minWidth="40.0" prefWidth="194.0" text="Password" />
-            <TableColumn fx:id="status" minWidth="31.0" prefWidth="75.0" text="Status" />
+          <TableColumn fx:id="username" minWidth="40.0" prefWidth="220.0" text="Username" />
+            <TableColumn fx:id="password" minWidth="40.0" prefWidth="220.0" text="Password" />
+            <TableColumn fx:id="status" minWidth="31.0" prefWidth="81.0" text="Status" />
         </columns>
          <opaqueInsets>
             <Insets />

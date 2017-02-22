@@ -1,4 +1,6 @@
 import javafx.application.Platform;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
@@ -25,9 +27,9 @@ public class serverController implements Initializable {
     @FXML
     private TextField searchUsername;
     @FXML
-    private Button create;
+    private TextField editUsername;
     @FXML
-    private Button remove;
+    private TextField editPassword;
     @FXML
     private TableView<User> userTable;
     @FXML
@@ -136,10 +138,15 @@ public class serverController implements Initializable {
         }
 
         String search = usernameInput.getText();
+        String pasw = passwordInput.getText();
 
         if(userExist(search, Server.allUsers)) setInfoAlertMessage("CreateError", "Username already exists", "Choose a different username");
 
-
+        if(!isVaibleUsername(search) || !isVaiblePassword(pasw)) {
+            setInfoAlertMessage("CreateError", "Username or Password criteria not fulfilled ",
+                    "- Username must be at least 4 characters and without namespaces \n - Password must be at least 6 characters and without namespaces");
+        return;
+        }
         if(!userExist(search,Server.allUsers)){
             User enterNewU = new User(usernameInput.getText(), passwordInput.getText(), new Circle(8, Color.GRAY));
             Server.allUsers.add(enterNewU);
@@ -163,6 +170,27 @@ public class serverController implements Initializable {
             if (u == null) setInfoAlertMessage("RemoveError","Select an user!","User must be selected!");
             else setInfoAlertMessage("RemoveError", "Not removable!", "Cannot remove this user because it is online");
         }
+    }
+
+
+    public void editUser(){
+        User u = userTable.getSelectionModel().getSelectedItem();
+
+        if (editUsername.getText().trim().isEmpty() || editPassword.getText().trim().isEmpty()) {
+            setInfoAlertMessage("EditError", "Fill out the Username and Password fields", "");
+            return;
+        }
+
+        if (u != null && u.getColor().equals(Color.GRAY) && Server.checkUser(u.getUsername())) {
+            u.setUsername(new SimpleStringProperty(editUsername.getText()));
+            u.setPassword(new SimpleStringProperty(editPassword.getText()));
+            userTable.refresh();
+        }
+        else{
+            if (u == null) setInfoAlertMessage("EditError","Select an user!","User must be selected!");
+            else setInfoAlertMessage("EditError", "Not editable!", "Cannot edit this user because it is online");
+        }
+        clearInputs();
     }
 
     /**
@@ -198,6 +226,16 @@ public class serverController implements Initializable {
                 return true;
         }
         return false;
+    }
+
+    private boolean isVaibleUsername(String s){
+        if(s.length() >= 4 && !s.contains(" ")) return true;
+        else return false;
+    }
+
+    private boolean isVaiblePassword(String s){
+        if(s.length() >= 6 && !s.contains(" ")) return true;
+        else return false;
     }
 
     /**

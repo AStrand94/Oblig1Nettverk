@@ -10,7 +10,7 @@ import javafx.scene.shape.Circle;
  */
 public class User {
 
-    private final StringProperty username;
+    private StringProperty username;
     private StringProperty password;
     private Circle status;
 
@@ -33,6 +33,10 @@ public class User {
         return username.get();
     }
 
+    public void setUsername(StringProperty username) {
+        this.username = username;
+    }
+
     public StringProperty usernameProperty(){
         return username;
     }
@@ -42,6 +46,10 @@ public class User {
      */
     public String getPassword() {
         return password.get();
+    }
+
+    public void setPassword(StringProperty password) {
+        this.password = password;
     }
 
     public StringProperty passwordProperty(){
