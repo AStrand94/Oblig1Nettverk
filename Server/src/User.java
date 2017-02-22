@@ -4,6 +4,10 @@ import javafx.beans.property.StringProperty;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 
+/**
+ * Object for each user in the Server program.
+ * Each user is stored as an object.
+ */
 public class User {
 
     private final StringProperty username;

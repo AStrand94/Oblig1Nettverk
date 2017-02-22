@@ -63,7 +63,7 @@ public class Server {
                 t.start();
             }
         }catch (BindException be){
-            System.out.println("ERROR WHEN CONNECTING TO PORT " +portNumber);
+            System.out.println("ERROR WHEN CONNECTING TO PORT " + portNumber);
             Platform.runLater(() -> {
                 Alert a = new Alert(Alert.AlertType.ERROR);
                 a.setTitle("ERROR");
@@ -98,13 +98,11 @@ public class Server {
                     new InputStreamReader(connect.getInputStream())); //input from client
                 boolean connected = false;
                 while (!connected) {
-                    System.out.println("CONNECTED!");
                     //Wants 'y' or 'n' from user. 'y' if user is registered, 'n' if needs to register
                     out.println("Are you a registered user? y/n");
                     isUser = in.readLine();
 
                     out.println("requser");
-                    System.out.println("TESTESTETSTEST");
 
                     // req username and password with a single space between them
                     Pattern p = Pattern.compile("(.+) (.+)");
@@ -438,8 +436,6 @@ public class Server {
      */
     public static void noChat(String user, String requester){
         ServerClient sc = findServerClient(requester);
-
-        System.out.println("ER SC NULL?: " + (sc == null));
 
         if (sc == null) return;
 

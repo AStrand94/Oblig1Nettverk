@@ -12,16 +12,12 @@ import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 
 import java.io.IOException;
-import java.net.InetSocketAddress;
-import java.net.Socket;
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class serverController implements Initializable {
 
-    //@FXML
-    //private Text cpuDisplay;
     @FXML
     private TextField usernameInput;
     @FXML
@@ -178,14 +174,6 @@ public class serverController implements Initializable {
     }
 
     /**
-     * Terminates JavaFX Application
-     */
-    protected void finalize(){
-        Platform.exit();
-        System.exit(0);
-    }
-
-    /**
      * Information for unwanted actions
      * @param title String, title
      * @param header String, header
@@ -217,7 +205,6 @@ public class serverController implements Initializable {
      */
     public void changePort(){
         if (Server.areUsersOnline()){
-            System.out.println(Server.areUsersOnline());
             Alert alert = new Alert(Alert.AlertType.ERROR);
 
             alert.setHeaderText("Users are online, cannot change portnumber! \n" +
@@ -252,8 +239,6 @@ public class serverController implements Initializable {
                     a.setTitle("Invalid portnumber");
                     a.setHeaderText("Please provide a valid number for portnumber");
                     a.showAndWait();
-                    for (char r : s.toCharArray()) System.out.print(r);
-                    System.out.println();
                 }
             });
             try {
@@ -271,7 +256,6 @@ public class serverController implements Initializable {
      */
     public void broadcastMessages(){
 
-        System.out.println("BROADCASTMESSAGES CALLED");
         TextInputDialog input = new TextInputDialog();
         input.setHeaderText("Broadcast message");
         input.setHeaderText("Write a message to broadcast");

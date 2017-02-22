@@ -111,7 +111,6 @@ public class ChatServer {
                 while (!(text = client1.getMessage().readLine()).equals("*QUIT*") && (chatAlive || (text.length() > 4 && text.substring(0,4).equals("*no*")))){
                     System.out.println(text);
                     if (text.length() > 4 && text.substring(0,4).equals("*no*")){
-                        System.out.println("RECEIVED NO");
                         Server.noChat(client1.getUsername(),text.substring(4,text.length()));
                     }
 
@@ -214,7 +213,7 @@ public class ChatServer {
     /**
      * Ends the chat for a client, and puts the client in a new chat.
      * Called when the other user already has disconnected.
-     * @param client
+     * @param client ServerClient, the client that ends the chat.
      */
     private void endChatNewChat(ServerClient client){
         client.setStatus(new Circle(8, Color.GREEN));

@@ -1,3 +1,4 @@
+import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -5,6 +6,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
+import org.omg.Messaging.SYNC_WITH_TRANSPORT;
 import sun.applet.Main;
 
 import java.io.IOException;
@@ -32,6 +34,9 @@ public class MainServer extends Application{
             stage.show();
 
             stage.setOnCloseRequest(e -> {
+                System.out.println("SERVER STOPPED");
+                Server.broadcaster("THE SERVER HAS DISCONNECTED");
+                Server.broadcaster("CONNECTION LOST");
                 Platform.exit();
                 System.exit(0);
             });
@@ -41,11 +46,4 @@ public class MainServer extends Application{
         }
     }
 
-    /**
-     * Calls when window is closed to completely exit the program.
-     */
-    protected void finalize(){
-        Platform.exit();
-        System.exit(0);
-    }
 }
