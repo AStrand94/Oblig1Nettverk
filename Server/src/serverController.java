@@ -10,6 +10,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 
+import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.net.Socket;
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -134,12 +137,14 @@ public class serverController implements Initializable {
      * User cannot be removed if it has active -or busy status.
      */
     public void onRemove() {
-        if (userTable.getSelectionModel().getSelectedItem().getColor().equals(Color.GRAY)) {
+        User u = userTable.getSelectionModel().getSelectedItem();
+        if (u != null && u.getColor().equals(Color.GRAY) && Server.checkUser(u.getUsername())) {
             Server.allUsers.remove(userTable.getSelectionModel().getSelectedItem());
             clearInputs();
             Server.sendUpdatedUsers();
         } else {
-            setInfoAlertMessage("RemoveError", "Not removable!", "Cannot remove this user because it is online");
+            if (u == null) setInfoAlertMessage("RemoveError","Select an user!","User must be selected!");
+            else setInfoAlertMessage("RemoveError", "Not removable!", "Cannot remove this user because it is online");
         }
     }
     /**
@@ -209,7 +214,13 @@ public class serverController implements Initializable {
             result.ifPresent(s ->{
 
                 if (s.chars().allMatch(Character::isDigit) && Integer.parseInt(s) < 65536 && !s.equals(portNumber)){
-                    t.stop();
+                    try {
+                        Server.serverSocket.close();
+                    }catch(IOException e){
+                        System.out.println("Could not close Serversocket");
+                        e.printStackTrace();
+                    }
+                    t.interrupt();
                     clearInputs();
                     portNumber = s;
                     t = Server.startListening(this,portNumber);

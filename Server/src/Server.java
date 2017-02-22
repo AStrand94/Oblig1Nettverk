@@ -12,6 +12,7 @@ import java.io.PrintWriter;
 import java.net.BindException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.NoSuchElementException;
 import java.util.regex.Matcher;
@@ -29,6 +30,7 @@ public class Server {
     static ObservableList<User> allUsers = FXCollections.observableArrayList();
 
     static serverController sc;
+    static ServerSocket serverSocket;
 
 
     /**
@@ -47,7 +49,8 @@ public class Server {
 
         System.out.println("Hi, this is ChatServer");
 
-        try (ServerSocket serverSocket = new ServerSocket(portNumber)) {
+        try {
+            serverSocket = new ServerSocket(portNumber);
             while (true) {
 
                 System.out.println("Listening for user");
@@ -68,7 +71,7 @@ public class Server {
                 a.showAndWait();
             });
         }catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("ServerSocket has been closed");
         }
         });
     }
@@ -95,7 +98,7 @@ public class Server {
                     new InputStreamReader(connect.getInputStream())); //input from client
                 boolean connected = false;
                 while (!connected) {
-
+                    System.out.println("CONNECTED!");
                     //Wants 'y' or 'n' from user. 'y' if user is registered, 'n' if needs to register
                     out.println("Are you a registered user? y/n");
                     isUser = in.readLine();
@@ -172,6 +175,17 @@ public class Server {
         for (User u : allUsers){
             if (u.getUsername().equals(uname) &&
                     u.getPassword().equals(passw))
+                exists = true;
+        }
+
+        return exists;
+    }
+
+    public static boolean checkUser(String uname){
+        boolean exists = false;
+
+        for (User u : allUsers){
+            if (u.getUsername().equals(uname))
                 exists = true;
         }
 
