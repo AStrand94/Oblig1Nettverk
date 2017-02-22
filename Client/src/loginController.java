@@ -199,7 +199,13 @@ public class loginController {
             errorMessage.setText("Please enter a username");
         else if (password.getText().equals(""))
             errorMessage.setText("Please enter a password");
-        else {
+        else if(userName.getText().length() < 4){
+            errorMessage.setText("Username must be at least 4 characters");
+        }else if (password.getText().length() < 6){
+            errorMessage.setText("Password must contain at least 6 characters");
+        }else if (password.getText().equals(userName.getText())){
+            errorMessage.setText("Username and password cannot match!");
+        } else{
             client.print().println("n");
             String receivedText = client.read().readLine();
             System.out.println(receivedText);
