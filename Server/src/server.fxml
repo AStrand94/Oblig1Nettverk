@@ -17,9 +17,9 @@
                   <MenuItem fx:id="broadcast" mnemonicParsing="false" onAction="#broadcastMessages" text="Broadcast" />
                </items>
             </MenuButton>
-            <VBox prefHeight="204.0" prefWidth="193.0">
+            <VBox prefHeight="198.0" prefWidth="193.0">
                <children>
-                      <Label alignment="CENTER" contentDisplay="CENTER" minHeight="-Infinity" prefHeight="57.0" prefWidth="193.0" text="Create new user" textFill="#59656f">
+                      <Label alignment="CENTER" contentDisplay="CENTER" minHeight="-Infinity" prefHeight="50.0" prefWidth="193.0" text="Create new user" textFill="#59656f">
                           <VBox.margin>
                               <Insets />
                           </VBox.margin>
@@ -67,9 +67,9 @@
                   </Label>
                </children>
             </VBox>
-            <VBox layoutX="10.0" layoutY="256.0" prefHeight="194.0" prefWidth="193.0">
+            <VBox layoutX="10.0" layoutY="256.0" prefHeight="200.0" prefWidth="193.0">
                <children>
-                  <Label alignment="CENTER" contentDisplay="CENTER" minHeight="-Infinity" prefHeight="43.0" prefWidth="193.0" text="Edit user" textFill="#59656f">
+                  <Label alignment="CENTER" contentDisplay="CENTER" minHeight="-Infinity" prefHeight="50.0" prefWidth="193.0" text="Edit user" textFill="#59656f">
                      <font>
                         <Font size="14.0" />
                      </font>
@@ -125,7 +125,7 @@
             </VBox>
             <VBox prefHeight="154.0" prefWidth="193.0">
                <children>
-                  <Label alignment="CENTER" contentDisplay="CENTER" minHeight="-Infinity" prefHeight="39.0" prefWidth="193.0" text="Remove user" textFill="#59656f">
+                  <Label alignment="CENTER" contentDisplay="CENTER" minHeight="-Infinity" prefHeight="50.0" prefWidth="193.0" text="Remove user" textFill="#59656f">
                      <font>
                         <Font size="14.0" />
                      </font>
