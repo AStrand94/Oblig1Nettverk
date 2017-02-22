@@ -15,7 +15,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 /**
- * Controls the connect scene.
+ * Controls the log in scene.
  */
 public class loginController {
 
@@ -42,6 +42,7 @@ public class loginController {
     private Button registerButton;
 
     /**
+     * Reads from the server when instantiated.
      *
      * @throws IOException
      */

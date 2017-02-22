@@ -2,16 +2,18 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
-import javafx.scene.image.ImageView;
+import javafx.scene.control.Alert;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
@@ -19,7 +21,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Created by stiangrim on 21.02.2017.
+ *  Created by stiangrim on 21.02.2017.
+
+
+ /**
+ * Controls the connect scene.
  */
 public class connectController {
 
@@ -32,6 +38,11 @@ public class connectController {
     @FXML
     TextField port;
 
+    /**
+     * Connects to the server if IP and Port is valid
+     *
+     * @throws IOException
+     */
     @FXML
     void connect() throws IOException {
         Pattern p = Pattern.compile("(\\d+).(\\d+).(\\d+).(\\d+)");
@@ -72,6 +83,11 @@ public class connectController {
         goToLoginScene();
     }
 
+    /**
+     * Opens an alert box with a text given by the parameter
+     *
+     * @param error The text that will appear in the Alert Box
+     */
     void alertBox(String error) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setHeaderText("Could not connect");
@@ -79,6 +95,9 @@ public class connectController {
         alert.showAndWait();
     }
 
+    /**
+     * Quits the program
+     */
     @FXML
     void quit() {
         client.receiver().interrupt();
@@ -86,6 +105,11 @@ public class connectController {
         System.exit(0);
     }
 
+    /**
+     * Switches to the log in scene
+     *
+     * @throws IOException
+     */
     void goToLoginScene() throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("login.fxml"));
 
