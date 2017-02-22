@@ -144,8 +144,8 @@ public class serverController implements Initializable {
 
         if(!isVaibleUsername(search) || !isVaiblePassword(pasw) || search.equals(pasw)) {
             setInfoAlertMessage("CreateError", "Username or Password criteria not fulfilled ",
-                    "- Username must be at least 4 characters, without namespaces and different from username password \n " +
-                            "- Password must be at least 6 characters, without namespaces and different from the username");
+                    "- Username must be at least 4 characters, without namespaces and different from your password \n " +
+                            "- Password must be at least 6 characters, without namespaces and different from your username");
         return;
         }
         if(!userExist(search,Server.allUsers)){
