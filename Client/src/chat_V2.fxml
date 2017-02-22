@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.paint.*?>
 <?import javafx.scene.shape.*?>
 <?import javafx.scene.text.*?>
 <?import javafx.geometry.*?>
@@ -9,9 +10,9 @@
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="430.0" prefWidth="700.0" style="-fx-background-color: #59656F;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="chatController">
    <top>
-      <HBox prefHeight="11.0" prefWidth="600.0" style="-fx-background-color: #59656F;" BorderPane.alignment="CENTER">
+      <HBox prefHeight="46.0" prefWidth="700.0" style="-fx-background-color: #59656F;" BorderPane.alignment="CENTER">
          <children>
-            <HBox prefHeight="27.0" prefWidth="531.0">
+            <HBox prefHeight="41.0" prefWidth="518.0">
                <children>
                   <Text fill="WHITE" opacity="0.3" strokeType="OUTSIDE" strokeWidth="0.0" text="Logged in as: " wrappingWidth="88.21875">
                      <font>
@@ -26,6 +27,48 @@
                         <Insets bottom="5.0" top="5.0" />
                      </HBox.margin>
                   </Text>
+               </children>
+            </HBox>
+            <HBox prefHeight="46.0" prefWidth="178.0">
+               <children>
+                  <VBox prefHeight="46.0" prefWidth="70.0">
+                     <children>
+                        <Circle fill="green" layoutX="15.0" layoutY="20.0" radius="7.0" stroke="WHITE" strokeType="INSIDE">
+                           <VBox.margin>
+                              <Insets bottom="2.5" left="15.0" top="8.0" />
+                           </VBox.margin>
+                        </Circle>
+                        <Label text="Available" textFill="WHITE" />
+                     </children>
+                  </VBox>
+                  <VBox layoutX="528.0" layoutY="10.0" prefHeight="40.0" prefWidth="60.0">
+                     <children>
+                        <Circle fill="orange" layoutX="15.0" layoutY="20.0" radius="7.0" stroke="WHITE" strokeType="INSIDE">
+                           <VBox.margin>
+                              <Insets bottom="2.5" left="10.0" top="8.0" />
+                           </VBox.margin>
+                        </Circle>
+                        <Label text="Busy" textFill="WHITE">
+                           <VBox.margin>
+                              <Insets left="5.0" />
+                           </VBox.margin>
+                        </Label>
+                     </children>
+                  </VBox>
+                  <VBox layoutX="570.0" layoutY="10.0" prefHeight="40.0" prefWidth="42.0">
+                     <children>
+                        <Circle fill="gray" layoutX="15.0" layoutY="20.0" radius="7.0" stroke="WHITE" strokeType="INSIDE">
+                           <VBox.margin>
+                              <Insets bottom="2.5" left="10.0" top="8.0" />
+                           </VBox.margin>
+                        </Circle>
+                        <Label text="Offline" textFill="WHITE">
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                        </Label>
+                     </children>
+                  </VBox>
                </children>
             </HBox>
          </children>
@@ -104,10 +147,14 @@
    <center>
       <HBox prefHeight="350.0" prefWidth="478.0" BorderPane.alignment="CENTER">
          <children>
-            <TextArea fx:id="chatArea" editable="false" prefHeight="351.0" prefWidth="501.0" wrapText="true">
+            <ScrollPane prefHeight="331.0" prefViewportHeight="331.0" prefViewportWidth="500.0" prefWidth="500.0">
                <HBox.margin>
-                  <Insets left="5.0" right="10.0" />
-               </HBox.margin></TextArea>
+                  <Insets left="5.0" />
+               </HBox.margin>
+               <content>
+                  <TextArea fx:id="chatArea" onInputMethodTextChanged="#sendMessage" prefHeight="330.0" prefWidth="488.0" />
+               </content>
+            </ScrollPane>
          </children>
       </HBox>
    </center>

@@ -276,6 +276,7 @@ public class Client {
                             connectRequest(received);
                         }
                     } else {
+                        chatArea.getStyle();
                         chatArea.appendText(received + '\n');
                     }
 

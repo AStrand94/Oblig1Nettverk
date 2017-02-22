@@ -6,6 +6,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
@@ -91,18 +92,35 @@ public class serverController implements Initializable {
     sortedData.comparatorProperty().bind(userTable.comparatorProperty());
 
     userTable.setItems(sortedData);
+
+        usernameInput.setOnKeyPressed(event -> {
+            if(event.getCode().equals(KeyCode.ENTER))
+                try {
+                    onCreate();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+        });
+
+        passwordInput.setOnKeyPressed(event -> {
+            if(event.getCode().equals(KeyCode.ENTER))
+                try {
+                    onCreate();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+        });
+
     }
 
     /**
      * Checks if the thread listening for users is alive, and then sets the server-status
      * to online or offline.
      */
-    private void updateStatusText(){
-        statusText.setText("Server is : " + (t.isAlive() ? "online" : "offline"));
-        portText.setText("Portnumber: " + (t.isAlive() ? portNumber : ""));
+    public void updateStatusText(){
+        statusText.setText(t.isAlive() ? "online" : "offline");
+        portText.setText(t.isAlive() ? portNumber : "");
     }
-
-
 
     /**
      * Refreshes the table whenever sendUpdatedUSers() is called.
@@ -115,9 +133,11 @@ public class serverController implements Initializable {
      * Creates a new user in allUsers list
      * The new user cannot exist, username is checked for existence
      */
-    public void onCreate() {
-        if (usernameInput.getText().trim().isEmpty() || passwordInput.getText().trim().isEmpty())
+    public void onCreate() throws IOException {
+        if (usernameInput.getText().trim().isEmpty() || passwordInput.getText().trim().isEmpty()) {
             setInfoAlertMessage("CreateError", "Fill out the Username and Password fields", "");
+            return;
+        }
 
         String search = usernameInput.getText();
 
@@ -138,6 +158,7 @@ public class serverController implements Initializable {
      */
     public void onRemove() {
         User u = userTable.getSelectionModel().getSelectedItem();
+
         if (u != null && u.getColor().equals(Color.GRAY) && Server.checkUser(u.getUsername())) {
             Server.allUsers.remove(userTable.getSelectionModel().getSelectedItem());
             clearInputs();
@@ -147,6 +168,7 @@ public class serverController implements Initializable {
             else setInfoAlertMessage("RemoveError", "Not removable!", "Cannot remove this user because it is online");
         }
     }
+
     /**
      * Clears input-fields
      */
